@@ -9,5 +9,7 @@
     <string name="record_button_description">Button for recording videos.</string>
     <string name="profile">Profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="camera">Camera</string>
+    <string name="ping">Ping Server</string>
 
 </resources>
