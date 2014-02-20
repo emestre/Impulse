@@ -82,7 +82,11 @@ public class HomeScreen extends Activity {
 				}.execute();
 			}
 		});
-		
+	}
+	
+	public void cameraButtonClick(View view) {
+		Intent intent = new Intent(HomeScreen.this, CameraActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
