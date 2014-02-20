@@ -14,4 +14,13 @@
         android:layout_height="wrap_content"
         android:text="@string/profile" />
 
+    <Button
+        android:id="@+id/server_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/profile_button"
+        android:layout_alignBottom="@+id/profile_button"
+        android:layout_toRightOf="@id/profile_button"
+        android:text="Button" />
+
 </RelativeLayout>
