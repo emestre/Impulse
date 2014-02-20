@@ -22,7 +22,8 @@ import com.facebook.Session;
 public class HomeScreen extends Activity {
 
 	private Button profileButton, serverButton;
-
+	private long startTime;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,42 +47,39 @@ public class HomeScreen extends Activity {
 			public void onClick(View v) {
 				Toast.makeText(HomeScreen.this, "Attempting to connect to server", Toast.LENGTH_LONG);
 				
-				try {
-					new AsyncTask<Void, Void, String>() {
+				new AsyncTask<Void, Void, String>() {
 
-						@Override
-						protected String doInBackground(Void... args) {
-							String notify = null;
+					@Override
+					protected String doInBackground(Void... args) {
+						String notify = null;
+						startTime = System.currentTimeMillis();
+						try {
+							
+							HttpClient client = new DefaultHttpClient();
+							HttpGet get = new HttpGet(
+									"http://impulse-backend.appspot.com/impulse");
+							HttpResponse response;
+							response = client.execute(get);
 
-							try {
-								HttpClient client = new DefaultHttpClient();
-								HttpGet get = new HttpGet(
-										"http://impulse-backend.appspot.com/impulse");
-								HttpResponse response;
-								response = client.execute(get);
-
-								if (response.getStatusLine().getStatusCode() == 200)
-									notify = "Successfull connection to Server";
-								else
-									notify = "Unsuccessfull connection to Server";
-								return notify;
-
-							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+							if (response.getStatusLine().getStatusCode() == 200)
+								notify = "Successful connection to Server";
+							else
+								notify = "Unsuccessful connection to Server";
 							return notify;
-						}
 
-						protected void onPostExecute(String notify) {
-							Toast.makeText(HomeScreen.this, notify, Toast.LENGTH_LONG)
-									.show();
+						} catch (ClientProtocolException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-					}.execute();
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				}
+						return notify;
+					}
+
+					protected void onPostExecute(String notify) {
+						Toast.makeText(HomeScreen.this, notify + " in " + (System.currentTimeMillis() - startTime) + "ms", Toast.LENGTH_LONG)
+								.show();
+					}
+				}.execute();
 			}
 		});
 		

@@ -21,6 +21,6 @@
         android:layout_alignBaseline="@+id/profile_button"
         android:layout_alignBottom="@+id/profile_button"
         android:layout_toRightOf="@id/profile_button"
-        android:text="Button" />
+        android:text="Ping Server" />
 
 </RelativeLayout>
