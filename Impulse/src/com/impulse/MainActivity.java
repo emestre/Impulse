@@ -1,5 +1,6 @@
 package com.impulse;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -25,7 +26,7 @@ public class MainActivity extends FragmentActivity {
 	        .findFragmentById(android.R.id.content);
 	    }
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

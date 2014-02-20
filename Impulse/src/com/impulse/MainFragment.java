@@ -11,12 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 
@@ -24,8 +21,7 @@ public class MainFragment extends Fragment {
 
 	private static final String TAG = "MainFragment";
 	private UiLifecycleHelper uiHelper;
-	private TextView userName;
-	private ProfilePictureView profPic;
+
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state,
@@ -49,10 +45,6 @@ public class MainFragment extends Fragment {
 		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 		authButton.setFragment(this);
 		authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
-        userName = (TextView) view.findViewById(R.id.user_name);
-        profPic = (ProfilePictureView) view.findViewById(R.id.profile_picture);
-        userName.setVisibility(View.GONE);
-        profPic.setVisibility(View.GONE);
 		return view;
 	}
 	
@@ -95,25 +87,13 @@ public class MainFragment extends Fragment {
 			Exception exception) {
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
-			 Request.newMeRequest(session, new Request.GraphUserCallback() {
-
-		            // callback after Graph API response with user object
-		            @Override
-		            public void onCompleted(GraphUser user, Response response) {
-		              if (user != null) {
-		                userName.setVisibility(View.VISIBLE);
-		                profPic.setVisibility(View.VISIBLE);
-		                Log.i(TAG, user.getName());
-		                userName.setText(user.getName());
-		                Log.i(TAG, user.getId());
-		                profPic.setProfileId(user.getId());
-		              }
-		            }
-		          }).executeAsync();
+			Intent intent = new Intent(getActivity(), HomeScreen.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			getActivity().startActivity(intent);
+			getActivity().finish();
 		} else if (state.isClosed()) {
 			Log.i(TAG, "Logged out...");
-            userName.setVisibility(View.GONE);
-            profPic.setVisibility(View.GONE);
 		}
 	}
 }
