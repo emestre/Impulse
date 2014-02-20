@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -18,7 +19,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
     
     private SurfaceView mSurfaceView;
-	protected static SurfaceHolder mHolder;
+	private SurfaceHolder mHolder;
     private Camera mCamera;
     private List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
@@ -38,12 +39,16 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
     
+    public Surface getSurface() {
+    	return mHolder.getSurface();
+    }
+    
     public void setCamera(Camera camera) {
     	mCamera = camera;
         if (mCamera != null) {
             mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
             this.requestLayout();
-        }
+        }        
     }
 
     public void surfaceCreated(SurfaceHolder holder) {

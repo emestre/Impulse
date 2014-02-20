@@ -69,15 +69,19 @@ public class CameraActivity extends Activity {
         
         // release the MediaRecorder
         releaseMediaRecorder();
-        
-        // release the camera immediately on pause event so it can be used by other apps
-        if (mCamera != null){
+        // release the camera immediately on pause event so it can be used by other applications
+        releaseCamera();
+    }
+    
+    private void releaseCamera() {
+    	if (mCamera != null){
+    		mCamera.stopPreview();
         	mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
         }
-        
-        Log.d(TAG, "camera preview paused, camera has been released");
+    	
+    	Log.d(TAG, "camera preview paused, camera has been released");
     }
     
     private void releaseMediaRecorder() {
@@ -141,9 +145,6 @@ public class CameraActivity extends Activity {
                 Log.d(TAG, "Error accessing file: " + e.getMessage());
             }
             // end of code that saves the image to the SD card
-        	
-            // restart the camera preview so we can take another picture
-        	mCamera.startPreview();
         }
     };
     
@@ -153,13 +154,14 @@ public class CameraActivity extends Activity {
             // stop recording and release camera
             mMediaRecorder.stop();  // stop the recording
             releaseMediaRecorder(); // release the MediaRecorder object
-            mCamera.lock();         // take camera access back from MediaRecorder
+//            mCamera.lock();         // take camera access back from MediaRecorder
 
             // inform the user that recording has stopped
             mIsRecording = false;
             mRecordButton.setImageResource(R.drawable.ic_action_video);
         }
     	else {
+    		releaseCamera();
             // initialize video camera
     		boolean prepare = prepareVideoRecorder();
             if (prepare) {
@@ -181,6 +183,10 @@ public class CameraActivity extends Activity {
     
     private boolean prepareVideoRecorder(){
 
+    	mCamera = getCameraInstance();
+    	mCamera.setDisplayOrientation(90);
+    	mPreview.setCamera(mCamera);
+    	
         mMediaRecorder = new MediaRecorder();
 
         // Step 1: Unlock and set camera to MediaRecorder
@@ -198,7 +204,7 @@ public class CameraActivity extends Activity {
         mMediaRecorder.setOutputFile(MediaFileHelper.getOutputMediaFile(MediaFileHelper.MEDIA_TYPE_VIDEO).toString());
 
         // Step 5: Set the preview output
-        mMediaRecorder.setPreviewDisplay(CameraPreview.mHolder.getSurface());
+        mMediaRecorder.setPreviewDisplay(mPreview.getSurface());
 
         // Step 6: Prepare configured MediaRecorder
         try {

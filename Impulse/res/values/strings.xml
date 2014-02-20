@@ -7,5 +7,7 @@
     <string name="app_id">603531596393445</string>
     <string name="capture_button_description">Button used to take picture.</string>
     <string name="record_button_description">Button for recording videos.</string>
+    <string name="profile">Profile</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>
