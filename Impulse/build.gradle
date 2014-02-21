@@ -1,11 +1,11 @@
-apply plugin: 'android-library'
+apply plugin: 'android'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile project(':facebook-android-sdk-3.6.0:facebook')
 }
 
 android {
-    compileSdkVersion 10
+    compileSdkVersion 19
     buildToolsVersion "19.0.1"
 
     sourceSets {
