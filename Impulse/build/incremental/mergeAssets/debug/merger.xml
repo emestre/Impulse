@@ -2,13 +2,16 @@
 <merger>
 
     <dataSet config="ImpulseFacebookAndroidSdk360FacebookUnspecified.aar" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\assets" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/assets" />
+    </dataSet>
+    <dataSet config="ComAndroidSupportAppcompatV71901.aar" >
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ComAndroidSupportAppcompatV71901.aar/assets" />
     </dataSet>
     <dataSet config="main" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\assets" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build-types\debug\assets" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build-types/debug/assets" />
     </dataSet>
 
 </merger>
