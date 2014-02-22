@@ -9,7 +9,8 @@ public class RestClient {
         new PostTask(url, userKey, new RestTaskCallback() {
             @Override
             public void onTaskComplete(String result) {
-                callback.onPostSuccess(result);
+                if(callback != null)
+                    callback.onPostSuccess(result);
             }
         }).execute();
     }

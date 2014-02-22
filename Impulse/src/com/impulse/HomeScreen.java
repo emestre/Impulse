@@ -17,7 +17,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphUser;
 
 public class HomeScreen extends Activity {
 
@@ -27,6 +31,20 @@ public class HomeScreen extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        Session session = Session.getActiveSession();
+        Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    RestClient db_client = new RestClient();
+                    db_client.postUser(user.getId(), null);
+                }
+            }
+        }).executeAsync();
+
+
 		setContentView(R.layout.activity_main);
 		profileButton = (Button) findViewById(R.id.profile_button);
 		profileButton.setOnClickListener(new OnClickListener() {
