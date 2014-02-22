@@ -166,13 +166,14 @@ containing a value of this type.
         public static int com_facebook_loginview_padding_right=0x7f060003;
         public static int com_facebook_loginview_padding_top=0x7f060004;
         public static int com_facebook_loginview_text_size=0x7f060005;
-        public static int com_facebook_picker_divider_width=0x7f06000c;
+        public static int com_facebook_picker_divider_width=0x7f06000d;
         public static int com_facebook_picker_place_image_size=0x7f060006;
-        public static int com_facebook_profilepictureview_preset_size_large=0x7f060007;
-        public static int com_facebook_profilepictureview_preset_size_normal=0x7f060008;
-        public static int com_facebook_profilepictureview_preset_size_small=0x7f060009;
-        public static int com_facebook_usersettingsfragment_profile_picture_height=0x7f06000a;
-        public static int com_facebook_usersettingsfragment_profile_picture_width=0x7f06000b;
+        public static int com_facebook_profilepictureview_preset_size_custom=0x7f060007;
+        public static int com_facebook_profilepictureview_preset_size_large=0x7f060008;
+        public static int com_facebook_profilepictureview_preset_size_normal=0x7f060009;
+        public static int com_facebook_profilepictureview_preset_size_small=0x7f06000a;
+        public static int com_facebook_usersettingsfragment_profile_picture_height=0x7f06000b;
+        public static int com_facebook_usersettingsfragment_profile_picture_width=0x7f06000c;
     }
     public static final class drawable {
         public static int com_facebook_button_blue=0x7f020000;
