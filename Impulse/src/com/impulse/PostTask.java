@@ -6,8 +6,14 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -20,6 +26,7 @@ public class PostTask extends AsyncTask<String, String, String> {
     private String url;
     private RestTaskCallback callback;
     private String userKey;
+    private ArrayList<String> friends;
 
     /**
      * Creates a new instance of PostTask with the specified URL, callback, and
@@ -37,13 +44,21 @@ public class PostTask extends AsyncTask<String, String, String> {
         this.callback = callback;
     }
 
+    public PostTask(String url, ArrayList<String> friends, RestTaskCallback callback) {
+        this.url = url;
+        this.friends = friends;
+        this.callback = callback;
+    }
+
     @Override
     protected String doInBackground(String... arg0) {
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
         HttpResponse resp = null;
 
-        if ((url.substring(url.lastIndexOf("/"))).equals("/createUser")) {
+        String type = url.substring(url.lastIndexOf("/"));
+
+        if (type.equals("/createUser")) {
             List<NameValuePair> list = new ArrayList<NameValuePair>();
             list.add(new BasicNameValuePair("userKey", this.userKey));
 
@@ -58,6 +73,31 @@ public class PostTask extends AsyncTask<String, String, String> {
 
             if (resp != null)
                return Integer.toString(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/getFriendList")) {
+            String result = null;
+            List<NameValuePair> list = new ArrayList<NameValuePair>();
+
+            list.add(new BasicNameValuePair("size", Integer.toString(friends.size())));
+            for (int i = 0; i < friends.size(); i++) {
+                list.add(new BasicNameValuePair("" + i, friends.get(i)));
+            }
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(list));
+                resp = client.execute(post);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null)
+                return result;
 
             return "Error Occurred";
         }
