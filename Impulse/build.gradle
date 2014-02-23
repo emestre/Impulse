@@ -3,6 +3,7 @@ apply plugin: 'android'
 dependencies {
    // compile 'com.android.support:appcompat-v7:19.0.+'
     compile project(':facebook-android-sdk-3.6.0:facebook')
+    compile files('Impulse/libs/android-support-v4.jar')
 }
 
 android {

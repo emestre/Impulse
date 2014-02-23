@@ -11,5 +11,8 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="camera">Camera</string>
     <string name="ping">Ping Server</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+
 
 </resources>

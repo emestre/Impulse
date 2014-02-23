@@ -233,7 +233,7 @@ containing a value of this type.
     public static final class id {
         public static final int action_settings=0x7f050026;
         public static final int authButton=0x7f050004;
-        public static final int camera_button=0x7f050007;
+        public static final int camera_button=0x7f050006;
         public static final int camera_capture_button=0x7f05000d;
         public static final int camera_layout=0x7f05000b;
         public static final int camera_preview=0x7f05000c;
@@ -262,11 +262,11 @@ containing a value of this type.
         public static final int friend_profile_picture=0x7f050024;
         public static final int friends_list=0x7f05000a;
         public static final int large=0x7f050002;
+        public static final int logout_button=0x7f050007;
         public static final int normal=0x7f050001;
         public static final int picker_subtitle=0x7f05001e;
         public static final int profile_button=0x7f050005;
         public static final int profile_picture=0x7f050008;
-        public static final int server_button=0x7f050006;
         public static final int small=0x7f050000;
         public static final int user_name=0x7f050009;
         public static final int viewMiddleInvisible=0x7f050003;
@@ -328,11 +328,13 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f07001b;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f07001c;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f07001d;
-        public static final int hello_world=0x7f07001e;
-        public static final int ping=0x7f07001f;
-        public static final int profile=0x7f070020;
-        public static final int record_button_description=0x7f070021;
-        public static final int title_activity_profile=0x7f070022;
+        public static final int drawer_close=0x7f07001e;
+        public static final int drawer_open=0x7f07001f;
+        public static final int hello_world=0x7f070020;
+        public static final int ping=0x7f070021;
+        public static final int profile=0x7f070022;
+        public static final int record_button_description=0x7f070023;
+        public static final int title_activity_profile=0x7f070024;
     }
     public static final class style {
         /** 

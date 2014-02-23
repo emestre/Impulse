@@ -13,13 +13,6 @@
         android:text="@string/profile" />
 
     <Button
-        android:id="@+id/server_button"
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:layout_margin="10dp"
-        android:text="@string/ping" />
-    
-    <Button
         android:id="@+id/camera_button"
         android:layout_width="200dp"
         android:layout_height="75dp"
@@ -27,5 +20,12 @@
         android:text="@string/camera"
         android:onClick="cameraButtonClick" />
 
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_margin="10dp"
+        android:text="Logout" />
+
 </LinearLayout>
-<!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/activity_main.xml -->
+<!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/layout/activity_main.xml -->
