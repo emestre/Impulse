@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\facebook-android-sdk-3.6.0\facebook\assets" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/facebook-android-sdk-3.6.0/facebook/assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\facebook-android-sdk-3.6.0\facebook\build-types\release\assets" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/facebook-android-sdk-3.6.0/facebook/build-types/release/assets" />
     </dataSet>
 
 </merger>
