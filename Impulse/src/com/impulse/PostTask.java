@@ -5,11 +5,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,8 +57,8 @@ public class PostTask extends AsyncTask<String, String, String> {
     protected String doInBackground(String... arg0) {
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
+        HttpGet get = new HttpGet(url);
         HttpResponse resp = null;
-
         String type = url.substring(url.lastIndexOf("/"));
 
         if (type.equals("/createUser")) {
@@ -79,16 +82,16 @@ public class PostTask extends AsyncTask<String, String, String> {
 
         else if (type.equals("/getFriendList")) {
             String result = null;
+            HttpParams params = new BasicHttpParams();
             List<NameValuePair> list = new ArrayList<NameValuePair>();
 
-            list.add(new BasicNameValuePair("size", Integer.toString(friends.size())));
-            for (int i = 0; i < friends.size(); i++) {
-                list.add(new BasicNameValuePair("" + i, friends.get(i)));
-            }
+            params.setParameter("size", friends.size());
+            for (int i = 0; i < friends.size(); i++)
+                params.setParameter(String.valueOf(i), friends.get(i));
 
             try {
-                post.setEntity(new UrlEncodedFormEntity(list));
-                resp = client.execute(post);
+                get.setParams(params);
+                resp = client.execute(get);
                 result = (new BasicResponseHandler()).handleResponse(resp);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
