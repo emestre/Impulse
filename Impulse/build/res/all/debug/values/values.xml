@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
     <eat-comment />
 
     <color name="com_facebook_blue">#3B5998</color>
@@ -11,7 +11,7 @@
     <color name="com_facebook_usersettingsfragment_connected_shadow_color">#000000</color>
     <color name="com_facebook_usersettingsfragment_connected_text_color">#FFFFFF</color>
     <color name="com_facebook_usersettingsfragment_not_connected_text_color">#A6AED7</color>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/attrs.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/attrs.xml -->
     <eat-comment />
 
     <declare-styleable name="HorizontalListView">
@@ -20,7 +20,7 @@
         <attr name="android:requiresFadingEdge" />
         <attr name="android:fadingEdgeLength" />
     </declare-styleable>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
     <eat-comment />
 
     <declare-styleable name="com_facebook_friend_picker_fragment">
@@ -57,12 +57,12 @@
         </attr>
         <attr name="is_cropped" format="boolean" />
     </declare-styleable>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/dimens.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/dimens.xml -->
     <eat-comment />
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
     <eat-comment />
 
     <dimen name="com_facebook_loginview_compound_drawable_padding">12dp</dimen>
@@ -80,7 +80,7 @@
     <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
 
     <drawable name="com_facebook_picker_default_separator_color">#33464c59</drawable>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/strings.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/strings.xml -->
     <eat-comment />
 
     <string name="action_settings">Settings</string>
@@ -88,7 +88,7 @@
     <string name="app_name">Impulse</string>
     <string name="camera">Camera</string>
     <string name="capture_button_description">Button used to take picture.</string>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
     <eat-comment />
 
     <string name="com_facebook_choose_friends">Choose Friends</string>
@@ -116,7 +116,7 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log in…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged in</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not logged in</string>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/strings.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/strings.xml -->
     <eat-comment />
 
     <string name="hello_world">Hello world!</string>
@@ -124,7 +124,7 @@
     <string name="profile">Profile</string>
     <string name="record_button_description">Button for recording videos.</string>
     <string name="title_activity_profile">ProfileActivity</string>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/styles.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/styles.xml -->
     <eat-comment />
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
@@ -142,7 +142,7 @@
     <style name="TwoWayView">
         <item name="android:orientation">horizontal</item>
     </style>
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
+    <!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
     <eat-comment />
 
     <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">

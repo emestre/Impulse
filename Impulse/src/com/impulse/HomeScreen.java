@@ -39,7 +39,12 @@ public class HomeScreen extends Activity {
             public void onCompleted(GraphUser user, Response response) {
                 if (user != null) {
                     RestClient db_client = new RestClient();
-                    db_client.postUser(user.getId(), null);
+                    db_client.postUser(user.getId(), new PostCallback() {
+                        @Override
+                        public void onPostSuccess(String result) {
+                            Toast.makeText(HomeScreen.this, result, Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         }).executeAsync();
