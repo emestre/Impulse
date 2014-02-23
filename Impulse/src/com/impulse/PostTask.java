@@ -43,7 +43,7 @@ public class PostTask extends AsyncTask<String, String, String> {
         HttpPost post = new HttpPost(url);
         HttpResponse resp = null;
 
-        if ((url.substring(url.lastIndexOf("/"))).equals("createUser")) {
+        if ((url.substring(url.lastIndexOf("/"))).equals("/createUser")) {
             List<NameValuePair> list = new ArrayList<NameValuePair>();
             list.add(new BasicNameValuePair("userKey", this.userKey));
 

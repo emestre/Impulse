@@ -2,364 +2,364 @@
 <merger>
 
     <dataSet config="ImpulseFacebookAndroidSdk360FacebookUnspecified.aar" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res" >
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res" >
             <file
                 name="com_facebook_button_blue"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_blue.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_blue.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_blue_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_blue_focused.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_blue_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_blue_normal.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_blue_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_blue_pressed.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_check"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_check.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_check.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_check_off"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_check_off.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_check_off.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_check_on"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_check_on.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_check_on.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_grey_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_grey_focused.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_grey_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_grey_normal.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_button_grey_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_button_grey_pressed.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_close"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_close.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_close.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_inverse_icon"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_inverse_icon.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_inverse_icon.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_list_divider"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_list_divider.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_list_divider.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_list_section_header_background"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_list_section_header_background.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_list_section_header_background.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_loginbutton_silver"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_loginbutton_silver.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_loginbutton_silver.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_logo"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_logo.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_logo.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_item_background"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_item_background.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_item_background.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_list_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_list_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_list_focused.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_list_longpressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_list_longpressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_list_longpressed.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_list_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_list_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_list_pressed.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_list_selector"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_list_selector.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_list_selector.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_list_selector_background_transition"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_list_selector_background_transition.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_list_selector_background_transition.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_list_selector_disabled"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_list_selector_disabled.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_list_selector_disabled.9.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_picker_top_button"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_picker_top_button.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_picker_top_button.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_place_default_icon"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_place_default_icon.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_place_default_icon.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_profile_default_icon"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_profile_default_icon.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_profile_default_icon.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_profile_picture_blank_portrait"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_profile_picture_blank_portrait.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_profile_picture_blank_portrait.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_profile_picture_blank_square"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_profile_picture_blank_square.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_profile_picture_blank_square.png"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_top_background"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_top_background.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_top_background.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_top_button"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_top_button.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_top_button.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_usersettingsfragment_background_gradient"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable\com_facebook_usersettingsfragment_background_gradient.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable/com_facebook_usersettingsfragment_background_gradient.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_button_blue_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_button_blue_focused.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_button_blue_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_button_blue_normal.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_button_blue_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_button_blue_pressed.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_button_grey_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_button_grey_focused.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_button_grey_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_button_grey_normal.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_button_grey_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_button_grey_pressed.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_close"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_close.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_close.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_inverse_icon"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_inverse_icon.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_inverse_icon.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_logo"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_logo.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_logo.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_picker_magnifier"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-hdpi\com_facebook_picker_magnifier.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-hdpi/com_facebook_picker_magnifier.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="com_facebook_close"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-ldpi\com_facebook_close.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-ldpi/com_facebook_close.png"
                 qualifiers="ldpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-mdpi\com_facebook_button_blue_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-mdpi/com_facebook_button_blue_focused.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-mdpi\com_facebook_button_blue_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-mdpi/com_facebook_button_blue_normal.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-mdpi\com_facebook_button_blue_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-mdpi/com_facebook_button_blue_pressed.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="com_facebook_inverse_icon"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-mdpi\com_facebook_inverse_icon.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-mdpi/com_facebook_inverse_icon.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="com_facebook_picker_magnifier"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-mdpi\com_facebook_picker_magnifier.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-mdpi/com_facebook_picker_magnifier.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_button_blue_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_button_blue_focused.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_button_blue_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_button_blue_normal.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_blue_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_button_blue_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_button_blue_pressed.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_focused"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_button_grey_focused.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_button_grey_focused.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_normal"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_button_grey_normal.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_button_grey_normal.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_button_grey_pressed"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_button_grey_pressed.9.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_button_grey_pressed.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_close"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_close.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_close.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_inverse_icon"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_inverse_icon.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_inverse_icon.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_logo"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_logo.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_logo.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_picker_magnifier"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\drawable-xhdpi\com_facebook_picker_magnifier.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/drawable-xhdpi/com_facebook_picker_magnifier.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="com_facebook_friendpickerfragment"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_friendpickerfragment.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_friendpickerfragment.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_login_activity_layout"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_login_activity_layout.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_login_activity_layout.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_activity_circle_row"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_activity_circle_row.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_activity_circle_row.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_checkbox"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_checkbox.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_checkbox.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_image"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_image.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_image.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_list_row"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_list_row.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_list_row.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_list_section_header"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_list_section_header.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_list_section_header.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_search_box"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_search_box.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_search_box.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_title_bar"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_title_bar.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_title_bar.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_picker_title_bar_stub"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_picker_title_bar_stub.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_picker_title_bar_stub.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_placepickerfragment"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_placepickerfragment.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_placepickerfragment.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_placepickerfragment_list_row"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_placepickerfragment_list_row.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_placepickerfragment_list_row.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_search_bar_layout"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_search_bar_layout.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_search_bar_layout.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="com_facebook_usersettingsfragment"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\layout\com_facebook_usersettingsfragment.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/layout/com_facebook_usersettingsfragment.xml"
                 qualifiers=""
                 type="layout" />
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml"
                 qualifiers="" >
                 <string name="com_facebook_internet_permission_error_message" >WebView login requires INTERNET permission
                 </string>
@@ -626,15 +626,31 @@ center
                 </string>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-es\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-es/values.xml"
                 qualifiers="es" >
                 <string name="com_facebook_nearby" >Cercano
                 </string>
                 <string name="com_facebook_requesterror_password_changed" >Su contraseña de Facebook ha cambiado, por favor vuelva a conectar la aplicación con Facebook.
                 </string>
-                <string name="com_facebook_loginview_log_out_action" >Cerrar sesión
-                </string>
                 <string name="com_facebook_requesterror_reconnect" >Se produjo un error al conectar con Facebook, por favor vuelva a conectar la aplicación con Facebook.
+                </string>
+                <string name="com_facebook_placepicker_subtitle_format" >%1$s • %2$,d estuvieron aquí
+                </string>
+                <string name="com_facebook_loading" >Cargando
+                </string>
+                <string name="com_facebook_requesterror_web_login" >Por favor, iniciar sesión a través https://www.facebook.com o https://m.facebook.com para volver a activar la aplicación para conectar con Facebook.
+                </string>
+                <string name="com_facebook_loginview_cancel_action" >Cancelar
+                </string>
+                <string name="com_facebook_choose_friends" >Elige Amigos
+                </string>
+                <string name="com_facebook_dialogloginactivity_ok_button" >Aceptar
+                </string>
+                <string name="com_facebook_loginview_log_in_button" >Iniciar sesión con Facebook
+                </string>
+                <string name="com_facebook_loginview_logged_in_as" >Sesión iniciada como: %1$s
+                </string>
+                <string name="com_facebook_loginview_log_out_action" >Cerrar sesión
                 </string>
                 <string name="com_facebook_requesterror_permissions" >Una conexión de aplicación con Facebook falló debido a permisos insuficientes, por favor, conceda los permisos de aplicaciones para realizar la operación.
                 </string>
@@ -646,19 +662,9 @@ center
                 </string>
                 <string name="com_facebook_loginview_logged_in_using_facebook" >Sesión iniciada con Facebook
                 </string>
-                <string name="com_facebook_placepicker_subtitle_format" >%1$s • %2$,d estuvieron aquí
-                </string>
-                <string name="com_facebook_requesterror_web_login" >Por favor, iniciar sesión a través https://www.facebook.com o https://m.facebook.com para volver a activar la aplicación para conectar con Facebook.
-                </string>
-                <string name="com_facebook_loading" >Cargando
-                </string>
                 <string name="com_facebook_picker_done_button_text" >Aceptar
                 </string>
                 <string name="com_facebook_placepicker_subtitle_catetory_only_format" >%1$s
-                </string>
-                <string name="com_facebook_loginview_cancel_action" >Cancelar
-                </string>
-                <string name="com_facebook_choose_friends" >Elige Amigos
                 </string>
                 <string name="com_facebook_internet_permission_error_message" >WebView inicio de sesión requiere permiso INTERNET
                 </string>
@@ -666,27 +672,21 @@ center
                 </string>
                 <string name="com_facebook_requesterror_relogin" >La aplicación no se conecta con Facebook, inicie sesión y volver a conectar esta aplicación.
                 </string>
-                <string name="com_facebook_dialogloginactivity_ok_button" >Aceptar
-                </string>
                 <string name="com_facebook_usersettingsfragment_log_in_button" >Iniciar sesión…
                 </string>
                 <string name="com_facebook_logo_content_description" >Logo de Facebook
                 </string>
-                <string name="com_facebook_loginview_log_in_button" >Iniciar sesión con Facebook
-                </string>
                 <string name="com_facebook_loginview_log_out_button" >Cerrar sesión
-                </string>
-                <string name="com_facebook_loginview_logged_in_as" >Sesión iniciada como: %1$s
                 </string>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-hdpi\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-hdpi/values.xml"
                 qualifiers="hdpi" >
                 <dimen name="com_facebook_picker_divider_width" >1px
                 </dimen>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-he\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-he/values.xml"
                 qualifiers="he" >
                 <string name="com_facebook_requesterror_password_changed" >.הסיסמה שלך בפייסבוק השתנתה, אנא חבר מחדש את האפליקציה עם פייסבוק
                 </string>
@@ -740,43 +740,21 @@ center
                 </string>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-iw\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-iw/values.xml"
                 qualifiers="iw" >
                 <string name="com_facebook_usersettingsfragment_log_in_button" >התחבר…
                 </string>
-                <string name="com_facebook_requesterror_password_changed" >.הסיסמה שלך בפייסבוק השתנתה, אנא חבר מחדש את האפליקציה עם פייסבוק
-                </string>
-                <string name="com_facebook_picker_done_button_text" >בצע
-                </string>
-                <string name="com_facebook_internet_permission_error_title" >AndroidManifest שגיאת
-                </string>
                 <string name="com_facebook_loginview_log_out_button" >התנתק
-                </string>
-                <string name="com_facebook_loginview_logged_in_as" >מחובר בשם: %1$s
-                </string>
-                <string name="com_facebook_internet_permission_error_message" >ההתחברות לתצוגת אתר דורשת אישור אינטרנט
                 </string>
                 <string name="com_facebook_loginview_logged_in_using_facebook" >מחובר באמצעות פייסבוק
                 </string>
-                <string name="com_facebook_requesterror_reconnect" >.ארעה שגיאה בעת החיבור עם פייסבוק, חבר בבקשה מחדש את האפליקציה עם פייסבוק
+                <string name="com_facebook_internet_permission_error_message" >ההתחברות לתצוגת אתר דורשת אישור אינטרנט
                 </string>
                 <string name="com_facebook_loginview_log_out_action" >התנתק
                 </string>
                 <string name="com_facebook_placepicker_subtitle_catetory_only_format" >%1$s
                 </string>
-                <string name="com_facebook_usersettingsfragment_logged_in" >מחובר
-                </string>
-                <string name="com_facebook_logo_content_description" >פייסבוק לוגו
-                </string>
                 <string name="com_facebook_choose_friends" >בחר חברים
-                </string>
-                <string name="com_facebook_dialogloginactivity_ok_button" >אישור
-                </string>
-                <string name="com_facebook_loading" >..מעלה
-                </string>
-                <string name="com_facebook_nearby" >קרוב אליי
-                </string>
-                <string name="com_facebook_loginview_log_in_button" >התחבר לפייסבוק
                 </string>
                 <string name="com_facebook_placepicker_subtitle_were_here_only_format" >%1$,d היו פה
                 </string>
@@ -786,27 +764,49 @@ center
                 </string>
                 <string name="com_facebook_requesterror_permissions" >.חיבור האפליקציה עם פייסבוק נכשל בשל הרשאות לא מספקות, אנא הענק הרשאות לאפליקציה בכדי שהפעולה תוכל להתבצע
                 </string>
-                <string name="com_facebook_loginview_cancel_action" >בטל
-                </string>
                 <string name="com_facebook_requesterror_web_login" >.כדי לאפשר מחדש לאפליקציה להתחבר עם פייסבוק https://www.facebook.com או https://m.facebook.com אנא היכנס דרך
                 </string>
                 <string name="com_facebook_requesterror_relogin" >.האפליקציה אינה מחוברת לפייסבוק, אנא היכנס וחבר מחדש את האפליקציה
                 </string>
+                <string name="com_facebook_requesterror_password_changed" >.הסיסמה שלך בפייסבוק השתנתה, אנא חבר מחדש את האפליקציה עם פייסבוק
+                </string>
+                <string name="com_facebook_internet_permission_error_title" >AndroidManifest שגיאת
+                </string>
+                <string name="com_facebook_picker_done_button_text" >בצע
+                </string>
+                <string name="com_facebook_loginview_logged_in_as" >מחובר בשם: %1$s
+                </string>
+                <string name="com_facebook_requesterror_reconnect" >.ארעה שגיאה בעת החיבור עם פייסבוק, חבר בבקשה מחדש את האפליקציה עם פייסבוק
+                </string>
+                <string name="com_facebook_logo_content_description" >פייסבוק לוגו
+                </string>
+                <string name="com_facebook_usersettingsfragment_logged_in" >מחובר
+                </string>
+                <string name="com_facebook_loading" >..מעלה
+                </string>
+                <string name="com_facebook_dialogloginactivity_ok_button" >אישור
+                </string>
+                <string name="com_facebook_nearby" >קרוב אליי
+                </string>
+                <string name="com_facebook_loginview_log_in_button" >התחבר לפייסבוק
+                </string>
+                <string name="com_facebook_loginview_cancel_action" >בטל
+                </string>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-ldpi\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-ldpi/values.xml"
                 qualifiers="ldpi" >
                 <dimen name="com_facebook_picker_divider_width" >1px
                 </dimen>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-mdpi\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-mdpi/values.xml"
                 qualifiers="mdpi" >
                 <dimen name="com_facebook_picker_divider_width" >1px
                 </dimen>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\exploded-bundles\ImpulseFacebookAndroidSdk360FacebookUnspecified.aar\res\values-xhdpi\values.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-xhdpi/values.xml"
                 qualifiers="xhdpi" >
                 <dimen name="com_facebook_picker_divider_width" >2px
                 </dimen>
@@ -814,134 +814,134 @@ center
         </source>
     </dataSet>
     <dataSet config="main" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res" >
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res" >
             <file
                 name="ic_action_camera"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\ic_action_camera.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/ic_action_camera.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="ic_action_stop"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\ic_action_stop.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/ic_action_stop.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="ic_action_video"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\ic_action_video.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/ic_action_video.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="ic_impulse_logo"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\ic_impulse_logo.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/ic_impulse_logo.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="ic_launcher"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\ic_launcher.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/ic_launcher.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="login_background"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\login_background.jpg"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/login_background.jpg"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="login_background0"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\login_background0.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/login_background0.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="login_background_small"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-hdpi\login_background_small.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-hdpi/login_background_small.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="ic_action_camera"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-mdpi\ic_action_camera.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-mdpi/ic_action_camera.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="ic_action_stop"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-mdpi\ic_action_stop.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-mdpi/ic_action_stop.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="ic_action_video"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-mdpi\ic_action_video.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-mdpi/ic_action_video.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="ic_launcher"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-mdpi\ic_launcher.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-mdpi/ic_launcher.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="ic_action_camera"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-xhdpi\ic_action_camera.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-xhdpi/ic_action_camera.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="ic_action_stop"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-xhdpi\ic_action_stop.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-xhdpi/ic_action_stop.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="ic_action_video"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-xhdpi\ic_action_video.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-xhdpi/ic_action_video.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="ic_launcher"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-xhdpi\ic_launcher.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-xhdpi/ic_launcher.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="ic_launcher"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\drawable-xxhdpi\ic_launcher.png"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/drawable-xxhdpi/ic_launcher.png"
                 qualifiers="xxhdpi"
                 type="drawable" />
             <file
                 name="activity_login"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\layout\activity_login.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/activity_login.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="activity_main"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\layout\activity_main.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/activity_main.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="activity_profile"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\layout\activity_profile.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/activity_profile.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="camera_layout"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\layout\camera_layout.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/camera_layout.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="friend_view"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\layout\friend_view.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/friend_view.xml"
                 qualifiers=""
                 type="layout" />
             <file
                 name="login"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\menu\login.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/menu/login.xml"
                 qualifiers=""
                 type="menu" />
             <file
                 name="main"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\menu\main.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/menu/main.xml"
                 qualifiers=""
                 type="menu" />
             <file
                 name="profile"
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\menu\profile.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/menu/profile.xml"
                 qualifiers=""
                 type="menu" />
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values\attrs.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/attrs.xml"
                 qualifiers="" >
                 <declare-styleable name="HorizontalListView" >
                     <attr
@@ -953,7 +953,7 @@ center
                 </declare-styleable>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values\dimens.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/dimens.xml"
                 qualifiers="" >
                 <dimen name="activity_horizontal_margin" >16dp
                 </dimen>
@@ -961,7 +961,7 @@ center
                 </dimen>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values\strings.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/strings.xml"
                 qualifiers="" >
                 <string name="action_settings" >Settings
                 </string>
@@ -985,7 +985,7 @@ center
                 </string>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values\styles.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values/styles.xml"
                 qualifiers="" >
 
                 <style name="TwoWayView" >
@@ -1013,13 +1013,13 @@ horizontal
                 </style>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values-sw720dp-land\dimens.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values-sw720dp-land/dimens.xml"
                 qualifiers="sw720dp-land" >
                 <dimen name="activity_horizontal_margin" >128dp
                 </dimen>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values-v11\styles.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values-v11/styles.xml"
                 qualifiers="v11" >
 
                 <style
@@ -1030,7 +1030,7 @@ horizontal
                 </style>
             </file>
             <file
-                path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\res\values-v14\styles.xml"
+                path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/values-v14/styles.xml"
                 qualifiers="v14" >
 
                 <style
@@ -1041,10 +1041,10 @@ horizontal
                 </style>
             </file>
         </source>
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build\res\rs\debug" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build/res/rs/debug" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="C:\Users\Eliot\Documents\GitHub\Impulse\Impulse\build-types\debug\res" />
+        <source path="/Users/akshay159/Documents/GitHub/Impulse/Impulse/build-types/debug/res" />
     </dataSet>
 
 </merger>
