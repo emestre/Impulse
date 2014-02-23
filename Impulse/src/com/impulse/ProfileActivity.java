@@ -19,6 +19,10 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,7 @@ public class ProfileActivity extends Activity {
     private TextView userName;
     private ProfilePictureView profPic;
     private HorizontalListView friendsList;
+    private ArrayList<String> allFriends;
     private ArrayList<Friend> friends;
     private FriendViewAdapter friendsAdapter;
 
@@ -35,6 +40,7 @@ public class ProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        allFriends = new ArrayList<String>();
         friends = new ArrayList<Friend>();
         friendsAdapter = new FriendViewAdapter(this, friends);
         Session session = Session.getActiveSession();
@@ -69,9 +75,18 @@ public class ProfileActivity extends Activity {
                     {
                         if (users != null) {
                             for (GraphUser user : users) {
+                                allFriends.add(user.getId());
                                 friends.add(new Friend(user.getName().split(" ")[0], user.getId()));
                             }
-                            friendsAdapter.notifyDataSetChanged();
+                            RestClient db_client = new RestClient();
+                            db_client.getFriendList(allFriends, new PostCallback() {
+                                @Override
+                                public void onPostSuccess(String result) {
+                                    Log.i("DB FRIENDS", result);
+                                    parseProceduresFromResponse(result);
+                                    friendsAdapter.notifyDataSetChanged();
+                                }
+                            });
                         }
                     }
                 }
@@ -87,6 +102,23 @@ public class ProfileActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void parseProceduresFromResponse(String response) {
+        JsonElement elem = new JsonParser().parse(response);
+        ArrayList<Friend> newFriendList = new ArrayList<Friend>();
+        JsonArray array = elem.getAsJsonArray();
+        for (int index = 0; index < array.size(); ++index) {
+            elem = array.get(index);
+            JsonObject obj = elem.getAsJsonObject();
+            JsonElement innerElem = obj.get("key");
+            String key = innerElem.getAsString();
+            for(Friend friend : friends) {
+                if(friend.getUser_id().equals(key))
+                    newFriendList.add(friend);
+            }
+        }
+        friends = newFriendList;
     }
 
     @Override
