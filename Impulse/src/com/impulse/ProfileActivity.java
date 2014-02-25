@@ -14,15 +14,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,18 +38,18 @@ public class ProfileActivity extends Activity {
     private TextView userName;
     private ProfilePictureView profPic;
     private HorizontalListView friendsList;
-    private ArrayList<String> allFriends;
     private ArrayList<Friend> friends;
     private FriendViewAdapter friendsAdapter;
+    private String userId;
+    private String userFirstName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        allFriends = new ArrayList<String>();
         friends = new ArrayList<Friend>();
         friendsAdapter = new FriendViewAdapter(this, friends);
-        Session session = Session.getActiveSession();
+        final Session session = Session.getActiveSession();
         userName = (TextView) findViewById(R.id.user_name);
         profPic = (ProfilePictureView) findViewById(R.id.profile_picture);
         friendsList = (HorizontalListView) findViewById(R.id.friends_list);
@@ -51,10 +57,11 @@ public class ProfileActivity extends Activity {
 
 
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("USER_ID")) {
-            String user_id = getIntent().getExtras().getString("USER_ID");
-            String user_name = getIntent().getExtras().getString("USER_NAME");
-            userName.setText(user_name);
-            profPic.setProfileId(user_id);
+            userId = getIntent().getExtras().getString("USER_ID");
+            userFirstName = getIntent().getExtras().getString("USER_NAME");
+            userName.setText(userFirstName);
+            profPic.setProfileId(userId);
+            getFriends(session);
         } else {
             Request.newMeRequest(session, new Request.GraphUserCallback() {
 
@@ -64,34 +71,13 @@ public class ProfileActivity extends Activity {
                     if (user != null) {
                         userName.setText(user.getName().split(" ")[0]);
                         profPic.setProfileId(user.getId());
-                    }
-                }
-            }).executeAsync();
-
-
-            Request.newMyFriendsRequest(session, new Request.GraphUserListCallback() {
-                @Override
-                public void onCompleted(List<GraphUser> users, Response response) {
-                    {
-                        if (users != null) {
-                            for (GraphUser user : users) {
-                                allFriends.add(user.getId());
-                                friends.add(new Friend(user.getName().split(" ")[0], user.getId()));
-                            }
-                            RestClient db_client = new RestClient();
-                            db_client.getFriendList(allFriends, new PostCallback() {
-                                @Override
-                                public void onPostSuccess(String result) {
-                                    Log.i("DB FRIENDS", result);
-                                    parseProceduresFromResponse(result);
-                                    friendsAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
+                        userId = user.getId();
+                        getFriends(session);
                     }
                 }
             }).executeAsync();
         }
+
 
         friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -104,21 +90,34 @@ public class ProfileActivity extends Activity {
         });
     }
 
-    private void parseProceduresFromResponse(String response) {
-        JsonElement elem = new JsonParser().parse(response);
-        ArrayList<Friend> newFriendList = new ArrayList<Friend>();
-        JsonArray array = elem.getAsJsonArray();
-        for (int index = 0; index < array.size(); ++index) {
-            elem = array.get(index);
-            JsonObject obj = elem.getAsJsonObject();
-            JsonElement innerElem = obj.get("key");
-            String key = innerElem.getAsString();
-            for(Friend friend : friends) {
-                if(friend.getUser_id().equals(key))
-                    newFriendList.add(friend);
+    private void getFriends(Session session) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("fields", "id,name,installed");
+
+        new Request(session, "/" + userId + "/friends", requestBundle, HttpMethod.GET, new Request.Callback() {
+            @Override
+            public void onCompleted(Response response) {
+                parseFriends(response);
+                friendsAdapter.notifyDataSetChanged();
+            }
+        }).executeAsync();
+    }
+
+    private void parseFriends(Response response) {
+        GraphObject results = response.getGraphObject();
+        JSONObject json = results.getInnerJSONObject();
+
+        JsonElement elem = new JsonParser().parse( json.toString());
+        JsonElement data = elem.getAsJsonObject().get("data");
+        JsonArray newFriends = data.getAsJsonArray();
+        for(JsonElement friend : newFriends) {
+            JsonObject newFriend = friend.getAsJsonObject();
+            if(newFriend.has("installed") && newFriend.get("installed").getAsString().equals("true")) {
+                String friendName = newFriend.get("name").getAsString().split(" ")[0];
+                String friendId = newFriend.get("id").getAsString();
+                friends.add(new Friend(friendName, friendId));
             }
         }
-        friends = newFriendList;
     }
 
     @Override
