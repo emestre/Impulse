@@ -1,9 +1,9 @@
 apply plugin: 'android'
 
 dependencies {
-    // compile 'com.android.support:appcompat-v7:19.0.+'
     compile project(':facebook-android-sdk-3.6.0:facebook')
     compile files('Impulse/libs/android-support-v4.jar')
+    compile files('Impulse/libs/android-support-v7-appcompat.jar')
     compile files('Impulse/libs/gson-2.2.4.jar')
     compile files('Impulse/libs/commons-codec-1.6.jar')
     compile files('Impulse/libs/commons-logging-1.1.3.jar')

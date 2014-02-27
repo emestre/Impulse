@@ -83,6 +83,9 @@
     <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/strings.xml -->
     <eat-comment />
 
+    <string name="action_next">Next</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_reply">Reply</string>
     <string name="action_settings">Settings</string>
     <string name="app_id">603531596393445</string>
     <string name="app_name">Impulse</string>
@@ -122,10 +125,12 @@
     <string name="drawer_close">Close Drawer</string>
     <string name="drawer_open">Open Drawer</string>
     <string name="hello_world">Hello world!</string>
+    <string name="logout">Logout</string>
     <string name="ping">Ping Server</string>
     <string name="profile">Profile</string>
     <string name="record_button_description">Button for recording videos.</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="view_posts">View Posts</string>
     <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/values/styles.xml -->
     <eat-comment />
 

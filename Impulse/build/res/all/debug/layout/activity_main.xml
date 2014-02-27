@@ -21,11 +21,19 @@
         android:onClick="cameraButtonClick" />
 
     <Button
+        android:id="@+id/view_posts_button"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_margin="10dp"
+        android:text="@string/view_posts" />
+
+
+    <Button
         android:id="@+id/logout_button"
         android:layout_width="200dp"
         android:layout_height="75dp"
         android:layout_margin="10dp"
-        android:text="Logout" />
+        android:text="@string/logout" />
 
 </LinearLayout>
 <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/layout/activity_main.xml -->

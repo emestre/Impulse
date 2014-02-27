@@ -1,20 +1,9 @@
 package com.impulse;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -26,10 +15,11 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.impulse.R;
 
 public class HomeScreen extends Activity {
 
-    private Button profileButton, logoutButton;
+    private Button profileButton, logoutButton, viewPostsButton;
     private long startTime;
 
 
@@ -39,12 +29,25 @@ public class HomeScreen extends Activity {
         setContentView(R.layout.activity_main);
         profileButton = (Button) findViewById(R.id.profile_button);
         logoutButton = (Button) findViewById(R.id.logout_button);
+        viewPostsButton = (Button) findViewById(R.id.view_posts_button);
         profileButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeScreen.this,
                         ProfileActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
+
+        viewPostsButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreen.this,
+                        PostActivity.class);
                 startActivity(intent);
             }
 

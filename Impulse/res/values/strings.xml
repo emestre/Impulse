@@ -13,6 +13,9 @@
     <string name="ping">Ping Server</string>
     <string name="drawer_open">Open Drawer</string>
     <string name="drawer_close">Close Drawer</string>
-
-
+    <string name="action_next">Next</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_reply">Reply</string>
+    <string name="logout">Logout</string>
+    <string name="view_posts">View Posts</string>
 </resources>
