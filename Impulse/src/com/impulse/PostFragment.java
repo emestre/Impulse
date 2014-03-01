@@ -1,10 +1,13 @@
 package com.impulse;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 public class PostFragment extends Fragment {
 
@@ -45,7 +48,22 @@ public class PostFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        return inflater.inflate(R.layout.post_fragment, container, false);
+        View view = inflater.inflate(R.layout.post_fragment, container, false);
+        ImageView image = (ImageView) view.findViewById(R.id.post_image);
+        String url = null;
+        if(getPageNumber() == 0)
+            url = "http://ppcdn.500px.org/56690912/e1fa0e8ee33b7f123cf9ca851fe7d5cae4f09e23/5.jpg";
+        else if(getPageNumber() == 1)
+            url = "http://farm6.staticflickr.com/5542/9463864484_7f49df4725_b.jpg";
+        else if(getPageNumber() == 2)
+            url = "http://i.imgur.com/Jnjq2au.jpg";
+        else if(getPageNumber() == 3)
+            url = "http://i.imgur.com/6oIQo8M.jpg";
+        else if(getPageNumber() == 4)
+            url = "http://i.imgur.com/lqaii.jpg";
+
+        Picasso.with(getActivity().getApplicationContext()).load(url).into(image);
+        return view;
     }
 
 }

@@ -15,7 +15,6 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.impulse.R;
 
 public class HomeScreen extends Activity {
 

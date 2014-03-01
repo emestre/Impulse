@@ -51,8 +51,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Scroller;
 
-import com.impulse.R;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

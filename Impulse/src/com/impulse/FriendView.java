@@ -2,7 +2,6 @@ package com.impulse;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 

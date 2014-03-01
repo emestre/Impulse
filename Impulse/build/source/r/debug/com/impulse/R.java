@@ -234,10 +234,10 @@ containing a value of this type.
         public static final int reply_video=0x7f02002a;
     }
     public static final class id {
-        public static final int action_next=0x7f05002a;
-        public static final int action_previous=0x7f050029;
-        public static final int action_reply=0x7f05002b;
-        public static final int action_settings=0x7f050028;
+        public static final int action_next=0x7f05002b;
+        public static final int action_previous=0x7f05002a;
+        public static final int action_reply=0x7f05002c;
+        public static final int action_settings=0x7f050029;
         public static final int authButton=0x7f050004;
         public static final int camera_button=0x7f050006;
         public static final int camera_capture_button=0x7f05000f;
@@ -272,6 +272,7 @@ containing a value of this type.
         public static final int normal=0x7f050001;
         public static final int pager=0x7f050009;
         public static final int picker_subtitle=0x7f050020;
+        public static final int post_image=0x7f050028;
         public static final int profile_button=0x7f050005;
         public static final int profile_picture=0x7f05000a;
         public static final int small=0x7f050000;

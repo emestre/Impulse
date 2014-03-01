@@ -1,13 +1,13 @@
 package com.impulse;
 
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
 
 //Code taken from:
 //http://developer.android.com/guide/topics/media/camera.html#saving-media

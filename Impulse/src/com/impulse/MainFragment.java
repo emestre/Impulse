@@ -1,24 +1,19 @@
 package com.impulse;
 
-import java.util.Arrays;
-
-import android.app.ActionBar;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
-import com.facebook.widget.ProfilePictureView;
+
+import java.util.Arrays;
 
 public class MainFragment extends Fragment {
 
