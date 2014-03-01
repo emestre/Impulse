@@ -17,8 +17,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-<<<<<<< HEAD
-=======
+
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
@@ -26,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
->>>>>>> 669a51e70bda8449d0f4994d53dfcf04b8d04a2a
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
