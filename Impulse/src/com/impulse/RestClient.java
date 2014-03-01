@@ -6,6 +6,7 @@ public class RestClient {
     private static final String BASE_URL = "http://impulse-backend.appspot.com";
     private static final String CREATE_USER = "/createUser";
     private static final String FRIEND_LIST = "/getFriendList";
+    private static final String UPLOAD_FILE = "/uploadFile";
 
     public void postUser(String userKey, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
@@ -18,13 +19,15 @@ public class RestClient {
         }).execute();
     }
 
-    public void getFriendList(ArrayList<String> friends, final PostCallback callback) {
-        String url = BASE_URL + FRIEND_LIST;
-        new PostTask(url, friends, new RestTaskCallback() {
+    public void postFile(String userKey, String caption, double latitude, double longitude, String filePath, String extension, int timeout, final PostCallback callback) {
+        String url = BASE_URL + UPLOAD_FILE;
+        new PostTask(userKey, caption, latitude, longitude, filePath, extension, timeout, new RestTaskCallback() {
             @Override
             public void onTaskComplete(String result) {
-                if (callback != null)
+                if (callback != null) {
                     callback.onPostSuccess(result);
+                }
+
             }
         }).execute();
     }
