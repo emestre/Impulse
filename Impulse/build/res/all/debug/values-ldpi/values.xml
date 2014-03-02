@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/build/exploded-bundles/ImpulseFacebookAndroidSdk360FacebookUnspecified.aar/res/values-ldpi/values.xml -->
+    <!-- From: file:/Users/alex/repos/impulse-android/Impulse/build/exploded-bundles/ImpulseAndroidFacebookAndroidSdk360FacebookUnspecified.aar/res/values-ldpi/values.xml -->
     <eat-comment />
 
     <dimen name="com_facebook_picker_divider_width">1px</dimen>
