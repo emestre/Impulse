@@ -12,10 +12,17 @@ import java.io.IOException;
 
 public class GetTask extends AsyncTask<String, String, String> {
     private String url;
+    private String fileName;
     private RestTaskCallback callback;
 
     public GetTask(String url, RestTaskCallback callback) {
         this.url = url;
+        this.callback = callback;
+    }
+
+    public GetTask(String url, String fileName, RestTaskCallback callback) {
+        this.url = url;
+        this.fileName = fileName;
         this.callback = callback;
     }
 
@@ -41,7 +48,29 @@ public class GetTask extends AsyncTask<String, String, String> {
 
             return "Error Occurred";
         }
+        else if (type.equals("/getFile")) {
+            url = url + "?" + "fileName=" + this.fileName;
+            get = new HttpGet(url);
+
+            try{
+                resp = client.execute(get);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null)
+                return result;
+
+            return "Error Occurred";
+        }
 
         return "Invalid URL";
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        callback.onTaskComplete(result);
+        super.onPostExecute(result);
     }
 }
