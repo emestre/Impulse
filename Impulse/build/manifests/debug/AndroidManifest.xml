@@ -30,6 +30,8 @@
         <activity android:name="com.impulse.CameraActivity" android:screenOrientation="portrait">
 
         </activity>
+        <activity android:label="@string/title_activity_create_post" android:name="com.impulse.CreatePost">
+        </activity>
     </application>
 
 </manifest>

@@ -914,6 +914,11 @@ center
                 qualifiers="xxhdpi"
                 type="drawable" />
             <file
+                name="activity_camera"
+                path="/Users/alex/repos/impulse-android/Impulse/res/layout/activity_camera.xml"
+                qualifiers=""
+                type="layout" />
+            <file
                 name="activity_login"
                 path="/Users/alex/repos/impulse-android/Impulse/res/layout/activity_login.xml"
                 qualifiers=""
@@ -995,6 +1000,8 @@ center
                 </string>
                 <string name="action_settings" >Settings
                 </string>
+                <string name="submenu_post_text" >Upload New Post
+                </string>
                 <string name="profile" >Profile
                 </string>
                 <string name="camera" >Camera
@@ -1015,7 +1022,11 @@ center
                 </string>
                 <string name="action_next" >Next
                 </string>
+                <string name="menu_create_text" >Create
+                </string>
                 <string name="ping" >Ping Server
+                </string>
+                <string name="submenu_save_text" >Save to SD Card
                 </string>
                 <string name="app_name" >Impulse
                 </string>
@@ -1024,6 +1035,8 @@ center
                 <string name="action_previous" >Previous
                 </string>
                 <string name="view_posts" >View Posts
+                </string>
+                <string name="title_activity_create_post" >New Post
                 </string>
                 <string name="drawer_open" >Open Drawer
                 </string>
@@ -1089,10 +1102,15 @@ horizontal
                 </style>
             </file>
             <file
-                name="activity_camera"
-                path="/Users/alex/repos/impulse-android/Impulse/res/layout/activity_camera.xml"
+                name="activity_create_post"
+                path="/Users/alex/repos/impulse-android/Impulse/res/layout/activity_create_post.xml"
                 qualifiers=""
                 type="layout" />
+            <file
+                name="create_post"
+                path="/Users/alex/repos/impulse-android/Impulse/res/menu/create_post.xml"
+                qualifiers=""
+                type="menu" />
         </source>
         <source path="/Users/alex/repos/impulse-android/Impulse/build/res/rs/debug" />
     </dataSet>

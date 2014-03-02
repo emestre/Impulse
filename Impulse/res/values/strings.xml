@@ -21,4 +21,8 @@
     <string name="switch_camera_text">Flip</string>
     <string name="capture_button_text">Take Picture</string>
     <string name="record_button_text">Start Recording</string>
+    <string name="menu_create_text">Create</string>
+    <string name="submenu_save_text">Save to SD Card</string>
+    <string name="submenu_post_text">Upload New Post</string>
+    <string name="title_activity_create_post">New Post</string>
 </resources>

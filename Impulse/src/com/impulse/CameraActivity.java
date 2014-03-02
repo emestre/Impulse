@@ -188,13 +188,13 @@ public class CameraActivity extends Activity {
                 Log.d(TAG, "Error writing to file: " + e.getMessage());
             }
 
-//            Intent intent = new Intent(getApplicationContext(), ReviewPostActivity.class);
-//            // store the media type in the intent
-//            intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
-//            // store the path to the media
-//            intent.putExtra(PATH_KEY, path);
-//            // start the preview post activity
-//            startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+            // store the media type in the intent
+            intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
+            // store the path to the media
+            intent.putExtra(PATH_KEY, path);
+            // start the preview post activity
+            startActivity(intent);
         }
     };
 
@@ -235,13 +235,13 @@ public class CameraActivity extends Activity {
         mIsRecording = false;
         mRecordButton.setText("Start Recording");
 
-//        Intent intent = new Intent(getApplicationContext(), ReviewPostActivity.class);
-//        // store the media type in the intent
-//        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
-//        // store the path to the media
-//        intent.putExtra(PATH_KEY, mVideoPath);
-//        // start the preview post activity
-//        startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+        // store the media type in the intent
+        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
+        // store the path to the media
+        intent.putExtra(PATH_KEY, mVideoPath);
+        // start the preview post activity
+        startActivity(intent);
 
         Log.d(TAG, "recording stopped");
     }

@@ -127,11 +127,15 @@
     <string name="drawer_open">Open Drawer</string>
     <string name="hello_world">Hello world!</string>
     <string name="logout">Logout</string>
+    <string name="menu_create_text">Create</string>
     <string name="ping">Ping Server</string>
     <string name="profile">Profile</string>
     <string name="record_button_description">Button for recording videos.</string>
     <string name="record_button_text">Start Recording</string>
+    <string name="submenu_post_text">Upload New Post</string>
+    <string name="submenu_save_text">Save to SD Card</string>
     <string name="switch_camera_text">Flip</string>
+    <string name="title_activity_create_post">New Post</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="view_posts">View Posts</string>
     <!-- From: file:/Users/alex/repos/impulse-android/Impulse/res/values/styles.xml -->
