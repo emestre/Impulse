@@ -91,6 +91,7 @@
     <string name="app_name">Impulse</string>
     <string name="camera">Camera</string>
     <string name="capture_button_description">Button used to take picture.</string>
+    <string name="capture_button_text">Take Picture</string>
     <!-- From: file:/Users/alex/repos/impulse-android/Impulse/build/exploded-bundles/ImpulseAndroidFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
     <eat-comment />
 
@@ -129,6 +130,8 @@
     <string name="ping">Ping Server</string>
     <string name="profile">Profile</string>
     <string name="record_button_description">Button for recording videos.</string>
+    <string name="record_button_text">Start Recording</string>
+    <string name="switch_camera_text">Flip</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="view_posts">View Posts</string>
     <!-- From: file:/Users/alex/repos/impulse-android/Impulse/res/values/styles.xml -->
