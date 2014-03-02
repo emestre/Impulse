@@ -23,4 +23,4 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/viewMiddleInvisible"/>
 
-</RelativeLayout><!-- From: file:/C:/Users/Eliot/Documents/GitHub/Impulse/Impulse/res/layout/activity_login.xml -->
+</RelativeLayout><!-- From: file:/Users/akshay159/Documents/GitHub/Impulse/Impulse/res/layout/activity_login.xml -->
