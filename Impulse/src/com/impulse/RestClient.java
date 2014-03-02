@@ -7,6 +7,7 @@ public class RestClient {
     private static final String CREATE_USER = "/createUser";
     private static final String UPLOAD_FILE = "/uploadFile";
     private static final String GET_POST_LIST = "/getPostList";
+    private static final String GET_FILE = "/getFile";
 
     public void postUser(String userKey, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
@@ -34,5 +35,21 @@ public class RestClient {
 
     public void getPostList(final GetCallback callback) {
         String url = BASE_URL + GET_POST_LIST;
+        new GetTask(url, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        });
+    }
+
+    public void getFile(String fileName, final GetCallback callback) {
+        String url = BASE_URL + GET_FILE;
+        new GetTask(url, fileName, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        });
     }
 }
