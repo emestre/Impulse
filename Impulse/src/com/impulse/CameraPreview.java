@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
@@ -82,8 +83,12 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+//            Log.d(TAG, "preview size set to: " + mPreviewSize.width + " x " + mPreviewSize.height);
             this.requestLayout();
+
+            mPictureSize = getOptimalPictureSize(mSupportedPictureSizes);
             mCamParams.setPictureSize(mPictureSize.width, mPictureSize.height);
+            Log.d(TAG, "picture size set to: " + mPictureSize.width + " x " + mPictureSize.height);
 
             mCamParams.setJpegQuality(50);
             mCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
@@ -110,7 +115,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         if (mSupportedPreviewSizes != null) {
             mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
         }
-        mPictureSize = getOptimalPreviewSize(mSupportedPictureSizes, width, height);
     }
 
     @Override
@@ -173,5 +177,27 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         }
 
         return optimalSize;
+    }
+
+    private Camera.Size getOptimalPictureSize(List<Camera.Size> list) {
+        final double TARGET_RATIO = 4.0 / 3.0;
+        final int TARGET_WIDTH = 900;
+        int diff = Integer.MAX_VALUE;
+        Camera.Size best = list.get(list.size() - 1);
+
+        // get all the sizes that have a 4:3 ratio
+        // then get the size that has height closest to 900px
+        for (Camera.Size size : list) {
+            if ((double)size.width / (double)size.height == TARGET_RATIO) {
+
+                int temp = Math.abs(size.height - TARGET_WIDTH);
+                if (temp < diff) {
+                    diff = temp;
+                    best = size;
+                }
+            }
+        }
+
+        return best;
     }
 }

@@ -206,10 +206,6 @@ public class CreatePost extends Activity {
                                 Log.d(TAG, "upload failed");
                                 Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
                             }
-
-//                            Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            startActivity(intent);
                         }
                     });
                 }
