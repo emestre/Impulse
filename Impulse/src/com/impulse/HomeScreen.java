@@ -43,11 +43,20 @@ public class HomeScreen extends Activity {
 
         viewPostsButton.setOnClickListener(new OnClickListener() {
 
+
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeScreen.this,
+                final Intent intent = new Intent(HomeScreen.this,
                         PostActivity.class);
-                startActivity(intent);
+                RestClient client = new RestClient();
+                client.getPostList(new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        intent.putExtra("POST_LIST", response);
+                        startActivity(intent);
+                    }
+                });
+
             }
 
         });

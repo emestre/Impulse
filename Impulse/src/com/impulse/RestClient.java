@@ -40,16 +40,10 @@ public class RestClient {
             public void onTaskComplete(String result) {
                 callback.onDataReceived(result);
             }
-        });
+        }).execute();
     }
 
-    public void getFile(String fileName, final GetCallback callback) {
-        String url = BASE_URL + GET_FILE;
-        new GetTask(url, fileName, new RestTaskCallback() {
-            @Override
-            public void onTaskComplete(String result) {
-                callback.onDataReceived(result);
-            }
-        });
+    public static String getFile(String fileName) {
+        return BASE_URL + GET_FILE + "?fileName=" + fileName;
     }
 }

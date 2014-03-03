@@ -1,13 +1,25 @@
 package com.impulse;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PostFragment extends Fragment {
 
@@ -21,18 +33,21 @@ public class PostFragment extends Fragment {
      */
     private int mPageNumber;
 
+    private String fileName;
+
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
      */
-    public static PostFragment create(int pageNumber) {
-        PostFragment fragment = new PostFragment();
+    public static PostFragment create(int pageNumber, String fileName) {
+        PostFragment fragment = new PostFragment(fileName);
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, pageNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public PostFragment() {
+    public PostFragment(String fileName) {
+        this.fileName = fileName;
     }
 
     public int getPageNumber() {
@@ -49,21 +64,12 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.post_fragment, container, false);
-        ImageView image = (ImageView) view.findViewById(R.id.post_image);
-        String url = null;
-        if(getPageNumber() == 0)
-            url = "http://ppcdn.500px.org/56690912/e1fa0e8ee33b7f123cf9ca851fe7d5cae4f09e23/5.jpg";
-        else if(getPageNumber() == 1)
-            url = "http://farm6.staticflickr.com/5542/9463864484_7f49df4725_b.jpg";
-        else if(getPageNumber() == 2)
-            url = "http://i.imgur.com/Jnjq2au.jpg";
-        else if(getPageNumber() == 3)
-            url = "http://i.imgur.com/6oIQo8M.jpg";
-        else if(getPageNumber() == 4)
-            url = "http://i.imgur.com/lqaii.jpg";
+        final ImageView image = (ImageView) view.findViewById(R.id.post_image);
 
-        Picasso.with(getActivity().getApplicationContext()).load(url).into(image);
+        if (fileName == null)
+            return view;
+
+        Picasso.with(getActivity().getApplicationContext()).load(RestClient.getFile(fileName)).into(image);
         return view;
     }
-
 }

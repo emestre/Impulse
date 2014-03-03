@@ -9,6 +9,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 public class GetTask extends AsyncTask<String, String, String> {
     private String url;
@@ -36,22 +37,6 @@ public class GetTask extends AsyncTask<String, String, String> {
         String type = url.substring(url.lastIndexOf("/"));
 
         if (type.equals("/getPostList")) {
-            try{
-                resp = client.execute(get);
-                result = (new BasicResponseHandler()).handleResponse(resp);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (result != null)
-                return result;
-
-            return "Error Occurred";
-        }
-        else if (type.equals("/getFile")) {
-            url = url + "?" + "fileName=" + this.fileName;
-            get = new HttpGet(url);
-
             try{
                 resp = client.execute(get);
                 result = (new BasicResponseHandler()).handleResponse(resp);

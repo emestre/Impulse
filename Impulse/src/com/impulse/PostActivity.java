@@ -8,16 +8,30 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+
+import com.facebook.Response;
+import com.facebook.model.GraphObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class PostActivity extends FragmentActivity {
 
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
-    private static final int NUM_PAGES = 5;
+    private int NUM_PAGES;
+
+    private ArrayList<Post> posts;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -34,6 +48,10 @@ public class PostActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        posts = new ArrayList<Post>();
+        String response = getIntent().getExtras().get("POST_LIST").toString();
+        parsePosts(response);
+        NUM_PAGES = posts.size();
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -49,6 +67,21 @@ public class PostActivity extends FragmentActivity {
                 invalidateOptionsMenu();
             }
         });
+    }
+
+    private void parsePosts(String response) {
+        Log.i("Response", response);
+        JsonParser parser = new JsonParser();
+        JsonArray results = parser.parse(response).getAsJsonArray();
+        for(JsonElement post : results) {
+            JsonObject toAdd = post.getAsJsonObject();
+            double lon = toAdd.get("longitude").getAsDouble();
+            double lat = toAdd.get("latitude").getAsDouble();
+            String caption = toAdd.get("caption").getAsString();
+            String fileName = toAdd.get("fileName").getAsString();
+            Post newPost = new Post(lon, lat, caption, fileName);
+            posts.add(newPost);
+        }
     }
 
     @Override
@@ -99,7 +132,7 @@ public class PostActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PostFragment.create(position);
+            return PostFragment.create(position, posts.get(position).fileName);
         }
 
         @Override
