@@ -25,4 +25,5 @@
     <string name="submenu_save_text">Save to SD Card</string>
     <string name="submenu_post_text">Upload New Post</string>
     <string name="title_activity_create_post">New Post</string>
+    <string name="menu_home_text">Home</string>
 </resources>

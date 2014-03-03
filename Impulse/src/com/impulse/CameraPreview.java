@@ -15,8 +15,11 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
 
     private SurfaceHolder mHolder;
+
     private Camera mCamera;
     private Camera.Parameters mCamParams;
+    private int mCameraId;
+
     private List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
     private List<Camera.Size> mSupportedPictureSizes;
@@ -32,8 +35,9 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
-    public void setCamera(Camera camera) {
+    public void setCamera(Camera camera, int id) {
         mCamera = camera;
+        mCameraId = id;
         if (camera != null) {
             mCamParams = mCamera.getParameters();
             mSupportedPreviewSizes = mCamParams.getSupportedPreviewSizes();
@@ -57,8 +61,10 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         // Make sure to stop the preview before resizing or reformatting it.
 
         Log.d(TAG, "preview surface changed");
-        Log.d(TAG, "camera = " + mCamera + " surface = " + mHolder.getSurface());
+        initSurface();
+    }
 
+    public void initSurface() {
         if (mCamera != null && mHolder.getSurface() != null) {
 
             mCamera.stopPreview();
@@ -66,9 +72,13 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             if (mPreviewSize.width > mPreviewSize.height) {
                 // rotate camera 90 degrees to portrait
                 mCamera.setDisplayOrientation(90);
-                // rotate the image file so it's oriented correctly (portrait) when viewed in photo viewer
-                mCamParams.setRotation(90);
+                Log.d(TAG, "display orientation set to: 90");
             }
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(mCameraId, info);
+            // rotate the image file so it's oriented correctly when viewed in photo viewer
+            mCamParams.setRotation(info.orientation);
+            Log.d(TAG, "rotation set to: " + info.orientation);
 
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
@@ -80,8 +90,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
             // update the camera object parameters
             mCamera.setParameters(mCamParams);
-            Log.d(TAG, "preview size set: width = " + mPreviewSize.width + " height = " + mPreviewSize.height);
-            Log.d(TAG, "picture size: width = " + mPictureSize.width + " height = " + mPictureSize.height);
+            Log.d(TAG, "camera parameters set");
 
             try {
                 mCamera.setPreviewDisplay(mHolder);
@@ -100,7 +109,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
         if (mSupportedPreviewSizes != null) {
             mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
-            Log.d(TAG, "on measure, optimal preview size calculated");
         }
         mPictureSize = getOptimalPreviewSize(mSupportedPictureSizes, width, height);
     }
@@ -127,8 +135,9 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
             Log.d(TAG, "on layout changed");
         }
-
-        Log.d(TAG, "in on layout, no change");
+        else {
+            Log.d(TAG, "in on layout no change");
+        }
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {

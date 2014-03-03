@@ -18,4 +18,11 @@
 
     </item>
 
+    <item
+        android:id="@+id/menu_home"
+        android:title="@string/menu_home_text"
+        android:showAsAction="always|withText">
+
+    </item>
+
 </menu>

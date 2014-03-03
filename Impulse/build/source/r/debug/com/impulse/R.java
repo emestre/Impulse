@@ -234,10 +234,10 @@ containing a value of this type.
         public static final int reply_video=0x7f02002a;
     }
     public static final class id {
-        public static final int action_next=0x7f050031;
-        public static final int action_previous=0x7f050030;
-        public static final int action_reply=0x7f050032;
-        public static final int action_settings=0x7f05002f;
+        public static final int action_next=0x7f050032;
+        public static final int action_previous=0x7f050031;
+        public static final int action_reply=0x7f050033;
+        public static final int action_settings=0x7f050030;
         public static final int authButton=0x7f05000b;
         public static final int camera_button=0x7f05000d;
         public static final int camera_capture_button=0x7f050007;
@@ -270,6 +270,7 @@ containing a value of this type.
         public static final int large=0x7f050002;
         public static final int logout_button=0x7f05000f;
         public static final int media_view=0x7f050009;
+        public static final int menu_home=0x7f05002f;
         public static final int menu_upload=0x7f05002c;
         public static final int normal=0x7f050001;
         public static final int pager=0x7f050010;
@@ -358,16 +359,17 @@ containing a value of this type.
         public static final int hello_world=0x7f070024;
         public static final int logout=0x7f070025;
         public static final int menu_create_text=0x7f070026;
-        public static final int ping=0x7f070027;
-        public static final int profile=0x7f070028;
-        public static final int record_button_description=0x7f070029;
-        public static final int record_button_text=0x7f07002a;
-        public static final int submenu_post_text=0x7f07002b;
-        public static final int submenu_save_text=0x7f07002c;
-        public static final int switch_camera_text=0x7f07002d;
-        public static final int title_activity_create_post=0x7f07002e;
-        public static final int title_activity_profile=0x7f07002f;
-        public static final int view_posts=0x7f070030;
+        public static final int menu_home_text=0x7f070027;
+        public static final int ping=0x7f070028;
+        public static final int profile=0x7f070029;
+        public static final int record_button_description=0x7f07002a;
+        public static final int record_button_text=0x7f07002b;
+        public static final int submenu_post_text=0x7f07002c;
+        public static final int submenu_save_text=0x7f07002d;
+        public static final int switch_camera_text=0x7f07002e;
+        public static final int title_activity_create_post=0x7f07002f;
+        public static final int title_activity_profile=0x7f070030;
+        public static final int view_posts=0x7f070031;
     }
     public static final class style {
         /** 

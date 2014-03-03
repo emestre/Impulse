@@ -128,6 +128,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="logout">Logout</string>
     <string name="menu_create_text">Create</string>
+    <string name="menu_home_text">Home</string>
     <string name="ping">Ping Server</string>
     <string name="profile">Profile</string>
     <string name="record_button_description">Button for recording videos.</string>

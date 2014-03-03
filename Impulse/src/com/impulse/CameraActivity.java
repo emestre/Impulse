@@ -29,18 +29,21 @@ public class CameraActivity extends Activity {
     private static final String TAG = "CameraActivity";
     public static final String PATH_KEY = "path";
     public static final String MEDIA_TYPE_KEY = "type";
-    private static final int BACK_CAMERA = 0;
-    private static final int FRONT_CAMERA = 1;
+    public static final String CAMERA_ID_KEY = "id";
+    public static final int BACK_CAMERA = 0;
+    public static final int FRONT_CAMERA = 1;
     private static final int MAX_RECORDING_LENGTH = 8000;
 
     private Camera mCamera;
-    private CameraPreview mPreview;
-    private SurfaceView mPreviewSurface;
-    private Button mRecordButton;
+    private int mCameraId = BACK_CAMERA;
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
     private String mVideoPath;
-    private int mCameraState = BACK_CAMERA;
+    private CameraPreview mPreview;
+    private SurfaceView mPreviewSurface;
+
+    private Button mCaptureButton;
+    private Button mRecordButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,9 +81,13 @@ public class CameraActivity extends Activity {
         });
 
         // set the capture button's on click listener
-        findViewById(R.id.camera_capture_button).setOnClickListener(new View.OnClickListener() {
+        mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable after click because multiple presses causes crash
+                mCaptureButton.setEnabled(false);
+
                 // get an image from the camera
                 mCamera.takePicture(null, null, mPicture);
                 Log.d(TAG, "picture taken");
@@ -106,9 +113,12 @@ public class CameraActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        mCamera = getCameraInstance(mCameraState);
-        mPreview.setCamera(mCamera);
+        mCamera = getCameraInstance(mCameraId);
+        mPreview.setCamera(mCamera, mCameraId);
         mCamera.startPreview();
+
+        // enable the capture button on
+        mCaptureButton.setEnabled(true);
     }
 
     /** A safe way to get an instance of the Camera object. */
@@ -146,7 +156,7 @@ public class CameraActivity extends Activity {
     private void releaseCamera() {
         if (mCamera != null){
             mCamera.stopPreview();
-            mPreview.setCamera(null);
+            mPreview.setCamera(null, -1);
             mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
@@ -164,6 +174,22 @@ public class CameraActivity extends Activity {
 
             Log.d(TAG, "media recorder has been released");
         }
+    }
+
+    private void switchCameraButtonClick() {
+        // toggle what camera we want to preview
+        if (mCameraId == BACK_CAMERA)
+            mCameraId = FRONT_CAMERA;
+        else
+            mCameraId = BACK_CAMERA;
+
+        releaseCamera();
+        // re-open the camera
+        mCamera = getCameraInstance(mCameraId);
+
+        // initialize and start the preview
+        mPreview.setCamera(mCamera, mCameraId);
+        mPreview.initSurface();
     }
 
     /** Callback to run when a picture has been taken. */
@@ -191,8 +217,11 @@ public class CameraActivity extends Activity {
             Intent intent = new Intent(getApplicationContext(), CreatePost.class);
             // store the media type in the intent
             intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
-            // store the path to the media
+            // store which camera we took the picture with
+            intent.putExtra(CAMERA_ID_KEY, mCameraId);
+            // store the path to the picture
             intent.putExtra(PATH_KEY, path);
+
             // start the preview post activity
             startActivity(intent);
         }
@@ -312,29 +341,5 @@ public class CameraActivity extends Activity {
         }
 
         return true;
-    }
-
-    private void switchCameraButtonClick() {
-        // toggle what camera we want to preview
-        if (mCameraState == BACK_CAMERA)
-            mCameraState = FRONT_CAMERA;
-        else
-            mCameraState = BACK_CAMERA;
-
-        releaseCamera();
-        // re-open the camera
-        mCamera = getCameraInstance(mCameraState);
-        // have to set reset our surface to preview the new camera
-        try {
-            if (mCamera != null)
-                mCamera.setPreviewDisplay(mPreviewSurface.getHolder());
-        }
-        catch (IOException e) {
-            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
-        }
-
-        // initialize and start the preview
-        mPreview.setCamera(mCamera);
-        mCamera.startPreview();
     }
 }

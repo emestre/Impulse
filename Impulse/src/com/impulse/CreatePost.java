@@ -1,6 +1,8 @@
 package com.impulse;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -14,15 +16,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
+
 import java.io.File;
 import java.io.IOException;
 
 public class CreatePost extends Activity {
 
     public static final String TAG = "CreatePost";
+    public static final String UPLOAD_SUCCESS = "200";
 
     private String mPathToMedia;
     private boolean mSaved = false;
+    private ProgressDialog mUploadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,7 @@ public class CreatePost extends Activity {
         int type = (Integer) extras.get(CameraActivity.MEDIA_TYPE_KEY);
 
         mPathToMedia = (String) getIntent().getExtras().get(CameraActivity.PATH_KEY);
+        int cameraId = (Integer) getIntent().getExtras().get(CameraActivity.CAMERA_ID_KEY);
 
         String toastText;
         FrameLayout mediaView = (FrameLayout) findViewById(R.id.media_view);
@@ -44,17 +54,22 @@ public class CreatePost extends Activity {
             ImageView image = new ImageView(this);
 
             // try to read the EXIF tags of the JPG image
-            int degrees = getRotation();
+            int degrees = getExifRotation();
             Log.d(TAG, "rotation = " + degrees);
 
             // rotate the image by the amount indicated in the EXIF tags
             Bitmap picture = BitmapFactory.decodeFile(mPathToMedia);
-            if (degrees != 0) {
-                Matrix rotateMatrix = new Matrix();
-                rotateMatrix.postRotate(degrees);
-                picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(),
-                        picture.getHeight(), rotateMatrix, false);
+            Matrix rotateMatrix = new Matrix();
+            if (cameraId == CameraActivity.FRONT_CAMERA) {
+                rotateMatrix.preScale(-1, 1);
+                rotateMatrix.postRotate(90);
             }
+            else {
+                rotateMatrix.postRotate(degrees);
+            }
+            picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(),
+                    picture.getHeight(), rotateMatrix, false);
+
             image.setImageBitmap(picture);
             mediaView.addView(image);
 
@@ -75,7 +90,7 @@ public class CreatePost extends Activity {
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
-    private int getRotation() {
+    private int getExifRotation() {
         ExifInterface exif = null;
         int degrees = 0;
 
@@ -143,7 +158,14 @@ public class CreatePost extends Activity {
 
         int itemId = item.getItemId();
 
-        if (itemId == R.id.submenu_save) {
+        if (itemId == R.id.menu_home) {
+            Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            return true;
+        }
+        else if (itemId == R.id.submenu_save) {
 //            String toastText;
 //
 //            if (MediaFileHelper.moveFileToSDCard(mPathToMedia)) {
@@ -161,14 +183,58 @@ public class CreatePost extends Activity {
             return true;
         }
         else if (itemId == R.id.submenu_post) {
-            // handle uploading post here
-            Toast.makeText(this, "upload selected", Toast.LENGTH_SHORT).show();
+            uploadPost();
 
             return true;
         }
         else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void uploadPost() {
+
+        Session session = Session.getActiveSession();
+        Request.newMeRequest(session, new Request.GraphUserCallback() {
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                String userId;
+                if (user != null) {
+                    userId = user.getId();
+
+                    RestClient client = new RestClient();
+                    client.postFile(userId, "test caption", 0, 0, mPathToMedia, "jpg", 0, new PostCallback() {
+                        @Override
+                        public void onPostSuccess(String result) {
+                            mUploadingProgress.dismiss();
+
+                            if (result.equals(UPLOAD_SUCCESS)) {
+                                Log.d(TAG, "upload succeeded");
+                                Toast.makeText(getApplicationContext(), "upload succeeded", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Log.d(TAG, "upload failed");
+                                Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
+                            }
+
+//                            Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+        }).executeAsync();
+
+        // display a loading spinner while the bill is uploading
+        mUploadingProgress = new ProgressDialog(this);
+        mUploadingProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mUploadingProgress.setTitle("Uploading Post...");
+        mUploadingProgress.setMessage("Your post is being created.");
+        mUploadingProgress.setIndeterminate(true);
+        mUploadingProgress.setCancelable(false);
+        mUploadingProgress.show();
+
     }
 
 }
