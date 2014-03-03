@@ -22,7 +22,7 @@ public class RestClient {
 
     public void postFile(String userKey, String caption, double latitude, double longitude, String filePath, String extension, int timeout, final PostCallback callback) {
         String url = BASE_URL + UPLOAD_FILE;
-        new PostTask(userKey, caption, latitude, longitude, filePath, extension, timeout, new RestTaskCallback() {
+        new PostTask(url, userKey, caption, latitude, longitude, filePath, extension, timeout, new RestTaskCallback() {
             @Override
             public void onTaskComplete(String result) {
                 if (callback != null) {

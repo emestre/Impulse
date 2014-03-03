@@ -60,7 +60,8 @@ public class PostTask extends AsyncTask<String, String, String> {
         this.callback = callback;
     }
 
-    public PostTask(String userKey, String caption, double latitude, double longitude, String filePath, String extension, int timeout, RestTaskCallback callback) {
+    public PostTask(String url, String userKey, String caption, double latitude, double longitude, String filePath, String extension, int timeout, RestTaskCallback callback) {
+        this.url = url;
         this.userKey = userKey;
         this.caption = caption;
         this.latitude = latitude;

@@ -1,140 +1,212 @@
 package com.impulse;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/** The activity that will display the camera preview. */
+/** This activity that will display the camera preview. */
 public class CameraActivity extends Activity {
 
     private static final String TAG = "CameraActivity";
-    
-	private Camera mCamera;
-    private CameraPreview mPreview;
-    private ImageButton mRecordButton;
+    public static final String PATH_KEY = "path";
+    public static final String MEDIA_TYPE_KEY = "type";
+    public static final String CAMERA_ID_KEY = "id";
+    public static final int BACK_CAMERA = 0;
+    public static final int FRONT_CAMERA = 1;
+    private static final int MAX_RECORDING_LENGTH = 8000;
+
+    private Camera mCamera;
+    private int mCameraId = BACK_CAMERA;
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
+    private String mVideoPath;
+    private CameraPreview mPreview;
+    private SurfaceView mPreviewSurface;
+
+    private Button mCaptureButton;
+    private Button mRecordButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // hide the status bar and action bar before setContentView()
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-        						WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // link this activity to the camera layout file
-        this.setContentView(R.layout.camera_layout);
-        
-        // create our Preview object
-        mPreview = new CameraPreview(this);
-        // set the preview object as the view of the FrameLayout
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
-        
-        // get the record button
-        mRecordButton = (ImageButton) findViewById(R.id.camera_record_button);
-        
+        this.setContentView(R.layout.activity_camera);
+
+        // create the preview surface and initialize button listeners
+        initLayout();
+
         // open the camera in onResume() so it can be properly released and re-opened
     }
-    
+
+    private void initLayout() {
+        // create our Preview object
+        mPreviewSurface = (SurfaceView) findViewById(R.id.preview_surface);
+        mPreview = new CameraPreview(this, mPreviewSurface);
+        // set the preview object as the view of the FrameLayout
+        ((FrameLayout) findViewById(R.id.camera_preview)).addView(mPreview);
+
+        // set the record button's on click listener
+        mRecordButton = (Button) findViewById(R.id.camera_record_button);
+        mRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                recordButtonClick();
+                Toast.makeText(getApplicationContext(), "disabled right now", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // set the capture button's on click listener
+        mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // disable after click because multiple presses causes crash
+                mCaptureButton.setEnabled(false);
+
+                // get an image from the camera
+                mCamera.takePicture(null, null, mPicture);
+                Log.d(TAG, "picture taken");
+            }
+        });
+
+        // check if this device has a front facing camera
+        if (Camera.getNumberOfCameras() >= 2) {
+            Button switchCamera  = (Button) findViewById(R.id.switch_camera_button);
+            switchCamera.setEnabled(true);
+            switchCamera.setVisibility(View.VISIBLE);
+
+            switchCamera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchCameraButtonClick();
+                }
+            });
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        
-        mCamera = getCameraInstance();
-        mPreview.setCamera(mCamera);
-        
-        Log.d(TAG, "new camera instance has been created");
+
+        mCamera = getCameraInstance(mCameraId);
+        mPreview.setCamera(mCamera, mCameraId);
+        mCamera.startPreview();
+
+        // enable the capture button on
+        mCaptureButton.setEnabled(true);
     }
-    
+
+    /** A safe way to get an instance of the Camera object. */
+    private static Camera getCameraInstance(int id) {
+        Camera c = null;
+
+        try {
+            // attempt to get a Camera instance
+            c = Camera.open(id);
+
+            if (id == BACK_CAMERA)
+                Log.d(TAG, "back facing camera has been opened");
+            else
+                Log.d(TAG, "front facing camera has been opened");
+        }
+        catch (Exception e) {
+            // camera is not available (in use or does not exist)
+            Log.d(TAG, "camera object could no be obtained: in use or does not exist");
+        }
+
+        // returns null if camera is unavailable
+        return c;
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        
+
         // release the MediaRecorder
         releaseMediaRecorder();
-        // release the camera immediately on pause event so it can be used by other applications
+        // release the camera so it can be used by other applications
         releaseCamera();
     }
-    
+
     private void releaseCamera() {
-    	if (mCamera != null){
-    		mCamera.stopPreview();
-        	mCamera.setPreviewCallback(null);
+        if (mCamera != null){
+            mCamera.stopPreview();
+            mPreview.setCamera(null, -1);
+            mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
+
+            if (mCameraId == BACK_CAMERA)
+                Log.d(TAG, "back camera has been released");
+            else
+                Log.d(TAG, "back camera has been released");
         }
-    	
-    	Log.d(TAG, "camera preview paused, camera has been released");
     }
-    
+
     private void releaseMediaRecorder() {
-    	
         if (mMediaRecorder != null) {
             mMediaRecorder.reset();   // clear recorder configuration
             mMediaRecorder.release(); // release the recorder object
             mMediaRecorder = null;
-            mCamera.lock();           // lock camera for later use
+            mCamera.lock();
+
+            Log.d(TAG, "media recorder has been released");
         }
     }
-    
-    /** A safe way to get an instance of the Camera object. */
-    private static Camera getCameraInstance() {
-        Camera c = null;
-        
-        try {
-        	// attempt to get a Camera instance
-            c = Camera.open();
-        }
-        catch (Exception e) {
-            // camera is not available (in use or does not exist)
-        	Log.d(TAG, "camera object could no be obtained: in use or does not exist");
-        }
-        
-        // returns null if camera is unavailable
-        return c;
+
+    private void switchCameraButtonClick() {
+        // toggle what camera we want to preview
+        if (mCameraId == BACK_CAMERA)
+            mCameraId = FRONT_CAMERA;
+        else
+            mCameraId = BACK_CAMERA;
+
+        releaseCamera();
+        // re-open the camera
+        mCamera = getCameraInstance(mCameraId);
+
+        // initialize and start the preview
+        mPreview.setCamera(mCamera, mCameraId);
+        mPreview.initSurface();
     }
-    
-    /** Listener method for the capture button. Takes a snapshot of the camera preview. */
-    public void captureButtonClick(View view) {
-    	// get an image from the camera
-        mCamera.takePicture(null, null, mPicture);
-        Log.d(TAG, "picture taken");
-    }
-    
+
     /** Callback to run when a picture has been taken. */
     private PictureCallback mPicture = new PictureCallback() {
 
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-        	
-        	// create a file for the image to be saved as
-            File image = MediaFileHelper.getOutputMediaFile(MediaFileHelper.MEDIA_TYPE_IMAGE);
-            
-            // code that saves the image to the SD card
-            if (image == null) {
-                Log.d(TAG, "Error creating media file, check storage permissions: ");
-                return;
-            }
-            
+
+            // get the path to the new image file in internal storage
+            String path = MediaFileHelper.getInternalCachePath(getApplicationContext(), MediaFileHelper.MEDIA_TYPE_IMAGE);
+
+            // try to write the image data to storage
             try {
-                FileOutputStream fos = new FileOutputStream(image);
+                FileOutputStream fos = new FileOutputStream(path);
                 fos.write(data);
                 fos.close();
             }
@@ -142,52 +214,84 @@ public class CameraActivity extends Activity {
                 Log.d(TAG, "File not found: " + e.getMessage());
             }
             catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
+                Log.d(TAG, "Error writing to file: " + e.getMessage());
             }
-            // end of code that saves the image to the SD card
+
+            Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+            // store the media type in the intent
+            intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
+            // store which camera we took the picture with
+            intent.putExtra(CAMERA_ID_KEY, mCameraId);
+            // store the path to the picture
+            intent.putExtra(PATH_KEY, path);
+
+            // start the preview post activity
+            startActivity(intent);
         }
     };
-    
-    public void recordButtonClick (View view) {
-    	
-    	if (mIsRecording) {
-            // stop recording and release camera
-            mMediaRecorder.stop();  // stop the recording
-            releaseMediaRecorder(); // release the MediaRecorder object
-//            mCamera.lock();         // take camera access back from MediaRecorder
 
-            // inform the user that recording has stopped
-            mIsRecording = false;
-            mRecordButton.setImageResource(R.drawable.ic_action_video);
+    public void recordButtonClick () {
+
+        if (mIsRecording) {
+            // stop recording
+            mMediaRecorder.stop();
+            onStopRecording();
         }
-    	else {
-    		releaseCamera();
+        else {
             // initialize video camera
-    		boolean prepare = prepareVideoRecorder();
+            boolean prepare = prepareVideoRecorder();
             if (prepare) {
                 // Camera is available and unlocked, MediaRecorder is prepared,
                 // now you can start recording
                 mMediaRecorder.start();
+                Log.d(TAG, "recording started");
 
                 // inform the user that recording has started
                 mIsRecording = true;
-                mRecordButton.setImageResource(R.drawable.ic_action_stop);
+                mRecordButton.setText("Stop Recording");
             }
             else {
                 // prepare didn't work, release the camera
                 releaseMediaRecorder();
                 // inform user
+                Toast.makeText(this, "Insert SD card to take video", Toast.LENGTH_SHORT).show();
             }
         }
     }
-    
-    private boolean prepareVideoRecorder(){
 
-    	mCamera = getCameraInstance();
-    	mCamera.setDisplayOrientation(90);
-    	mPreview.setCamera(mCamera);
-    	
+    private void onStopRecording() {
+
+        // release the MediaRecorder object
+        releaseMediaRecorder();
+        // inform the user that recording has stopped
+        mIsRecording = false;
+        mRecordButton.setText("Start Recording");
+
+        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+        // store the media type in the intent
+        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
+        // store the path to the media
+        intent.putExtra(PATH_KEY, mVideoPath);
+        // start the preview post activity
+        startActivity(intent);
+
+        Log.d(TAG, "recording stopped");
+    }
+
+    private boolean prepareVideoRecorder() {
         mMediaRecorder = new MediaRecorder();
+
+        mMediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mr, int what, int extra) {
+
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    // recording stopped due to 8 second limit
+                    onStopRecording();
+                    Log.d(TAG, "8 second video limit reached");
+                }
+            }
+        });
 
         // Step 1: Unlock and set camera to MediaRecorder
         mCamera.unlock();
@@ -196,15 +300,33 @@ public class CameraActivity extends Activity {
         // Step 2: Set sources
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        // set video format
+//        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+//        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+//        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H263);
+//        mMediaRecorder.setVideoSize(480, 360);
+//        mMediaRecorder.setVideoFrameRate(30);
+//        mMediaRecorder.setVideoEncodingBitRate(500000);
+
+        // set max duration to 8 seconds
+        mMediaRecorder.setMaxDuration(MAX_RECORDING_LENGTH);
 
         // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
 
         // Step 4: Set output file
-        mMediaRecorder.setOutputFile(MediaFileHelper.getOutputMediaFile(MediaFileHelper.MEDIA_TYPE_VIDEO).toString());
+        mVideoPath = MediaFileHelper.getExternalCachePath(getApplicationContext(), MediaFileHelper.MEDIA_TYPE_VIDEO);
+        if (mVideoPath == null) {
+            Log.d(TAG, "SD card is not mounted");
+            return false;
+        }
+        mMediaRecorder.setOutputFile(mVideoPath);
 
         // Step 5: Set the preview output
-        mMediaRecorder.setPreviewDisplay(mPreview.getSurface());
+        mMediaRecorder.setPreviewDisplay(mPreviewSurface.getHolder().getSurface());
+
+        // set the orientation hint for video view - need SUPPORT for more orientations ----------
+        mMediaRecorder.setOrientationHint(90);
 
         // Step 6: Prepare configured MediaRecorder
         try {
@@ -220,7 +342,7 @@ public class CameraActivity extends Activity {
             releaseMediaRecorder();
             return false;
         }
-        
+
         return true;
     }
 }
