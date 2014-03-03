@@ -220,7 +220,6 @@ public class CreatePost extends Activity {
         mUploadingProgress.setIndeterminate(true);
         mUploadingProgress.setCancelable(false);
         mUploadingProgress.show();
-
     }
 
 }

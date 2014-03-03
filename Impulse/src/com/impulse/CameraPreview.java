@@ -3,6 +3,7 @@ package com.impulse;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -34,6 +35,8 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        setFocusableInTouchMode(true);
     }
 
     public void setCamera(Camera camera, int id) {
@@ -45,6 +48,17 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             mSupportedPictureSizes = mCamParams.getSupportedPictureSizes();
             this.requestLayout();
         }
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            Log.d(TAG, "received touch event");
+
+            // focus the camera, no callback
+            mCamera.autoFocus(null);
+        }
+
+        return true;
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
@@ -117,33 +131,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if (changed && getChildCount() > 0) {
-            final View child = getChildAt(0);
-
-            final int width = r - l;
-            final int height = b - t;
-
-            // Center the child SurfaceView within the parent.
-            if (width * height > height * width) {
-                final int scaledChildWidth = width * height / height;
-                child.layout((width - scaledChildWidth) / 2, 0,
-                        (width + scaledChildWidth) / 2, height);
-            }
-            else {
-                final int scaledChildHeight = height * width / width;
-                child.layout(0, (height - scaledChildHeight) / 2,
-                        width, (height + scaledChildHeight) / 2);
-            }
-
-            Log.d(TAG, "on layout changed");
-        }
-        else {
-            Log.d(TAG, "in on layout no change");
-        }
-    }
-
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double) h / w;
@@ -199,5 +186,32 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         }
 
         return best;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if (changed && getChildCount() > 0) {
+            final View child = getChildAt(0);
+
+            final int width = r - l;
+            final int height = b - t;
+
+            // Center the child SurfaceView within the parent.
+            if (width * height > height * width) {
+                final int scaledChildWidth = width * height / height;
+                child.layout((width - scaledChildWidth) / 2, 0,
+                        (width + scaledChildWidth) / 2, height);
+            }
+            else {
+                final int scaledChildHeight = height * width / width;
+                child.layout(0, (height - scaledChildHeight) / 2,
+                        width, (height + scaledChildHeight) / 2);
+            }
+
+            Log.d(TAG, "on layout changed");
+        }
+        else {
+            Log.d(TAG, "in on layout no change");
+        }
     }
 }

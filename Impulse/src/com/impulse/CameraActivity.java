@@ -58,18 +58,21 @@ public class CameraActivity extends Activity {
         this.setContentView(R.layout.activity_camera);
 
         // create the preview surface and initialize button listeners
+        initPreview();
         initLayout();
 
         // open the camera in onResume() so it can be properly released and re-opened
     }
 
-    private void initLayout() {
+    private void initPreview() {
         // create our Preview object
         mPreviewSurface = (SurfaceView) findViewById(R.id.preview_surface);
         mPreview = new CameraPreview(this, mPreviewSurface);
         // set the preview object as the view of the FrameLayout
         ((FrameLayout) findViewById(R.id.camera_preview)).addView(mPreview);
+    }
 
+    private void initLayout() {
         // set the record button's on click listener
         mRecordButton = (Button) findViewById(R.id.camera_record_button);
         mRecordButton.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +120,7 @@ public class CameraActivity extends Activity {
         mPreview.setCamera(mCamera, mCameraId);
         mCamera.startPreview();
 
-        // enable the capture button on
+        // enable the capture button
         mCaptureButton.setEnabled(true);
     }
 
