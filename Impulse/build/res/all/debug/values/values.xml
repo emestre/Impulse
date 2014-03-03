@@ -90,6 +90,8 @@
     <string name="app_id">603531596393445</string>
     <string name="app_name">Impulse</string>
     <string name="camera">Camera</string>
+    <string name="caption">Caption</string>
+    <string name="caption_hint">Enter a caption</string>
     <string name="capture_button_description">Button used to take picture.</string>
     <string name="capture_button_text">Take Picture</string>
     <!-- From: file:/Users/alex/repos/impulse-android/Impulse/build/exploded-bundles/ImpulseAndroidFacebookAndroidSdk360FacebookUnspecified.aar/res/values/values.xml -->
@@ -138,6 +140,7 @@
     <string name="switch_camera_text">Flip</string>
     <string name="title_activity_create_post">New Post</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="toggle_button_text">Video</string>
     <string name="view_posts">View Posts</string>
     <!-- From: file:/Users/alex/repos/impulse-android/Impulse/res/values/styles.xml -->
     <eat-comment />

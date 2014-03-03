@@ -5,12 +5,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,22 +38,47 @@ public class CreatePost extends Activity {
     private String mPathToMedia;
     private ProgressDialog mUploadingProgress;
 
+    private EditText mCaption;
+    private FrameLayout mFrameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
+        initLayout();
         displayMedia();
+    }
+
+    private void initLayout() {
+
+        mFrameLayout = (FrameLayout) findViewById(R.id.media_view);
+        // set the frame layout to receive touch events to hide keyboard
+        mFrameLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // hide the keyboard if touch is received outside of keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+                return true;
+            }
+        });
+
+        // set the caption text field text color to white if not running
+        // API > 10, newer text fields have transparent background (black for this screen)
+        mCaption = (EditText) findViewById(R.id.caption_field);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+            mCaption.setTextColor(Color.WHITE);
+        }
     }
 
     private void displayMedia() {
         Bundle extras = getIntent().getExtras();
         int type = (Integer) extras.get(CameraActivity.MEDIA_TYPE_KEY);
+        mPathToMedia = (String) extras.get(CameraActivity.PATH_KEY);
+        int cameraId = (Integer) extras.get(CameraActivity.CAMERA_ID_KEY);
 
-        mPathToMedia = (String) getIntent().getExtras().get(CameraActivity.PATH_KEY);
-        int cameraId = (Integer) getIntent().getExtras().get(CameraActivity.CAMERA_ID_KEY);
-
-        FrameLayout mediaView = (FrameLayout) findViewById(R.id.media_view);
         if (type == MediaFileHelper.MEDIA_TYPE_IMAGE) {
             ImageView image = new ImageView(this);
 
@@ -55,9 +86,11 @@ public class CreatePost extends Activity {
             int degrees = getExifRotation();
             Log.d(TAG, "rotation = " + degrees);
 
-            // rotate the image by the amount indicated in the EXIF tags
             Bitmap picture = BitmapFactory.decodeFile(mPathToMedia);
             Matrix rotateMatrix = new Matrix();
+
+            // rotate the image by the amount indicated in the EXIF tags
+            // or mirror the image if taken with the front camera
             if (cameraId == CameraActivity.FRONT_CAMERA) {
                 rotateMatrix.preScale(-1, 1);
                 rotateMatrix.postRotate(90);
@@ -69,14 +102,14 @@ public class CreatePost extends Activity {
                     picture.getHeight(), rotateMatrix, false);
 
             image.setImageBitmap(picture);
-            mediaView.addView(image);
+            mFrameLayout.addView(image);
 
             Log.d(TAG, "image received");
         }
         else if (type == MediaFileHelper.MEDIA_TYPE_VIDEO) {
             VideoView video = new VideoView(this);
             video.setVideoPath(mPathToMedia);
-            mediaView.addView(video);
+            mFrameLayout.addView(video);
             video.start();
 
             Log.d(TAG, "video received");
@@ -183,6 +216,8 @@ public class CreatePost extends Activity {
 
     private void uploadPost() {
 
+        final String captionText = mCaption.getText().toString();
+
         Session session = Session.getActiveSession();
         Request.newMeRequest(session, new Request.GraphUserCallback() {
             @Override
@@ -193,7 +228,7 @@ public class CreatePost extends Activity {
 
                     RestClient client = new RestClient();
                     // timeout in minutes
-                    client.postFile(userId, "test caption", 0, 0, mPathToMedia, "jpg", 0, new PostCallback() {
+                    client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", 0, new PostCallback() {
                         @Override
                         public void onPostSuccess(String result) {
                             mUploadingProgress.dismiss();
@@ -221,5 +256,4 @@ public class CreatePost extends Activity {
         mUploadingProgress.setCancelable(false);
         mUploadingProgress.show();
     }
-
 }

@@ -26,4 +26,7 @@
     <string name="submenu_post_text">Upload New Post</string>
     <string name="title_activity_create_post">New Post</string>
     <string name="menu_home_text">Home</string>
+    <string name="toggle_button_text">Video</string>
+    <string name="caption_hint">Enter a caption</string>
+    <string name="caption">Caption</string>
 </resources>

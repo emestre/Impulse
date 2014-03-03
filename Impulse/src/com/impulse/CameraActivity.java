@@ -6,19 +6,19 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,14 +36,18 @@ public class CameraActivity extends Activity {
 
     private Camera mCamera;
     private int mCameraId = BACK_CAMERA;
+    private boolean isCamera = true;        // true = take picture, false = record video
+
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
     private String mVideoPath;
-    private CameraPreview mPreview;
-    private SurfaceView mPreviewSurface;
 
+    private FrameLayout mFrame;
+    private SurfaceView mPreviewSurface;
+    private CameraPreview mPreview;
     private Button mCaptureButton;
-    private Button mRecordButton;
+    private Button mToggle;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,37 +69,34 @@ public class CameraActivity extends Activity {
     }
 
     private void initPreview() {
+        mFrame = (FrameLayout) findViewById(R.id.camera_preview);
+        // create the surface view that holds the camera preview
+        mPreviewSurface = new SurfaceView(this);
+        mPreviewSurface.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                                   ViewGroup.LayoutParams.MATCH_PARENT));
+        mFrame.addView(mPreviewSurface);
         // create our Preview object
-        mPreviewSurface = (SurfaceView) findViewById(R.id.preview_surface);
         mPreview = new CameraPreview(this, mPreviewSurface);
         // set the preview object as the view of the FrameLayout
-        ((FrameLayout) findViewById(R.id.camera_preview)).addView(mPreview);
+        mFrame.addView(mPreview);
+
+        // set the frame layout to receive touch events for auto focus
+        mFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mCamera != null) {
+                        // focus the camera, no callback
+                        mCamera.autoFocus(null);
+                    }
+                }
+
+                return true;
+            }
+        });
     }
 
     private void initLayout() {
-        // set the record button's on click listener
-        mRecordButton = (Button) findViewById(R.id.camera_record_button);
-        mRecordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                recordButtonClick();
-                Toast.makeText(getApplicationContext(), "disabled right now", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // set the capture button's on click listener
-        mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
-        mCaptureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // disable after click because multiple presses causes crash
-                mCaptureButton.setEnabled(false);
-
-                // get an image from the camera
-                mCamera.takePicture(null, null, mPicture);
-                Log.d(TAG, "picture taken");
-            }
-        });
 
         // check if this device has a front facing camera
         if (Camera.getNumberOfCameras() >= 2) {
@@ -110,6 +111,45 @@ public class CameraActivity extends Activity {
                 }
             });
         }
+
+        // set the capture button's on click listener
+        mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isCamera) {
+                    // disable after click because multiple presses causes crash
+                    mCaptureButton.setEnabled(false);
+
+                    // get an image from the camera
+                    mCamera.takePicture(null, null, mPicture);
+                    Log.d(TAG, "picture taken");
+                }
+                else {
+//                    recordButtonClick();
+                    Toast.makeText(getApplicationContext(), "not yet...", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // set the toggle button's on click listener
+        mToggle = (Button) findViewById(R.id.toggle_button);
+        mToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isCamera) {
+                    isCamera = false;
+                    mCaptureButton.setText(getString(R.string.record_button_text));
+                    mToggle.setText("Camera");
+                }
+                else {
+                    isCamera = true;
+                    mCaptureButton.setText(getString(R.string.capture_button_text));
+                    mToggle.setText("Video");
+                }
+            }
+        });
     }
 
     @Override
@@ -122,6 +162,10 @@ public class CameraActivity extends Activity {
 
         // enable the capture button
         mCaptureButton.setEnabled(true);
+        // set camera state as taking pictures
+        isCamera = true;
+        mCaptureButton.setText(getString(R.string.capture_button_text));
+        mToggle.setText("Video");
     }
 
     /** A safe way to get an instance of the Camera object. */
@@ -167,7 +211,7 @@ public class CameraActivity extends Activity {
             if (mCameraId == BACK_CAMERA)
                 Log.d(TAG, "back camera has been released");
             else
-                Log.d(TAG, "back camera has been released");
+                Log.d(TAG, "front camera has been released");
         }
     }
 
@@ -176,7 +220,6 @@ public class CameraActivity extends Activity {
             mMediaRecorder.reset();   // clear recorder configuration
             mMediaRecorder.release(); // release the recorder object
             mMediaRecorder = null;
-            mCamera.lock();
 
             Log.d(TAG, "media recorder has been released");
         }
@@ -190,12 +233,14 @@ public class CameraActivity extends Activity {
             mCameraId = BACK_CAMERA;
 
         releaseCamera();
+        mFrame.removeView(mPreviewSurface);
+        mFrame.removeView(mPreview);
+
         // re-open the camera
         mCamera = getCameraInstance(mCameraId);
-
+        initPreview();
         // initialize and start the preview
         mPreview.setCamera(mCamera, mCameraId);
-        mPreview.initSurface();
     }
 
     /** Callback to run when a picture has been taken. */
@@ -251,34 +296,16 @@ public class CameraActivity extends Activity {
 
                 // inform the user that recording has started
                 mIsRecording = true;
-                mRecordButton.setText("Stop Recording");
             }
             else {
                 // prepare didn't work, release the camera
                 releaseMediaRecorder();
+                // lock the camera on all APIs if prepare failed
+                mCamera.lock();
                 // inform user
                 Toast.makeText(this, "Insert SD card to take video", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void onStopRecording() {
-
-        // release the MediaRecorder object
-        releaseMediaRecorder();
-        // inform the user that recording has stopped
-        mIsRecording = false;
-        mRecordButton.setText("Start Recording");
-
-        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
-        // store the media type in the intent
-        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
-        // store the path to the media
-        intent.putExtra(PATH_KEY, mVideoPath);
-        // start the preview post activity
-        startActivity(intent);
-
-        Log.d(TAG, "recording stopped");
     }
 
     private boolean prepareVideoRecorder() {
@@ -337,15 +364,36 @@ public class CameraActivity extends Activity {
         }
         catch (IllegalStateException e) {
             Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.getMessage());
-            releaseMediaRecorder();
             return false;
         }
         catch (IOException e) {
             Log.d(TAG, "IOException preparing MediaRecorder: " + e.getMessage());
-            releaseMediaRecorder();
             return false;
         }
 
         return true;
+    }
+
+    private void onStopRecording() {
+
+        // inform the user that recording has stopped
+        mIsRecording = false;
+        // release the MediaRecorder object
+        releaseMediaRecorder();
+        // lock the camera for API < 14
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            mCamera.lock();
+            Log.d(TAG, "camera locked after recording stopped");
+        }
+
+        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+        // store the media type in the intent
+        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
+        // store the path to the media
+        intent.putExtra(PATH_KEY, mVideoPath);
+        // start the preview post activity
+        startActivity(intent);
+
+        Log.d(TAG, "recording stopped");
     }
 }

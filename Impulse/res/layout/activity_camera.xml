@@ -11,11 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <SurfaceView
-            android:id="@+id/preview_surface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
     </FrameLayout>
 
     <Button
@@ -30,30 +25,21 @@
         android:visibility="gone"
         android:enabled="false" />
 
-    <LinearLayout
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:id="@+id/toggle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:text="@string/toggle_button_text"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/>
+
+    <Button
+        android:id="@+id/camera_capture_button"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" >
-
-        <Button
-            android:id="@+id/camera_capture_button"
-            android:contentDescription="@string/capture_button_description"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
-            android:layout_marginRight="2dp"
-            android:text="@string/capture_button_text" />
-
-        <Button
-            android:id="@+id/camera_record_button"
-            android:contentDescription="@string/record_button_description"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="2dp"
-            android:text="@string/record_button_text" />
-
-    </LinearLayout>
+        android:text="@string/capture_button_text" />
 
 </RelativeLayout>

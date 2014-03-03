@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
@@ -48,17 +50,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             mSupportedPictureSizes = mCamParams.getSupportedPictureSizes();
             this.requestLayout();
         }
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            Log.d(TAG, "received touch event");
-
-            // focus the camera, no callback
-            mCamera.autoFocus(null);
-        }
-
-        return true;
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
