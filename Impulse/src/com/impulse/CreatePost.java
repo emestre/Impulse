@@ -30,7 +30,6 @@ public class CreatePost extends Activity {
     public static final String UPLOAD_SUCCESS = "200";
 
     private String mPathToMedia;
-    private boolean mSaved = false;
     private ProgressDialog mUploadingProgress;
 
     @Override
@@ -48,7 +47,6 @@ public class CreatePost extends Activity {
         mPathToMedia = (String) getIntent().getExtras().get(CameraActivity.PATH_KEY);
         int cameraId = (Integer) getIntent().getExtras().get(CameraActivity.CAMERA_ID_KEY);
 
-        String toastText;
         FrameLayout mediaView = (FrameLayout) findViewById(R.id.media_view);
         if (type == MediaFileHelper.MEDIA_TYPE_IMAGE) {
             ImageView image = new ImageView(this);
@@ -73,7 +71,7 @@ public class CreatePost extends Activity {
             image.setImageBitmap(picture);
             mediaView.addView(image);
 
-            toastText = "image received";
+            Log.d(TAG, "image received");
         }
         else if (type == MediaFileHelper.MEDIA_TYPE_VIDEO) {
             VideoView video = new VideoView(this);
@@ -81,13 +79,12 @@ public class CreatePost extends Activity {
             mediaView.addView(video);
             video.start();
 
-            toastText = "video received";
+            Log.d(TAG, "video received");
         }
         else {
-            toastText = "unknown media file received";
+            Log.d(TAG, "unknown media received");
         }
 
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
     private int getExifRotation() {
@@ -195,6 +192,7 @@ public class CreatePost extends Activity {
                     userId = user.getId();
 
                     RestClient client = new RestClient();
+                    // timeout in minutes
                     client.postFile(userId, "test caption", 0, 0, mPathToMedia, "jpg", 0, new PostCallback() {
                         @Override
                         public void onPostSuccess(String result) {
