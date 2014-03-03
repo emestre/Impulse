@@ -61,11 +61,16 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <!--<ImageView-->
+            <!--android:id="@+id/post_image"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/login_background0" />-->
+
         <ImageView
             android:id="@+id/post_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/login_background0" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

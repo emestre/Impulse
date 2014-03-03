@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class RestClient {
     private static final String BASE_URL = "http://impulse-backend.appspot.com";
     private static final String CREATE_USER = "/createUser";
-    private static final String FRIEND_LIST = "/getFriendList";
     private static final String UPLOAD_FILE = "/uploadFile";
+    private static final String GET_POST_LIST = "/getPostList";
+    private static final String GET_FILE = "/getFile";
 
     public void postUser(String userKey, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
@@ -30,5 +31,19 @@ public class RestClient {
 
             }
         }).execute();
+    }
+
+    public void getPostList(final GetCallback callback) {
+        String url = BASE_URL + GET_POST_LIST;
+        new GetTask(url, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public static String getFile(String fileName) {
+        return BASE_URL + GET_FILE + "?fileName=" + fileName;
     }
 }

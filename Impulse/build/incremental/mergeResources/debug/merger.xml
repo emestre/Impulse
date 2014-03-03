@@ -539,42 +539,40 @@ center
 
                 <dimen name="com_facebook_picker_place_image_size" >64dp
                 </dimen>
+                <dimen name="com_facebook_usersettingsfragment_profile_picture_height" >64dp
+                </dimen>
 
                 <string name="com_facebook_requesterror_reconnect" >Please log into this app again to reconnect your Facebook account.
                 </string>
 
-                <dimen name="com_facebook_usersettingsfragment_profile_picture_height" >64dp
-                </dimen>
-
                 <color name="com_facebook_usersettingsfragment_connected_text_color" >#FFFFFF
                 </color>
 
-                <string name="com_facebook_loginview_log_out_action" >Log out
-                </string>
-
                 <dimen name="com_facebook_profilepictureview_preset_size_custom" >150dp
                 </dimen>
-                <dimen name="com_facebook_profilepictureview_preset_size_small" >50dp
-                </dimen>
 
+                <string name="com_facebook_loginview_log_out_action" >Log out
+                </string>
                 <string name="com_facebook_dialogloginactivity_ok_button" >OK
                 </string>
+
+                <dimen name="com_facebook_profilepictureview_preset_size_small" >50dp
+                </dimen>
 
                 <color name="com_facebook_usersettingsfragment_not_connected_text_color" >#A6AED7
                 </color>
 
-                <string name="com_facebook_loginview_logged_in_as" >Logged in as: %1$s
-                </string>
-
                 <dimen name="com_facebook_profilepictureview_preset_size_large" >180dp
                 </dimen>
 
-                <string name="com_facebook_loginview_cancel_action" >Cancel
+                <string name="com_facebook_loginview_logged_in_as" >Logged in as: %1$s
                 </string>
 
                 <color name="com_facebook_usersettingsfragment_connected_shadow_color" >#000000
                 </color>
 
+                <string name="com_facebook_loginview_cancel_action" >Cancel
+                </string>
                 <string name="com_facebook_loginview_logged_in_using_facebook" >Logged in using Facebook
                 </string>
 
@@ -658,9 +656,9 @@ center
                 </string>
                 <string name="com_facebook_loginview_cancel_action" >Cancelar
                 </string>
-                <string name="com_facebook_choose_friends" >Elige Amigos
-                </string>
                 <string name="com_facebook_internet_permission_error_message" >WebView inicio de sesión requiere permiso INTERNET
+                </string>
+                <string name="com_facebook_choose_friends" >Elige Amigos
                 </string>
                 <string name="com_facebook_placepicker_subtitle_were_here_only_format" >es:%1$,d estuvieron aquí
                 </string>
@@ -696,21 +694,21 @@ center
                 </string>
                 <string name="com_facebook_requesterror_reconnect" >.ארעה שגיאה בעת החיבור עם פייסבוק, חבר בבקשה מחדש את האפליקציה עם פייסבוק
                 </string>
-                <string name="com_facebook_logo_content_description" >פייסבוק לוגו
-                </string>
                 <string name="com_facebook_picker_done_button_text" >בצע
+                </string>
+                <string name="com_facebook_logo_content_description" >פייסבוק לוגו
                 </string>
                 <string name="com_facebook_loginview_log_in_button" >התחבר לפייסבוק
                 </string>
                 <string name="com_facebook_loginview_logged_in_as" >מחובר בשם: %1$s
                 </string>
-                <string name="com_facebook_placepicker_subtitle_were_here_only_format" >%1$,d היו פה
-                </string>
                 <string name="com_facebook_requesterror_relogin" >.האפליקציה אינה מחוברת לפייסבוק, אנא היכנס וחבר מחדש את האפליקציה
                 </string>
-                <string name="com_facebook_internet_permission_error_title" >AndroidManifest שגיאת
+                <string name="com_facebook_placepicker_subtitle_were_here_only_format" >%1$,d היו פה
                 </string>
                 <string name="com_facebook_internet_permission_error_message" >ההתחברות לתצוגת אתר דורשת אישור אינטרנט
+                </string>
+                <string name="com_facebook_internet_permission_error_title" >AndroidManifest שגיאת
                 </string>
                 <string name="com_facebook_usersettingsfragment_log_in_button" >התחבר…
                 </string>
@@ -764,19 +762,19 @@ center
                 </string>
                 <string name="com_facebook_placepicker_subtitle_catetory_only_format" >%1$s
                 </string>
-                <string name="com_facebook_usersettingsfragment_logged_in" >מחובר
-                </string>
                 <string name="com_facebook_logo_content_description" >פייסבוק לוגו
+                </string>
+                <string name="com_facebook_usersettingsfragment_logged_in" >מחובר
                 </string>
                 <string name="com_facebook_choose_friends" >בחר חברים
                 </string>
-                <string name="com_facebook_dialogloginactivity_ok_button" >אישור
-                </string>
                 <string name="com_facebook_loading" >..מעלה
                 </string>
-                <string name="com_facebook_nearby" >קרוב אליי
+                <string name="com_facebook_dialogloginactivity_ok_button" >אישור
                 </string>
                 <string name="com_facebook_loginview_log_in_button" >התחבר לפייסבוק
+                </string>
+                <string name="com_facebook_nearby" >קרוב אליי
                 </string>
                 <string name="com_facebook_placepicker_subtitle_were_here_only_format" >%1$,d היו פה
                 </string>
@@ -1038,6 +1036,7 @@ center
                 </string>
                 <string name="submenu_save_text" >Save to SD Card
                 </string>
+<<<<<<< HEAD
                 <string name="app_name" >Impulse
                 </string>
                 <string name="action_previous" >Previous
@@ -1047,6 +1046,17 @@ center
                 <string name="drawer_open" >Open Drawer
                 </string>
                 <string name="capture_button_text" >Take Picture
+=======
+                <string name="app_id" >603531596393445
+                </string>
+                <string name="action_previous" >Previous
+                </string>
+                <string name="view_posts" >View Posts
+                </string>
+                <string name="drawer_open" >Open Drawer
+                </string>
+                <string name="hello_world" >Hello world!
+>>>>>>> upstream/master
                 </string>
             </file>
             <file
