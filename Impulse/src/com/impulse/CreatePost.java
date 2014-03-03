@@ -128,18 +128,13 @@ public class CreatePost extends Activity {
     public void onDestroy() {
         super.onDestroy();
 
-        if (!mSaved) {
-            File image = new File(mPathToMedia);
-            boolean success = image.delete();
+        File image = new File(mPathToMedia);
+        boolean success = image.delete();
 
-            if (success)
-                Log.d(TAG, "file deletion SUCCEEDED");
-            else
-                Log.d(TAG, "file deletion FAILED");
-        }
-        else {
-            Log.d(TAG, "file was moved to SD card");
-        }
+        if (success)
+            Log.d(TAG, "file deletion SUCCEEDED");
+        else
+            Log.d(TAG, "file deletion FAILED");
     }
 
     @Override
@@ -166,20 +161,17 @@ public class CreatePost extends Activity {
             return true;
         }
         else if (itemId == R.id.submenu_save) {
-//            String toastText;
-//
-//            if (MediaFileHelper.moveFileToSDCard(mPathToMedia)) {
-//                toastText = "Saved to SD Card";
-//                mSaved = true;
-//                MediaFileHelper.runMediaScanner(this);
-//            }
-//            else {
-//                toastText = "Save Failed";
-//                mSaved = false;
-//            }
-//            Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+            String toastText;
 
-            Toast.makeText(this, "does nothing right now", Toast.LENGTH_SHORT).show();
+            if (MediaFileHelper.moveFileToSDCard(mPathToMedia)) {
+                toastText = "Saved to SD Card";
+                MediaFileHelper.runMediaScanner(this);
+            }
+            else {
+                toastText = "Save Failed";
+            }
+            Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+
             return true;
         }
         else if (itemId == R.id.submenu_post) {

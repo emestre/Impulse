@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.google.common.io.Files;
 
+import org.apache.http.entity.mime.content.FileBody;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -91,7 +93,22 @@ public class MediaFileHelper {
         File oldPath = new File(path);
         File newPath = new File(externalDir.getAbsolutePath() + File.separator + oldPath.getName());
 
-        return oldPath.renameTo(newPath);
+        FileBody fb = new FileBody(oldPath);
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(newPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            fb.writeTo(fos);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public static void runMediaScanner(Context context) {

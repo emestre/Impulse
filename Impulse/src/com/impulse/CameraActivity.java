@@ -161,7 +161,10 @@ public class CameraActivity extends Activity {
             mCamera.release();
             mCamera = null;
 
-            Log.d(TAG, "camera has been released");
+            if (mCameraId == BACK_CAMERA)
+                Log.d(TAG, "back camera has been released");
+            else
+                Log.d(TAG, "back camera has been released");
         }
     }
 
