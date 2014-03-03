@@ -42,8 +42,6 @@ public class HomeScreen extends Activity {
 
 
         viewPostsButton.setOnClickListener(new OnClickListener() {
-
-
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(HomeScreen.this,
@@ -56,9 +54,7 @@ public class HomeScreen extends Activity {
                         startActivity(intent);
                     }
                 });
-
             }
-
         });
 
         logoutButton.setOnClickListener(new OnClickListener() {
