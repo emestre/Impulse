@@ -37,6 +37,7 @@ public class CameraActivity extends Activity {
     private Camera mCamera;
     private int mCameraId = BACK_CAMERA;
     private boolean isCamera = true;        // true = take picture, false = record video
+    private boolean isFocusing = false;
 
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
@@ -85,9 +86,17 @@ public class CameraActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mCamera != null) {
+                    if (mCamera != null && !isFocusing) {
+
+                        isFocusing = true;
                         // focus the camera, no callback
-                        mCamera.autoFocus(null);
+                        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                            @Override
+                            public void onAutoFocus(boolean success, Camera camera) {
+                                // no longer attempting to auto focus
+                                isFocusing = false;
+                            }
+                        });
                     }
                 }
 
