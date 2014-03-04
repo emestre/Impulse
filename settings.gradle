@@ -1,2 +1,0 @@
-include ':Impulse'
-include ':facebook-android-sdk-3.6.0:facebook'
