@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Impulse</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="app_id">603531596393445</string>
+    <string name="capture_button_description">Button used to take picture.</string>
+    <string name="record_button_description">Button for recording videos.</string>
+    <string name="profile">Profile</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="camera">Camera</string>
+    <string name="ping">Ping Server</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="action_next">Next</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_reply">Reply</string>
+    <string name="logout">Logout</string>
+    <string name="view_posts">View Posts</string>
+    <string name="switch_camera_text">Flip</string>
+    <string name="capture_button_text">Take Picture</string>
+    <string name="record_button_text">Start Recording</string>
+    <string name="menu_create_text">Create</string>
+    <string name="submenu_save_text">Save to SD Card</string>
+    <string name="submenu_post_text">Upload New Post</string>
+    <string name="title_activity_create_post">New Post</string>
+    <string name="menu_home_text">Home</string>
+    <string name="toggle_button_text">Video</string>
+    <string name="caption_hint">Enter a caption</string>
+    <string name="caption">Caption</string>
+</resources>
