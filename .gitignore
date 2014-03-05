@@ -2,3 +2,10 @@
 /local.properties
 /.idea/workspace.xml
 .DS_Store
+.idea
+*.iml
+.classpath
+.project
+bin/
+gen/
+facebook-*
