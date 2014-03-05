@@ -88,6 +88,8 @@ public class PostActivity extends FragmentActivity {
 
             String calculatedTimeout = calculateTimeout(timeOut);
 
+            if(calculatedTimeout.isEmpty())
+                continue;
 
             Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout);
             posts.add(newPost);
@@ -122,6 +124,8 @@ public class PostActivity extends FragmentActivity {
             else if(diffInMinutes > 0) {
                 calculatedTimeout = diffInMinutes + " mins";
             }
+            else
+                return "";
         } catch (ParseException e) {
             e.printStackTrace();
         }

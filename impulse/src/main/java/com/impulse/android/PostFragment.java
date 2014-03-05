@@ -129,6 +129,7 @@ public class PostFragment extends Fragment {
         if (!myId.equals(userId)) {
             new Request(session, "/" + userId + "/mutualFriends/" + myId, null, HttpMethod.GET, new Request.Callback() {
                         public void onCompleted(Response response) {
+                            Log.i("Response", response.toString());
                             mutualFriends.setText(parseFriends(response) + " mutual friends");
                         }
                     }
