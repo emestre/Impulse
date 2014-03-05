@@ -1,7 +1,7 @@
 package com.impulse.android;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +41,9 @@ public class CreatePost extends ActionBarActivity {
 
     private EditText mCaption;
     private FrameLayout mFrameLayout;
+
+    // post expiration time in hours
+    private int mPostExpireTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,13 +95,15 @@ public class CreatePost extends ActionBarActivity {
 
             // rotate the image by the amount indicated in the EXIF tags
             // or mirror the image if taken with the front camera
-            if (cameraId == CameraActivity.FRONT_CAMERA) {
-                rotateMatrix.preScale(-1, 1);
-                rotateMatrix.postRotate(90);
-            }
-            else {
-                rotateMatrix.postRotate(degrees);
-            }
+//            if (cameraId == CameraActivity.FRONT_CAMERA) {
+//                rotateMatrix.preScale(-1, 1);
+//                rotateMatrix.postRotate(90);
+//            }
+//            else {
+//                rotateMatrix.postRotate(degrees);
+//            }
+
+            rotateMatrix.postRotate(degrees);
             picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(),
                     picture.getHeight(), rotateMatrix, false);
 
@@ -170,9 +175,47 @@ public class CreatePost extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.create_post, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem expirationItem = menu.findItem(R.id.menu_expiration);
+
+        if (expirationItem != null) {
+            switch (mPostExpireTime) {
+                case 1:
+                    expirationItem.setTitle("1 Hour");
+                    break;
+
+                case 6:
+                    expirationItem.setTitle("6 Hours");
+                    break;
+
+                case 12:
+                    expirationItem.setTitle("12 Hours");
+                    break;
+
+                case 24:
+                    expirationItem.setTitle("24 Hours");
+                    break;
+
+                case 48:
+                    expirationItem.setTitle("48 Hours");
+                    break;
+
+                case 72:
+                    expirationItem.setTitle("72 Hours");
+                    break;
+
+                default:
+                    expirationItem.setTitle(getString(R.string.menu_expire_text));
+                    break;
+            }
+        }
         return true;
     }
 
@@ -207,7 +250,36 @@ public class CreatePost extends ActionBarActivity {
         }
         else if (itemId == R.id.submenu_post) {
             uploadPost();
-
+            return true;
+        }
+        else if (itemId == R.id.submenu_1) {
+            mPostExpireTime = 1;
+            supportInvalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.submenu_6) {
+            mPostExpireTime = 6;
+            supportInvalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.submenu_12) {
+            mPostExpireTime = 12;
+            supportInvalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.submenu_24) {
+            mPostExpireTime = 24;
+            supportInvalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.submenu_48) {
+            mPostExpireTime = 48;
+            supportInvalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.submenu_72) {
+            mPostExpireTime = 72;
+            supportInvalidateOptionsMenu();
             return true;
         }
         else {
@@ -218,35 +290,41 @@ public class CreatePost extends ActionBarActivity {
     private void uploadPost() {
 
         final String captionText = mCaption.getText().toString();
+        // post expiration time in minutes
+        final int timeout;
 
-        Session session = Session.getActiveSession();
-        Request.newMeRequest(session, new Request.GraphUserCallback() {
+        // convert the expiration time to minutes
+        if (mPostExpireTime == 0) {
+            timeout = 48 * 60;
+        }
+        else {
+            timeout = mPostExpireTime * 60;
+        }
+
+        // get the user's unique facebook ID from shared preferences
+        String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+
+        Log.d(TAG, "uploading new post with:");
+        Log.d(TAG, "user ID = " + userId);
+        Log.d(TAG, "caption text = " + captionText);
+        Log.d(TAG, "timeout in minutes = " + timeout);
+
+        RestClient client = new RestClient();
+        client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", timeout, new PostCallback() {
             @Override
-            public void onCompleted(GraphUser user, Response response) {
-                String userId;
-                if (user != null) {
-                    userId = user.getId();
+            public void onPostSuccess(String result) {
+                mUploadingProgress.dismiss();
 
-                    RestClient client = new RestClient();
-                    // timeout in minutes
-                    client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", 0, new PostCallback() {
-                        @Override
-                        public void onPostSuccess(String result) {
-                            mUploadingProgress.dismiss();
-
-                            if (result.equals(UPLOAD_SUCCESS)) {
-                                Log.d(TAG, "upload succeeded");
-                                Toast.makeText(getApplicationContext(), "upload succeeded", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Log.d(TAG, "upload failed");
-                                Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                if (result.equals(UPLOAD_SUCCESS)) {
+                    Log.d(TAG, "upload succeeded");
+                    Toast.makeText(getApplicationContext(), "upload succeeded", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Log.d(TAG, "upload failed");
+                    Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
                 }
             }
-        }).executeAsync();
+        });
 
         // display a loading spinner while the bill is uploading
         mUploadingProgress = new ProgressDialog(this);
