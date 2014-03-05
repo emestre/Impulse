@@ -32,7 +32,8 @@
         android:layout_height="wrap_content"
         android:text="@string/toggle_button_text"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/camera_capture_button"

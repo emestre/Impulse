@@ -35,6 +35,7 @@ public class CreatePost extends ActionBarActivity {
     private ProgressDialog mUploadingProgress;
 
     private EditText mCaption;
+    private int mRotation;
     private FrameLayout mFrameLayout;
 
     // post expiration time in hours
@@ -76,32 +77,20 @@ public class CreatePost extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         int type = (Integer) extras.get(CameraActivity.MEDIA_TYPE_KEY);
         mPathToMedia = (String) extras.get(CameraActivity.PATH_KEY);
-        int cameraId = (Integer) extras.get(CameraActivity.CAMERA_ID_KEY);
 
         if (type == MediaFileHelper.MEDIA_TYPE_IMAGE) {
-            ImageView image = new ImageView(this);
-
+            int cameraId = (Integer) extras.get(CameraActivity.CAMERA_ID_KEY);
             // try to read the EXIF tags of the JPG image
-            int degrees = getExifRotation();
-            Log.d(TAG, "rotation = " + degrees);
-
+            mRotation = (Integer) extras.get(CameraActivity.IMAGE_ROTATION_KEY);
+            Log.d(TAG, "rotation = " + mRotation);
             Bitmap picture = BitmapFactory.decodeFile(mPathToMedia);
-            Matrix rotateMatrix = new Matrix();
 
-            // rotate the image by the amount indicated in the EXIF tags
-            // or mirror the image if taken with the front camera
-//            if (cameraId == CameraActivity.FRONT_CAMERA) {
-//                rotateMatrix.preScale(-1, 1);
-//                rotateMatrix.postRotate(90);
-//            }
-//            else {
-//                rotateMatrix.postRotate(degrees);
-//            }
-
-            rotateMatrix.postRotate(degrees);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(mRotation);
             picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(),
-                    picture.getHeight(), rotateMatrix, false);
+                    picture.getHeight(), matrix, false);
 
+            ImageView image = new ImageView(this);
             image.setImageBitmap(picture);
             mFrameLayout.addView(image);
         }
@@ -117,39 +106,39 @@ public class CreatePost extends ActionBarActivity {
 
     }
 
-    private int getExifRotation() {
-        ExifInterface exif = null;
-        int degrees = 0;
-
-        try {
-            exif = new ExifInterface(mPathToMedia);
-        }
-        catch (IOException e) {
-            Log.d(TAG, e.getMessage());
-        }
-
-        if (exif != null) {
-            // get the orientation attribute of the image
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-            ExifInterface.ORIENTATION_NORMAL);
-
-            switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                degrees = 90;
-                break;
-
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                degrees = 180;
-                break;
-
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                degrees = 270;
-                break;
-            }
-        }
-
-        return degrees;
-    }
+//    private int getExifRotation() {
+//        ExifInterface exif = null;
+//        int degrees = 0;
+//
+//        try {
+//            exif = new ExifInterface(mPathToMedia);
+//        }
+//        catch (IOException e) {
+//            Log.d(TAG, e.getMessage());
+//        }
+//
+//        if (exif != null) {
+//            // get the orientation attribute of the image
+//            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+//            ExifInterface.ORIENTATION_NORMAL);
+//
+//            switch (orientation) {
+//            case ExifInterface.ORIENTATION_ROTATE_90:
+//                degrees = 90;
+//                break;
+//
+//            case ExifInterface.ORIENTATION_ROTATE_180:
+//                degrees = 180;
+//                break;
+//
+//            case ExifInterface.ORIENTATION_ROTATE_270:
+//                degrees = 270;
+//                break;
+//            }
+//        }
+//
+//        return degrees;
+//    }
 
     @Override
     public void onDestroy() {
@@ -280,7 +269,6 @@ public class CreatePost extends ActionBarActivity {
 
     private void uploadPost() {
 
-        final String captionText = mCaption.getText().toString();
         // post expiration time in minutes
         final int timeout;
 
@@ -294,14 +282,20 @@ public class CreatePost extends ActionBarActivity {
 
         // get the user's unique facebook ID from shared preferences
         String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        final String captionText;
+        if (mCaption.getText().toString().equals(""))
+            captionText = userId;
+        else
+            captionText = mCaption.getText().toString();
 
         Log.d(TAG, "uploading new post with:");
         Log.d(TAG, "user ID = " + userId);
         Log.d(TAG, "caption text = " + captionText);
         Log.d(TAG, "timeout in minutes = " + timeout);
+        Log.d(TAG, "rotate image = " + mRotation);
 
         RestClient client = new RestClient();
-        client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", timeout, new PostCallback() {
+        client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", timeout, mRotation, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
                 mUploadingProgress.dismiss();

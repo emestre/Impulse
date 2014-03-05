@@ -66,12 +66,12 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         // Make sure to stop the preview before resizing or reformatting it.
 
         Log.d(TAG, "preview surface changed");
-        initSurface(90);
+        initSurface();
         mInitialized = true;
     }
 
-    public boolean initSurface(int rotation) {
-        if (mInitialized && mCamera != null && mHolder.getSurface() != null) {
+    public boolean initSurface() {
+        if (mCamera != null && mHolder.getSurface() != null) {
 
             mCamera.stopPreview();
 
@@ -82,7 +82,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             }
 
             // set the camera's rotation so image is displayed right
-            mCamParams.setRotation(rotation);
+//            mCamParams.setRotation(rotation);
 
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
