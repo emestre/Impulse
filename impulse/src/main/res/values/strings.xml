@@ -29,4 +29,11 @@
     <string name="toggle_button_text">Video</string>
     <string name="caption_hint">Enter a caption</string>
     <string name="caption">Caption</string>
+    <string name="menu_expire_text">Expiration</string>
+    <string name="submenu_1_text">1 hour</string>
+    <string name="submenu_6_text">6 hours</string>
+    <string name="submenu_12_text">12 hours</string>
+    <string name="submenu_24_text">24 hours</string>
+    <string name="submenu_48_text">48 hours</string>
+    <string name="submenu_72_text">72 hours</string>
 </resources>
