@@ -1,5 +1,6 @@
 package com.impulse.android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,8 +21,15 @@ import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
@@ -75,39 +83,65 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.post_fragment, container, false);
+
+        if(view == null || post == null)
+            return view;
+
         image = (ImageView) view.findViewById(R.id.post_image);
         userName = (TextView) view.findViewById(R.id.post_user);
         mutualFriends = (TextView) view.findViewById(R.id.post_mutual_friends);
         caption = (TextView) view.findViewById(R.id.post_caption);
         timeout = (TextView) view.findViewById(R.id.post_timeout);
 
-
-        int firstQuote = post.fileName.indexOf("\"");
+        int firstQuote = post.fileName.indexOf("\"") + 1;
         int lastQuote = post.fileName.lastIndexOf("\"");
         String userId = post.fileName.substring(firstQuote, lastQuote);
-        Log.i("FILE", post.fileName);
-        Log.i("USER_ID", userId + "     \"");
-        Session session = Session.getActiveSession();
 
+        Session session = Session.getActiveSession();
+        getUserName(session, userId);
+        getMutualFriendsCount(session, userId);
+
+        caption.setText(post.caption);
+        timeout.setText(post.timeOut);
+        Picasso.with(getActivity().getApplicationContext()).load(RestClient.getFile(post.fileName)).into(image);
+        return view;
+    }
+
+    private void getUserName(Session session, String userId) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("fields", "name");
-        new Request(
-                session,
-                "/" + userId,
-                requestBundle,
-                HttpMethod.GET,
-                new Request.Callback() {
+        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
                     public void onCompleted(Response response) {
-                        Log.i("RESPONSE", response.toString());
-                        response.getGraphObject();
+                        JSONObject json = response.getGraphObject().getInnerJSONObject();
+                        if (json == null) {
+                            userName.setText("Impulse");
+                            return;
+                        }
+                        JsonElement elem = new JsonParser().parse(json.toString());
+                        userName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
                     }
                 }
         ).executeAsync();
+    }
 
-        if (post == null)
-            return view;
-        caption.setText(post.caption);
-        Picasso.with(getActivity().getApplicationContext()).load(RestClient.getFile(post.fileName)).into(image);
-        return view;
+    private void getMutualFriendsCount(Session session, String userId) {
+        String myId = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        if (!myId.equals(userId)) {
+            new Request(session, "/" + userId + "/mutualFriends/" + myId, null, HttpMethod.GET, new Request.Callback() {
+                        public void onCompleted(Response response) {
+                            mutualFriends.setText(parseFriends(response) + " mutual friends");
+                        }
+                    }
+            ).executeAsync();
+        }
+    }
+
+    private int parseFriends(Response response) {
+        GraphObject results = response.getGraphObject();
+        JSONObject json = results.getInnerJSONObject();
+        JsonElement elem = new JsonParser().parse(json.toString());
+        JsonElement data = elem.getAsJsonObject().get("data");
+        JsonArray mutualFriends = data.getAsJsonArray();
+        return mutualFriends.size();
     }
 }

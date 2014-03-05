@@ -23,7 +23,13 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class PostActivity extends FragmentActivity {
 
@@ -78,9 +84,48 @@ public class PostActivity extends FragmentActivity {
             double lat = toAdd.get("latitude").getAsDouble();
             String caption = toAdd.get("caption").getAsString();
             String fileName = toAdd.get("fileName").getAsString();
-            Post newPost = new Post(lon, lat, caption, fileName);
+            String timeOut = toAdd.get("timeout").getAsString();
+
+            String calculatedTimeout = calculateTimeout(timeOut);
+
+
+            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout);
             posts.add(newPost);
         }
+    }
+
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+    }
+
+    private String calculateTimeout(String timeOut) {
+        String calculatedTimeout = null;
+        try {
+            Date result = null;
+            DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.US);
+            Date currentTime = new Date();
+            result = df.parse(timeOut);
+            Log.i("DATES", result.toString() + " " + currentTime.toString());
+            long diffInDays = getDateDiff(currentTime, result, TimeUnit.DAYS);
+            long diffInHours = getDateDiff(currentTime, result,TimeUnit.HOURS);
+            long diffInMinutes = getDateDiff(currentTime, result, TimeUnit.MINUTES);
+            if(diffInDays > 0) {
+                diffInHours -= diffInDays * 24;
+                diffInMinutes -= (diffInDays * 24 * 60 + diffInHours * 60);
+                calculatedTimeout = diffInDays + " days " + diffInHours + " hrs " + diffInMinutes + " mins";
+            }
+            else if(diffInHours > 0) {
+                diffInMinutes -= diffInHours * 60;
+                calculatedTimeout = diffInHours + " hrs " + diffInMinutes + " mins";
+            }
+            else if(diffInMinutes > 0) {
+                calculatedTimeout = diffInMinutes + " mins";
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return calculatedTimeout;
     }
 
     @Override

@@ -22,12 +22,12 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
     private Camera mCamera;
     private Camera.Parameters mCamParams;
-    private int mCameraId;
-
     private List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
     private List<Camera.Size> mSupportedPictureSizes;
     private Camera.Size mPictureSize;
+
+    private boolean mInitialized = false;
 
     @SuppressWarnings("deprecation")
     public CameraPreview(Context context, SurfaceView surface) {
@@ -41,9 +41,8 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         setFocusableInTouchMode(true);
     }
 
-    public void setCamera(Camera camera, int id) {
+    public void setCamera(Camera camera) {
         mCamera = camera;
-        mCameraId = id;
         if (camera != null) {
             mCamParams = mCamera.getParameters();
             mSupportedPreviewSizes = mCamParams.getSupportedPreviewSizes();
@@ -67,11 +66,12 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         // Make sure to stop the preview before resizing or reformatting it.
 
         Log.d(TAG, "preview surface changed");
-        initSurface();
+        initSurface(90);
+        mInitialized = true;
     }
 
-    public void initSurface() {
-        if (mCamera != null && mHolder.getSurface() != null) {
+    public boolean initSurface(int rotation) {
+        if (mInitialized && mCamera != null && mHolder.getSurface() != null) {
 
             mCamera.stopPreview();
 
@@ -80,16 +80,13 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
                 mCamera.setDisplayOrientation(90);
                 Log.d(TAG, "display orientation set to: 90");
             }
-            Camera.CameraInfo info = new Camera.CameraInfo();
-            Camera.getCameraInfo(mCameraId, info);
-            // rotate the image file so it's oriented correctly when viewed in photo viewer
-            mCamParams.setRotation(info.orientation);
-            Log.d(TAG, "rotation set to: " + info.orientation);
+
+            // set the camera's rotation so image is displayed right
+            mCamParams.setRotation(rotation);
 
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
-//            Log.d(TAG, "preview size set to: " + mPreviewSize.width + " x " + mPreviewSize.height);
-            this.requestLayout();
+            Log.d(TAG, "preview size set to: " + mPreviewSize.width + " x " + mPreviewSize.height);
 
             mPictureSize = getOptimalPictureSize(mSupportedPictureSizes);
             mCamParams.setPictureSize(mPictureSize.width, mPictureSize.height);
@@ -108,6 +105,11 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
                 Log.d(TAG, "set preview display threw exception: " + e.getMessage());
             }
             mCamera.startPreview();
+
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -181,28 +183,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if (changed && getChildCount() > 0) {
-            final View child = getChildAt(0);
 
-            final int width = r - l;
-            final int height = b - t;
-
-            // Center the child SurfaceView within the parent.
-            if (width * height > height * width) {
-                final int scaledChildWidth = width * height / height;
-                child.layout((width - scaledChildWidth) / 2, 0,
-                        (width + scaledChildWidth) / 2, height);
-            }
-            else {
-                final int scaledChildHeight = height * width / width;
-                child.layout(0, (height - scaledChildHeight) / 2,
-                        width, (height + scaledChildHeight) / 2);
-            }
-
-            Log.d(TAG, "on layout changed");
-        }
-        else {
-            Log.d(TAG, "in on layout no change");
-        }
     }
 }
