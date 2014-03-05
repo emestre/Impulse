@@ -131,7 +131,7 @@ public class PostActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PostFragment.create(position, posts.get(position).fileName);
+            return PostFragment.create(position, posts.get(position));
         }
 
         @Override
