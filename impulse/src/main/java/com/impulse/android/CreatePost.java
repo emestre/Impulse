@@ -23,11 +23,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphUser;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -109,16 +104,12 @@ public class CreatePost extends ActionBarActivity {
 
             image.setImageBitmap(picture);
             mFrameLayout.addView(image);
-
-            Log.d(TAG, "image received");
         }
         else if (type == MediaFileHelper.MEDIA_TYPE_VIDEO) {
             VideoView video = new VideoView(this);
             video.setVideoPath(mPathToMedia);
             mFrameLayout.addView(video);
             video.start();
-
-            Log.d(TAG, "video received");
         }
         else {
             Log.d(TAG, "unknown media received");
