@@ -1,6 +1,7 @@
 package com.impulse.android;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -94,13 +95,15 @@ public class CreatePost extends ActionBarActivity {
 
             // rotate the image by the amount indicated in the EXIF tags
             // or mirror the image if taken with the front camera
-            if (cameraId == CameraActivity.FRONT_CAMERA) {
-                rotateMatrix.preScale(-1, 1);
-                rotateMatrix.postRotate(90);
-            }
-            else {
-                rotateMatrix.postRotate(degrees);
-            }
+//            if (cameraId == CameraActivity.FRONT_CAMERA) {
+//                rotateMatrix.preScale(-1, 1);
+//                rotateMatrix.postRotate(90);
+//            }
+//            else {
+//                rotateMatrix.postRotate(degrees);
+//            }
+
+            rotateMatrix.postRotate(degrees);
             picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(),
                     picture.getHeight(), rotateMatrix, false);
 
@@ -290,6 +293,7 @@ public class CreatePost extends ActionBarActivity {
         // post expiration time in minutes
         final int timeout;
 
+        // convert the expiration time to minutes
         if (mPostExpireTime == 0) {
             timeout = 48 * 60;
         }
@@ -297,35 +301,30 @@ public class CreatePost extends ActionBarActivity {
             timeout = mPostExpireTime * 60;
         }
 
-        Session session = Session.getActiveSession();
-        Request.newMeRequest(session, new Request.GraphUserCallback() {
+        // get the user's unique facebook ID from shared preferences
+        String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+
+        Log.d(TAG, "uploading new post with:");
+        Log.d(TAG, "user ID = " + userId);
+        Log.d(TAG, "caption text = " + captionText);
+        Log.d(TAG, "timeout in minutes = " + timeout);
+
+        RestClient client = new RestClient();
+        client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", timeout, new PostCallback() {
             @Override
-            public void onCompleted(GraphUser user, Response response) {
-                String userId;
-                if (user != null) {
-                    userId = user.getId();
+            public void onPostSuccess(String result) {
+                mUploadingProgress.dismiss();
 
-                    Log.d(TAG, "caption text = " + captionText);
-                    Log.d(TAG, "timeout in minutes = " + timeout);
-                    RestClient client = new RestClient();
-                    client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", timeout, new PostCallback() {
-                        @Override
-                        public void onPostSuccess(String result) {
-                            mUploadingProgress.dismiss();
-
-                            if (result.equals(UPLOAD_SUCCESS)) {
-                                Log.d(TAG, "upload succeeded");
-                                Toast.makeText(getApplicationContext(), "upload succeeded", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Log.d(TAG, "upload failed");
-                                Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                if (result.equals(UPLOAD_SUCCESS)) {
+                    Log.d(TAG, "upload succeeded");
+                    Toast.makeText(getApplicationContext(), "upload succeeded", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Log.d(TAG, "upload failed");
+                    Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
                 }
             }
-        }).executeAsync();
+        });
 
         // display a loading spinner while the bill is uploading
         mUploadingProgress = new ProgressDialog(this);

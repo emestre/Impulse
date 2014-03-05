@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +44,7 @@ public class CameraActivity extends Activity {
     private int mCameraId = BACK_CAMERA;
     private boolean isCamera = true;        // true = take picture, false = record video
     private boolean isFocusing = false;
+    private int mRotation;
 
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
@@ -49,6 +56,7 @@ public class CameraActivity extends Activity {
     private Button mCaptureButton;
     private Button mToggle;
 
+    private OrientationEventListener mOrientationListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,15 @@ public class CameraActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // KEEP this code here, moving it does not allow the event listener to be
+        // disabled in onPause (kills battery life because sensor is always running)
+        mOrientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                calculateRotation(orientation);
+            }
+        };
 
         // link this activity to the camera layout file
         this.setContentView(R.layout.activity_camera);
@@ -80,46 +97,9 @@ public class CameraActivity extends Activity {
         mPreview = new CameraPreview(this, mPreviewSurface);
         // set the preview object as the view of the FrameLayout
         mFrame.addView(mPreview);
-
-        // set the frame layout to receive touch events for auto focus
-        mFrame.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mCamera != null && !isFocusing) {
-
-                        isFocusing = true;
-                        // focus the camera, no callback
-                        mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                            @Override
-                            public void onAutoFocus(boolean success, Camera camera) {
-                                // no longer attempting to auto focus
-                                isFocusing = false;
-                            }
-                        });
-                    }
-                }
-
-                return true;
-            }
-        });
     }
 
     private void initLayout() {
-
-        // check if this device has a front facing camera
-        if (Camera.getNumberOfCameras() >= 2) {
-            Button switchCamera  = (Button) findViewById(R.id.switch_camera_button);
-            switchCamera.setEnabled(true);
-            switchCamera.setVisibility(View.VISIBLE);
-
-            switchCamera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switchCameraButtonClick();
-                }
-            });
-        }
 
         // set the capture button's on click listener
         mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
@@ -142,6 +122,20 @@ public class CameraActivity extends Activity {
             }
         });
 
+        // check if this device has a front facing camera
+        if (Camera.getNumberOfCameras() >= 2) {
+            Button switchCamera  = (Button) findViewById(R.id.switch_camera_button);
+            switchCamera.setEnabled(true);
+            switchCamera.setVisibility(View.VISIBLE);
+
+            switchCamera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchCameraButtonClick();
+                }
+            });
+        }
+
         // set the toggle button's on click listener
         mToggle = (Button) findViewById(R.id.toggle_button);
         mToggle.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +153,28 @@ public class CameraActivity extends Activity {
                 }
             }
         });
+
+        // set the frame layout to receive touch events for auto focus
+        mFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mCamera != null && !isFocusing) {
+
+                        isFocusing = true;
+                        // focus the camera, no callback
+                        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                            @Override
+                            public void onAutoFocus(boolean success, Camera camera) {
+                                // no longer attempting to auto focus
+                                isFocusing = false;
+                            }
+                        });
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -166,8 +182,9 @@ public class CameraActivity extends Activity {
         super.onResume();
 
         mCamera = getCameraInstance(mCameraId);
-        mPreview.setCamera(mCamera, mCameraId);
+        mPreview.setCamera(mCamera);
         mCamera.startPreview();
+        mRotation = -100;
 
         // enable the capture button
         mCaptureButton.setEnabled(true);
@@ -175,6 +192,9 @@ public class CameraActivity extends Activity {
         isCamera = true;
         mCaptureButton.setText(getString(R.string.capture_button_text));
         mToggle.setText("Video");
+
+        // enable this activity to receive orientation change events
+        mOrientationListener.enable();
     }
 
     /** A safe way to get an instance of the Camera object. */
@@ -203,6 +223,10 @@ public class CameraActivity extends Activity {
     protected void onPause() {
         super.onPause();
 
+        // disable the orientation change events, without this we will keep receiving
+        // the events even after this activity loses context
+        mOrientationListener.disable();
+
         // release the MediaRecorder
         releaseMediaRecorder();
         // release the camera so it can be used by other applications
@@ -212,7 +236,7 @@ public class CameraActivity extends Activity {
     private void releaseCamera() {
         if (mCamera != null){
             mCamera.stopPreview();
-            mPreview.setCamera(null, -1);
+            mPreview.setCamera(null);
             mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
@@ -249,7 +273,7 @@ public class CameraActivity extends Activity {
         mCamera = getCameraInstance(mCameraId);
         initPreview();
         // initialize and start the preview
-        mPreview.setCamera(mCamera, mCameraId);
+        mPreview.setCamera(mCamera);
     }
 
     /** Callback to run when a picture has been taken. */
@@ -259,7 +283,8 @@ public class CameraActivity extends Activity {
         public void onPictureTaken(byte[] data, Camera camera) {
 
             // get the path to the new image file in internal storage
-            String path = MediaFileHelper.getInternalCachePath(getApplicationContext(), MediaFileHelper.MEDIA_TYPE_IMAGE);
+            String path = MediaFileHelper.getInternalCachePath(getApplicationContext(),
+                                            MediaFileHelper.MEDIA_TYPE_IMAGE);
 
             // try to write the image data to storage
             try {
@@ -404,5 +429,26 @@ public class CameraActivity extends Activity {
         startActivity(intent);
 
         Log.d(TAG, "recording stopped");
+    }
+
+    private void calculateRotation(int orientation) {
+        if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN)
+            return;
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(mCameraId, info);
+        orientation = (orientation + 45) / 90 * 90;
+
+        int rotation;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            rotation = (info.orientation - orientation + 360) % 360;
+        }
+        else {  // back-facing camera
+            rotation = (info.orientation + orientation) % 360;
+        }
+
+        if (rotation != mRotation && mPreview.initSurface(rotation)) {
+            mRotation = rotation;
+            Log.d(TAG, "camera rotation set to: " + mRotation);
+        }
     }
 }
