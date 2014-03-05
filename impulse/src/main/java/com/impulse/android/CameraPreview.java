@@ -27,8 +27,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
     private List<Camera.Size> mSupportedPictureSizes;
     private Camera.Size mPictureSize;
 
-    private boolean mInitialized = false;
-
     @SuppressWarnings("deprecation")
     public CameraPreview(Context context, SurfaceView surface) {
         super(context);
@@ -67,7 +65,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
         Log.d(TAG, "preview surface changed");
         initSurface();
-        mInitialized = true;
     }
 
     public boolean initSurface() {
@@ -80,9 +77,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
                 mCamera.setDisplayOrientation(90);
                 Log.d(TAG, "display orientation set to: 90");
             }
-
-            // set the camera's rotation so image is displayed right
-//            mCamParams.setRotation(rotation);
 
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);

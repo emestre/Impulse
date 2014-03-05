@@ -2,6 +2,7 @@ package com.impulse.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -97,24 +98,18 @@ public class MediaFileHelper {
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(newPath);
-        } catch (FileNotFoundException e) {
+            fb.writeTo(fos);
+            fos.close();
+        }
+        catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
         }
-        try {
-            fb.writeTo(fos);
-        } catch (IOException e) {
+        catch (IOException e) {
             e.printStackTrace();
             return false;
         }
 
         return true;
-    }
-
-    public static void runMediaScanner(Context context) {
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
-                + Environment.getExternalStorageDirectory() + File.separator + "Impulse")));
-
-        Log.d(TAG, "media scanner ran on Impulse");
     }
 }

@@ -41,7 +41,7 @@ public class CameraActivity extends Activity {
     private int mCameraId = BACK_CAMERA;
     private boolean isCamera = true;        // true = take picture, false = record video
     private boolean isFocusing = false;
-    private int mRotation;
+    private int mRotation = 90;
 
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
@@ -181,7 +181,6 @@ public class CameraActivity extends Activity {
         mCamera = getCameraInstance(mCameraId);
         mPreview.setCamera(mCamera);
         mCamera.startPreview();
-        mRotation = -100;
 
         // enable the capture button
         mCaptureButton.setEnabled(true);
@@ -437,17 +436,11 @@ public class CameraActivity extends Activity {
         Camera.getCameraInfo(mCameraId, info);
         orientation = (orientation + 45) / 90 * 90;
 
-        int rotation;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             mRotation = (info.orientation - orientation + 360) % 360;
         }
         else {  // back-facing camera
             mRotation = (info.orientation + orientation) % 360;
         }
-
-//        if (rotation != mRotation && mPreview.initSurface(rotation)) {
-//            mRotation = rotation;
-//            Log.d(TAG, "camera rotation set to: " + mRotation);
-//        }
     }
 }

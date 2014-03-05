@@ -8,8 +8,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -35,11 +38,12 @@ public class CreatePost extends ActionBarActivity {
     private ProgressDialog mUploadingProgress;
 
     private EditText mCaption;
+    private String mCaptionText;
+    private int mPostExpireTime = 0;            // post expiration time in hours
     private int mRotation;
     private FrameLayout mFrameLayout;
 
-    // post expiration time in hours
-    private int mPostExpireTime = 0;
+    private MediaScannerConnection mediaScanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +87,9 @@ public class CreatePost extends ActionBarActivity {
             // try to read the EXIF tags of the JPG image
             mRotation = (Integer) extras.get(CameraActivity.IMAGE_ROTATION_KEY);
             Log.d(TAG, "rotation = " + mRotation);
-            Bitmap picture = BitmapFactory.decodeFile(mPathToMedia);
 
+            Bitmap picture = BitmapFactory.decodeFile(mPathToMedia);
+            // rotate the image by the degrees specified
             Matrix matrix = new Matrix();
             matrix.postRotate(mRotation);
             picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(),
@@ -105,40 +110,6 @@ public class CreatePost extends ActionBarActivity {
         }
 
     }
-
-//    private int getExifRotation() {
-//        ExifInterface exif = null;
-//        int degrees = 0;
-//
-//        try {
-//            exif = new ExifInterface(mPathToMedia);
-//        }
-//        catch (IOException e) {
-//            Log.d(TAG, e.getMessage());
-//        }
-//
-//        if (exif != null) {
-//            // get the orientation attribute of the image
-//            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-//            ExifInterface.ORIENTATION_NORMAL);
-//
-//            switch (orientation) {
-//            case ExifInterface.ORIENTATION_ROTATE_90:
-//                degrees = 90;
-//                break;
-//
-//            case ExifInterface.ORIENTATION_ROTATE_180:
-//                degrees = 180;
-//                break;
-//
-//            case ExifInterface.ORIENTATION_ROTATE_270:
-//                degrees = 270;
-//                break;
-//            }
-//        }
-//
-//        return degrees;
-//    }
 
     @Override
     public void onDestroy() {
@@ -217,9 +188,11 @@ public class CreatePost extends ActionBarActivity {
         else if (itemId == R.id.submenu_save) {
             String toastText;
 
+            // set EXIF tag of image for proper image rotation when viewed in gallery
+            setExifRotation();
             if (MediaFileHelper.moveFileToSDCard(mPathToMedia)) {
+                runMediaScanner();
                 toastText = "Saved to SD Card";
-                MediaFileHelper.runMediaScanner(this);
             }
             else {
                 toastText = "Save Failed";
@@ -268,11 +241,14 @@ public class CreatePost extends ActionBarActivity {
     }
 
     private void uploadPost() {
-
-        // post expiration time in minutes
-        final int timeout;
+        // get the user's unique facebook ID from shared preferences
+        String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        mCaptionText = mCaption.getText().toString();
+        if (mCaptionText.equals(""))
+            mCaptionText = userId;
 
         // convert the expiration time to minutes
+        final int timeout;
         if (mPostExpireTime == 0) {
             timeout = 48 * 60;
         }
@@ -280,22 +256,14 @@ public class CreatePost extends ActionBarActivity {
             timeout = mPostExpireTime * 60;
         }
 
-        // get the user's unique facebook ID from shared preferences
-        String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-        final String captionText;
-        if (mCaption.getText().toString().equals(""))
-            captionText = userId;
-        else
-            captionText = mCaption.getText().toString();
-
         Log.d(TAG, "uploading new post with:");
         Log.d(TAG, "user ID = " + userId);
-        Log.d(TAG, "caption text = " + captionText);
+        Log.d(TAG, "caption text = " + mCaptionText);
         Log.d(TAG, "timeout in minutes = " + timeout);
         Log.d(TAG, "rotate image = " + mRotation);
 
         RestClient client = new RestClient();
-        client.postFile(userId, captionText, 0, 0, mPathToMedia, "jpg", timeout, mRotation, new PostCallback() {
+        client.postFile(userId, mCaptionText, 0, 0, mPathToMedia, "jpg", timeout, mRotation, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
                 mUploadingProgress.dismiss();
@@ -319,5 +287,60 @@ public class CreatePost extends ActionBarActivity {
         mUploadingProgress.setIndeterminate(true);
         mUploadingProgress.setCancelable(false);
         mUploadingProgress.show();
+    }
+
+    private void setExifRotation() {
+        ExifInterface exif;
+
+        try {
+            exif = new ExifInterface(mPathToMedia);
+            exif.setAttribute(ExifInterface.TAG_ORIENTATION, getExifRotationString(mRotation));
+            exif.saveAttributes();
+        }
+        catch (IOException e) {
+            Log.d(TAG, e.getMessage());
+        }
+    }
+
+    private String getExifRotationString(int rotation) {
+        int rot = ExifInterface.ORIENTATION_NORMAL;
+
+        switch (rotation) {
+            case 90:
+                rot = ExifInterface.ORIENTATION_ROTATE_90;
+                break;
+
+            case 180:
+                rot = ExifInterface.ORIENTATION_ROTATE_180;
+                break;
+
+            case 270:
+                rot = ExifInterface.ORIENTATION_ROTATE_270;
+                break;
+        }
+
+        return Integer.toString(rot);
+    }
+
+    private void runMediaScanner() {
+        mediaScanner = new MediaScannerConnection(this, new MediaScannerConnection.MediaScannerConnectionClient() {
+            @Override
+            public void onMediaScannerConnected() {
+                mediaScanner.scanFile(Environment.getExternalStorageDirectory().toString()
+                                        + File.separator + "Impulse", null);
+            }
+
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                if (uri != null) {
+                    Log.d(TAG, "media scanner success");
+                }
+                else {
+                    Log.d(TAG, "media scanner failed");
+                }
+                mediaScanner.disconnect();
+            }
+        });
+        mediaScanner.connect();
     }
 }
