@@ -9,11 +9,13 @@ public class Post {
     public double lat;
     public String caption;
     public String fileName;
+    public String timeOut;
 
-    public Post(double lon, double lat, String caption, String fileName) {
+    public Post(double lon, double lat, String caption, String fileName, String timeOut) {
         this.lat = lat;
         this.lon = lon;
         this.caption = caption;
         this.fileName = fileName;
+        this.timeOut = timeOut;
     }
 }

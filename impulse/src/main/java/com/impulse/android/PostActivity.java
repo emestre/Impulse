@@ -78,7 +78,8 @@ public class PostActivity extends FragmentActivity {
             double lat = toAdd.get("latitude").getAsDouble();
             String caption = toAdd.get("caption").getAsString();
             String fileName = toAdd.get("fileName").getAsString();
-            Post newPost = new Post(lon, lat, caption, fileName);
+            String timeOut = toAdd.get("timeout").getAsString();
+            Post newPost = new Post(lon, lat, caption, fileName, timeOut);
             posts.add(newPost);
         }
     }
