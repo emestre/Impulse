@@ -103,7 +103,9 @@ public class PostFragment extends Fragment {
 
         caption.setText(post.caption);
         timeout.setText(post.timeOut);
-        Picasso.with(getActivity().getApplicationContext()).load(RestClient.getFile(post.fileName)).into(image);
+        Picasso.with(getActivity().getApplicationContext())
+                .load(RestClient.getFile(post.fileName))
+                .rotate(post.rotation).into(image);
         return view;
     }
 

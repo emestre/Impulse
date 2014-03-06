@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.SurfaceView;
@@ -36,6 +32,7 @@ public class CameraActivity extends Activity {
     public static final String PATH_KEY = "path";
     public static final String MEDIA_TYPE_KEY = "type";
     public static final String CAMERA_ID_KEY = "id";
+    public static final String IMAGE_ROTATION_KEY = "rotation";
     public static final int BACK_CAMERA = 0;
     public static final int FRONT_CAMERA = 1;
     private static final int MAX_RECORDING_LENGTH = 8000;
@@ -44,7 +41,7 @@ public class CameraActivity extends Activity {
     private int mCameraId = BACK_CAMERA;
     private boolean isCamera = true;        // true = take picture, false = record video
     private boolean isFocusing = false;
-    private int mRotation;
+    private int mRotation = 90;
 
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
@@ -184,7 +181,6 @@ public class CameraActivity extends Activity {
         mCamera = getCameraInstance(mCameraId);
         mPreview.setCamera(mCamera);
         mCamera.startPreview();
-        mRotation = -100;
 
         // enable the capture button
         mCaptureButton.setEnabled(true);
@@ -304,6 +300,8 @@ public class CameraActivity extends Activity {
             intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
             // store which camera we took the picture with
             intent.putExtra(CAMERA_ID_KEY, mCameraId);
+            // store the rotation
+            intent.putExtra(IMAGE_ROTATION_KEY, mRotation);
             // store the path to the picture
             intent.putExtra(PATH_KEY, path);
 
@@ -438,17 +436,11 @@ public class CameraActivity extends Activity {
         Camera.getCameraInfo(mCameraId, info);
         orientation = (orientation + 45) / 90 * 90;
 
-        int rotation;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            rotation = (info.orientation - orientation + 360) % 360;
+            mRotation = (info.orientation - orientation + 360) % 360;
         }
         else {  // back-facing camera
-            rotation = (info.orientation + orientation) % 360;
-        }
-
-        if (rotation != mRotation && mPreview.initSurface(rotation)) {
-            mRotation = rotation;
-            Log.d(TAG, "camera rotation set to: " + mRotation);
+            mRotation = (info.orientation + orientation) % 360;
         }
     }
 }
