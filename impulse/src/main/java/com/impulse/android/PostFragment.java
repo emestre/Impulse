@@ -99,7 +99,7 @@ public class PostFragment extends Fragment {
 
         Session session = Session.getActiveSession();
         getUserName(session, userId);
-        getMutualFriendsCount(session, userId);
+       // getMutualFriendsCount(session, userId);
 
         caption.setText(post.caption);
         timeout.setText(post.timeOut);
