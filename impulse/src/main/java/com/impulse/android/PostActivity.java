@@ -102,7 +102,7 @@ public class PostActivity extends FragmentActivity {
     }
 
     private String calculateTimeout(String timeOut) {
-        String calculatedTimeout = null;
+        String calculatedTimeout = "";
         try {
             Date result = null;
             DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.US);
