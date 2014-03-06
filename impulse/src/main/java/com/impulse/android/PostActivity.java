@@ -103,23 +103,15 @@ public class PostActivity extends FragmentActivity {
         return date2.getMillis() - date1.getMillis();
     }
 
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
-    }
-
     private String calculateTimeout(String timeOut) {
-        String calculatedTimeout = "";
-
-        Date result = null;
-
+        String calculatedTimeout;
         DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss zzz yyyy");
         DateTime dt = formatter.parseDateTime(timeOut);
-
         DateTime currentTime = new DateTime();
         long diffInDays = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60 * 24);
         long diffInHours = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60);
         long diffInMinutes = getDateTimeDiff(currentTime, dt) / (1000 * 60);
+
         if (diffInDays > 0) {
             diffInHours -= diffInDays * 24;
             diffInMinutes -= (diffInDays * 24 * 60 + diffInHours * 60);
@@ -130,7 +122,7 @@ public class PostActivity extends FragmentActivity {
         } else if (diffInMinutes > 0) {
             calculatedTimeout = diffInMinutes + " mins";
         } else
-            return "";
+            calculatedTimeout = "";
 
         return calculatedTimeout;
     }
