@@ -21,6 +21,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -78,7 +81,7 @@ public class PostActivity extends FragmentActivity {
         Log.i("Response", response);
         JsonParser parser = new JsonParser();
         JsonArray results = parser.parse(response).getAsJsonArray();
-        for(JsonElement post : results) {
+        for (JsonElement post : results) {
             JsonObject toAdd = post.getAsJsonObject();
             double lon = toAdd.get("longitude").getAsDouble();
             double lat = toAdd.get("latitude").getAsDouble();
@@ -88,7 +91,7 @@ public class PostActivity extends FragmentActivity {
             int rotation = toAdd.get("rotation").getAsInt();
             String calculatedTimeout = calculateTimeout(timeOut);
 
-            if(calculatedTimeout.isEmpty())
+            if (calculatedTimeout.isEmpty())
                 continue;
 
             Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout, rotation);
@@ -96,39 +99,39 @@ public class PostActivity extends FragmentActivity {
         }
     }
 
+    public static long getDateTimeDiff(DateTime date1, DateTime date2) {
+        return date2.getMillis() - date1.getMillis();
+    }
+
     public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
         long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
 
     private String calculateTimeout(String timeOut) {
         String calculatedTimeout = "";
-        try {
-            Date result = null;
-            DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.US);
-            Date currentTime = new Date();
-            result = df.parse(timeOut);
-            Log.i("DATES", result.toString() + " " + currentTime.toString());
-            long diffInDays = getDateDiff(currentTime, result, TimeUnit.DAYS);
-            long diffInHours = getDateDiff(currentTime, result,TimeUnit.HOURS);
-            long diffInMinutes = getDateDiff(currentTime, result, TimeUnit.MINUTES);
-            if(diffInDays > 0) {
-                diffInHours -= diffInDays * 24;
-                diffInMinutes -= (diffInDays * 24 * 60 + diffInHours * 60);
-                calculatedTimeout = diffInDays + " days " + diffInHours + " hrs " + diffInMinutes + " mins";
-            }
-            else if(diffInHours > 0) {
-                diffInMinutes -= diffInHours * 60;
-                calculatedTimeout = diffInHours + " hrs " + diffInMinutes + " mins";
-            }
-            else if(diffInMinutes > 0) {
-                calculatedTimeout = diffInMinutes + " mins";
-            }
-            else
-                return "";
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        Date result = null;
+
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss zzz yyyy");
+        DateTime dt = formatter.parseDateTime(timeOut);
+
+        DateTime currentTime = new DateTime();
+        long diffInDays = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60 * 24);
+        long diffInHours = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60);
+        long diffInMinutes = getDateTimeDiff(currentTime, dt) / (1000 * 60);
+        if (diffInDays > 0) {
+            diffInHours -= diffInDays * 24;
+            diffInMinutes -= (diffInDays * 24 * 60 + diffInHours * 60);
+            calculatedTimeout = diffInDays + " days " + diffInHours + " hrs " + diffInMinutes + " mins";
+        } else if (diffInHours > 0) {
+            diffInMinutes -= diffInHours * 60;
+            calculatedTimeout = diffInHours + " hrs " + diffInMinutes + " mins";
+        } else if (diffInMinutes > 0) {
+            calculatedTimeout = diffInMinutes + " mins";
+        } else
+            return "";
+
         return calculatedTimeout;
     }
 
