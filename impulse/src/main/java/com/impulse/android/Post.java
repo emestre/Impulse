@@ -10,12 +10,14 @@ public class Post {
     public String caption;
     public String fileName;
     public String timeOut;
+    public int rotation;
 
-    public Post(double lon, double lat, String caption, String fileName, String timeOut) {
+    public Post(double lon, double lat, String caption, String fileName, String timeOut, int rotation) {
         this.lat = lat;
         this.lon = lon;
         this.caption = caption;
         this.fileName = fileName;
         this.timeOut = timeOut;
+        this.rotation = rotation;
     }
 }
