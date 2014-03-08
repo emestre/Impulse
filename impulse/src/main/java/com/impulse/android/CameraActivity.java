@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/** This activity that will display the camera preview. */
 public class CameraActivity extends Activity {
 
     private static final String TAG = "CameraActivity";

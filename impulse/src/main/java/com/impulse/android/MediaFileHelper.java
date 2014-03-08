@@ -1,13 +1,8 @@
 package com.impulse.android;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-
-import com.google.common.io.Files;
 
 import org.apache.http.entity.mime.content.FileBody;
 
