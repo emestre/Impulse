@@ -114,11 +114,12 @@ public class PostFragment extends Fragment {
         requestBundle.putString("fields", "name");
         new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
                     public void onCompleted(Response response) {
-                        JSONObject json = response.getGraphObject().getInnerJSONObject();
-                        if (json == null) {
+                        GraphObject obj = response.getGraphObject();
+                        if (obj == null) {
                             userName.setText("Impulse");
                             return;
                         }
+                        JSONObject json = response.getGraphObject().getInnerJSONObject();
                         JsonElement elem = new JsonParser().parse(json.toString());
                         userName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
                     }
