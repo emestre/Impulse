@@ -1,7 +1,5 @@
 package com.impulse.android;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.SensorManager;
@@ -9,6 +7,9 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -21,36 +22,35 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
-public class CameraActivity extends Activity {
+public class CameraActivity extends FragmentActivity {
 
     private static final String TAG = "CameraActivity";
     public static final String PATH_KEY = "path";
-    public static final String MEDIA_TYPE_KEY = "type";
-    public static final String CAMERA_ID_KEY = "id";
     public static final String IMAGE_ROTATION_KEY = "rotation";
     public static final int BACK_CAMERA = 0;
     public static final int FRONT_CAMERA = 1;
     private static final int MAX_RECORDING_LENGTH = 8000;
 
     private Camera mCamera;
+    private int mNumCams = Camera.getNumberOfCameras();
     private int mCameraId = BACK_CAMERA;
-    private boolean isCamera = true;        // true = take picture, false = record video
     private boolean isFocusing = false;
     private int mRotation = 90;
+    public static byte imageData[];
 
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecording = false;
     private String mVideoPath;
 
-    private FrameLayout mFrame;
+    private FrameLayout mPreviewFrame;
     private SurfaceView mPreviewSurface;
     private CameraPreview mPreview;
     private Button mCaptureButton;
-    private Button mToggle;
+    private Button mSwitchCamera;
+    private Button mToggleButton;
 
     private OrientationEventListener mOrientationListener;
 
@@ -83,16 +83,16 @@ public class CameraActivity extends Activity {
     }
 
     private void initPreview() {
-        mFrame = (FrameLayout) findViewById(R.id.camera_preview);
+        mPreviewFrame = (FrameLayout) findViewById(R.id.camera_preview);
         // create the surface view that holds the camera preview
         mPreviewSurface = new SurfaceView(this);
         mPreviewSurface.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                                                    ViewGroup.LayoutParams.MATCH_PARENT));
-        mFrame.addView(mPreviewSurface);
+        mPreviewFrame.addView(mPreviewSurface);
         // create our Preview object
         mPreview = new CameraPreview(this, mPreviewSurface);
         // set the preview object as the view of the FrameLayout
-        mFrame.addView(mPreview);
+        mPreviewFrame.addView(mPreview);
     }
 
     private void initLayout() {
@@ -102,29 +102,22 @@ public class CameraActivity extends Activity {
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable after click because multiple presses causes crash
+                mCaptureButton.setEnabled(false);
 
-                if (isCamera) {
-                    // disable after click because multiple presses causes crash
-                    mCaptureButton.setEnabled(false);
-
-                    // get an image from the camera
-                    mCamera.takePicture(null, null, mPicture);
-                    Log.d(TAG, "picture taken");
-                }
-                else {
-//                    recordButtonClick();
-                    Toast.makeText(getApplicationContext(), "not yet...", Toast.LENGTH_SHORT).show();
-                }
+                // get an image from the camera
+                mCamera.takePicture(null, null, mPicture);
+                Log.d(TAG, "picture taken");
             }
         });
 
         // check if this device has a front facing camera
-        if (Camera.getNumberOfCameras() >= 2) {
-            Button switchCamera  = (Button) findViewById(R.id.switch_camera_button);
-            switchCamera.setEnabled(true);
-            switchCamera.setVisibility(View.VISIBLE);
+        if (mNumCams >= 2) {
+            mSwitchCamera  = (Button) findViewById(R.id.switch_camera_button);
+            mSwitchCamera.setEnabled(true);
+            mSwitchCamera.setVisibility(View.VISIBLE);
 
-            switchCamera.setOnClickListener(new View.OnClickListener() {
+            mSwitchCamera.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     switchCameraButtonClick();
@@ -133,25 +126,16 @@ public class CameraActivity extends Activity {
         }
 
         // set the toggle button's on click listener
-        mToggle = (Button) findViewById(R.id.toggle_button);
-        mToggle.setOnClickListener(new View.OnClickListener() {
+        mToggleButton = (Button) findViewById(R.id.toggle_button);
+        mToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isCamera) {
-                    isCamera = false;
-                    mCaptureButton.setText(getString(R.string.record_button_text));
-                    mToggle.setText("Camera");
-                }
-                else {
-                    isCamera = true;
-                    mCaptureButton.setText(getString(R.string.capture_button_text));
-                    mToggle.setText("Video");
-                }
+
             }
         });
 
         // set the frame layout to receive touch events for auto focus
-        mFrame.setOnTouchListener(new View.OnTouchListener() {
+        mPreviewFrame.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -183,10 +167,6 @@ public class CameraActivity extends Activity {
 
         // enable the capture button
         mCaptureButton.setEnabled(true);
-        // set camera state as taking pictures
-        isCamera = true;
-        mCaptureButton.setText(getString(R.string.capture_button_text));
-        mToggle.setText("Video");
 
         // enable this activity to receive orientation change events
         mOrientationListener.enable();
@@ -261,8 +241,8 @@ public class CameraActivity extends Activity {
             mCameraId = BACK_CAMERA;
 
         releaseCamera();
-        mFrame.removeView(mPreviewSurface);
-        mFrame.removeView(mPreview);
+        mPreviewFrame.removeView(mPreviewSurface);
+        mPreviewFrame.removeView(mPreview);
 
         // re-open the camera
         mCamera = getCameraInstance(mCameraId);
@@ -277,35 +257,70 @@ public class CameraActivity extends Activity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
-            // get the path to the new image file in internal storage
-            String path = MediaFileHelper.getInternalCachePath(getApplicationContext(),
-                                            MediaFileHelper.MEDIA_TYPE_IMAGE);
+            imageData = Arrays.copyOf(data, data.length);
+            Bundle bundle = new Bundle();
+            bundle.putInt(IMAGE_ROTATION_KEY, mRotation);
 
-            // try to write the image data to storage
-            try {
-                FileOutputStream fos = new FileOutputStream(path);
-                fos.write(data);
-                fos.close();
-            }
-            catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-            }
-            catch (IOException e) {
-                Log.d(TAG, "Error writing to file: " + e.getMessage());
-            }
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+                @Override
+                public void onBackStackChanged() {
+                    FragmentManager manager = getSupportFragmentManager();
 
-            Intent intent = new Intent(getApplicationContext(), CreatePost.class);
-            // store the media type in the intent
-            intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
-            // store which camera we took the picture with
-            intent.putExtra(CAMERA_ID_KEY, mCameraId);
-            // store the rotation
-            intent.putExtra(IMAGE_ROTATION_KEY, mRotation);
-            // store the path to the picture
-            intent.putExtra(PATH_KEY, path);
+                    if (manager.getBackStackEntryCount() == 0) {
+                        mPreviewFrame.setVisibility(View.VISIBLE);
+                        mCaptureButton.setVisibility(View.VISIBLE);
+                        if (mNumCams >= 2)
+                            mSwitchCamera.setVisibility(View.VISIBLE);
+                        mCaptureButton.setEnabled(true);
+                    }
+                }
+            });
 
-            // start the preview post activity
-            startActivity(intent);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            PreviewFragment fragment = new PreviewFragment();
+            fragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.image_fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+            mPreviewFrame.setVisibility(View.GONE);
+            mCaptureButton.setVisibility(View.GONE);
+            if (mNumCams >= 2)
+                mSwitchCamera.setVisibility(View.GONE);
+            mCamera.startPreview();
+
+
+
+//            // get the path to the new image file in internal storage
+//            String path = MediaFileHelper.getInternalCachePath(getApplicationContext(),
+//                                            MediaFileHelper.MEDIA_TYPE_IMAGE);
+//
+//            // try to write the image data to storage
+//            try {
+//                FileOutputStream fos = new FileOutputStream(path);
+//                fos.write(data);
+//                fos.close();
+//            }
+//            catch (FileNotFoundException e) {
+//                Log.d(TAG, "File not found: " + e.getMessage());
+//            }
+//            catch (IOException e) {
+//                Log.d(TAG, "Error writing to file: " + e.getMessage());
+//            }
+//
+//            Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+//            // store the media type in the intent
+//            intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
+//            // store which camera we took the picture with
+//            intent.putExtra(CAMERA_ID_KEY, mCameraId);
+//            // store the rotation
+//            intent.putExtra(IMAGE_ROTATION_KEY, mRotation);
+//            // store the path to the picture
+//            intent.putExtra(PATH_KEY, path);
+//
+//            // start the preview post activity
+//            startActivity(intent);
         }
     };
 
@@ -417,13 +432,13 @@ public class CameraActivity extends Activity {
             Log.d(TAG, "camera locked after recording stopped");
         }
 
-        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
-        // store the media type in the intent
-        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
-        // store the path to the media
-        intent.putExtra(PATH_KEY, mVideoPath);
-        // start the preview post activity
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
+//        // store the media type in the intent
+//        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
+//        // store the path to the media
+//        intent.putExtra(PATH_KEY, mVideoPath);
+//        // start the preview post activity
+//        startActivity(intent);
 
         Log.d(TAG, "recording stopped");
     }

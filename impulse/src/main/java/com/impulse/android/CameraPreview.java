@@ -155,7 +155,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
     private Camera.Size getOptimalPictureSize(List<Camera.Size> list) {
         final double TARGET_RATIO = 4.0 / 3.0;
-        final int TARGET_WIDTH = 900;
+        final int TARGET_WIDTH = 480;
         int diff = Integer.MAX_VALUE;
         Camera.Size best = list.get(list.size() - 1);
 

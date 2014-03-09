@@ -1,27 +1,160 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.impulse.android.CreatePostActivity"
+    android:background="#C4C4C4">
 
-    <FrameLayout
-        android:id="@+id/media_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8.8">
-
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/image_thumb"
+        android:contentDescription="@string/image_thumb_description"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"/>
 
     <EditText
         android:id="@+id/caption_field"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/image_thumb"
+        android:textSize="14sp"
         android:inputType="textMultiLine|textCapSentences"
-        android:maxLines="2"
-        android:maxLength="67"
-        android:hint="@string/caption_hint"
-        android:textCursorDrawable="@null"
-        android:layout_weight="1.2" />
+        android:maxLines="5"
+        android:maxLength="65"
+        android:hint="@string/caption_hint"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/caption_field"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/location_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_action_place"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/location_icon"
+                android:inputType="textCapWords"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:hint="Name this location (optional)"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:id="@+id/audience_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_group"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/audience_icon"
+                android:layout_centerVertical="true"
+                android:text="Share with..."
+                android:textSize="17sp"/>
+
+            <RadioGroup
+                android:id="@+id/audience_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp">
+
+                <RadioButton
+                    android:id="@+id/friends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Friends"/>
+
+                <RadioButton
+                    android:id="@+id/everyone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Everyone"/>
+
+            </RadioGroup>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:id="@+id/time_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_time"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/time_icon"
+                android:layout_centerVertical="true"
+                android:text="Share for..."
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/expiration_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="45dp"
+                android:layout_centerVertical="true"
+                android:text="48 Hours"
+                android:textSize="17sp"/>
+
+        </RelativeLayout>
+
+        <SeekBar
+            android:id="@+id/time_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:progress="100"
+            android:max="100"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:text="Share"/>
+
+</RelativeLayout>
