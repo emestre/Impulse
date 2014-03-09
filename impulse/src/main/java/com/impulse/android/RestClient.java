@@ -43,6 +43,16 @@ public class RestClient {
         }).execute();
     }
 
+    public void getPostList(final GetCallback callback, String userId) {
+        String url = BASE_URL + GET_POST_LIST;
+        new GetTask(url, userId, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
     public static String getFile(String fileName) {
         return BASE_URL + GET_FILE + "?fileName=" + fileName;
     }

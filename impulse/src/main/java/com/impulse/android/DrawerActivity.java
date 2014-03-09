@@ -93,10 +93,8 @@ public class DrawerActivity extends ActionBarActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        selectItem(1);
 
-        if (savedInstanceState == null) {
-            selectItem(1);
-        }
     }
 
     @Override
@@ -120,7 +118,7 @@ public class DrawerActivity extends ActionBarActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        if(item.getItemId() == R.id.new_post) {
+        if (item.getItemId() == R.id.new_post) {
             Intent intent = new Intent(this, CameraActivity.class);
             startActivity(intent);
         }
@@ -138,20 +136,32 @@ public class DrawerActivity extends ActionBarActivity {
     private void selectItem(final int position) {
         // update the main content by replacing fragments
         Fragment fragment;
-        switch(position) {
+        switch (position) {
             case 0:
                 fragment = new ProfileActivity();
                 setFragment(fragment, position);
                 break;
             case 1:
                 RestClient client = new RestClient();
-                client.getPostList(new GetCallback() {
-                    @Override
-                    void onDataReceived(String response) {
-                        Fragment frag = PostActivity.create(response);
-                        setFragment(frag, position);
-                    }
-                });
+                final Bundle extras = getIntent().getExtras();
+                if (extras != null && extras.containsKey("USER_ID")) {
+                    client.getPostList(new GetCallback() {
+                        @Override
+                        void onDataReceived(String response) {
+                            Fragment frag = PostActivity.create(response);
+                            setFragment(frag, position);
+                        }
+                    }, extras.getString("USER_ID"));
+                    extras.remove("USER_ID");
+                } else {
+                    client.getPostList(new GetCallback() {
+                        @Override
+                        void onDataReceived(String response) {
+                            Fragment frag = PostActivity.create(response);
+                            setFragment(frag, position);
+                        }
+                    });
+                }
 
                 break;
             case 2:
@@ -164,10 +174,6 @@ public class DrawerActivity extends ActionBarActivity {
             default:
                 return;
         }
-    }
-
-    public void onBackPressed() {
-        finish();
     }
 
     public void setFragment(Fragment fragment, int position) {

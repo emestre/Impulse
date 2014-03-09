@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -34,6 +35,7 @@ public class ProfileActivity extends Fragment {
     private HorizontalListView friendsList;
     private ArrayList<Friend> friends;
     private FriendViewAdapter friendsAdapter;
+    private Button viewPosts;
     private String userId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class ProfileActivity extends Fragment {
         userName = (TextView) root.findViewById(R.id.user_name);
         profPic = (ProfilePictureView) root.findViewById(R.id.profile_picture);
         friendsList = (HorizontalListView) root.findViewById(R.id.friends_list);
+        viewPosts = (Button) root.findViewById(R.id.user_posts);
         friendsList.setAdapter(friendsAdapter);
 
 
@@ -75,6 +78,17 @@ public class ProfileActivity extends Fragment {
                 getFriends(session);
             }
         });
+
+        viewPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DrawerActivity.class);
+                intent.putExtra("USER_ID", userId);
+                startActivity(intent);
+            }
+        });
+
+
 
         return root;
     }

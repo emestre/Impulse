@@ -38,6 +38,7 @@
     <string name="submenu_48_text">48 hours</string>
     <string name="submenu_72_text">72 hours</string>
     <string name="title_activity_drawer">DrawerActivity</string>
+    <string name="user_posts">View active posts</string>
     <string-array name="pages_array">
         <item>Profile</item>
         <item>Posts</item>

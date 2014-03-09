@@ -182,6 +182,7 @@ public class CreatePost extends ActionBarActivity {
             Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
             return true;
         }
         else if (itemId == R.id.submenu_save) {
