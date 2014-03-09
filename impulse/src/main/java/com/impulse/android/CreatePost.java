@@ -179,10 +179,10 @@ public class CreatePost extends ActionBarActivity {
         int itemId = item.getItemId();
 
         if (itemId == R.id.menu_home) {
-            Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
+            Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-
+            finish();
             return true;
         }
         else if (itemId == R.id.submenu_save) {

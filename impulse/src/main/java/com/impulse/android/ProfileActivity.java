@@ -3,9 +3,13 @@ package com.impulse.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -24,61 +28,69 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends Fragment {
 
     private TextView userName;
     private ProfilePictureView profPic;
     private HorizontalListView friendsList;
     private ArrayList<Friend> friends;
     private FriendViewAdapter friendsAdapter;
+    private Button viewPosts;
     private String userId;
-    private String userFirstName;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.activity_profile, container, false);
+
+
         friends = new ArrayList<Friend>();
-        friendsAdapter = new FriendViewAdapter(this, friends);
+        friendsAdapter = new FriendViewAdapter(getActivity(), friends);
         final Session session = Session.getActiveSession();
-        userName = (TextView) findViewById(R.id.user_name);
-        profPic = (ProfilePictureView) findViewById(R.id.profile_picture);
-        friendsList = (HorizontalListView) findViewById(R.id.friends_list);
+        userName = (TextView) root.findViewById(R.id.user_name);
+        profPic = (ProfilePictureView) root.findViewById(R.id.profile_picture);
+        friendsList = (HorizontalListView) root.findViewById(R.id.friends_list);
+        viewPosts = (Button) root.findViewById(R.id.user_posts);
         friendsList.setAdapter(friendsAdapter);
 
 
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("USER_ID")) {
-            userId = getIntent().getExtras().getString("USER_ID");
-            userFirstName = getIntent().getExtras().getString("USER_NAME");
-            userName.setText(userFirstName);
-            profPic.setProfileId(userId);
-            getFriends(session);
-        } else {
-            Request.newMeRequest(session, new Request.GraphUserCallback() {
+        Request.newMeRequest(session, new Request.GraphUserCallback() {
 
-                // callback after Graph API response with user object
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        userName.setText(user.getName().split(" ")[0]);
-                        profPic.setProfileId(user.getId());
-                        userId = user.getId();
-                        getFriends(session);
-                    }
+            // callback after Graph API response with user object
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    userName.setText(user.getName().split(" ")[0]);
+                    profPic.setProfileId(user.getId());
+                    userId = user.getId();
+                    getFriends(session);
                 }
-            }).executeAsync();
-        }
+            }
+        }).executeAsync();
 
 
         friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = getIntent();
-                intent.putExtra("USER_NAME", ((Friend) friendsList.getItemAtPosition(position)).getUser_name());
-                intent.putExtra("USER_ID", ((Friend) friendsList.getItemAtPosition(position)).getUser_id());
+                userName.setText(((Friend) friendsList.getItemAtPosition(position)).getUser_name());
+                userId = ((Friend) friendsList.getItemAtPosition(position)).getUser_id();
+                profPic.setProfileId(userId);
+                friends.clear();
+                friendsAdapter.notifyDataSetChanged();
+                getFriends(session);
+            }
+        });
+
+        viewPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DrawerActivity.class);
+                intent.putExtra("USER_ID", userId);
                 startActivity(intent);
             }
         });
+
+
+
+        return root;
     }
 
     private void getFriends(Session session) {
@@ -98,24 +110,17 @@ public class ProfileActivity extends Activity {
         GraphObject results = response.getGraphObject();
         JSONObject json = results.getInnerJSONObject();
 
-        JsonElement elem = new JsonParser().parse( json.toString());
+        JsonElement elem = new JsonParser().parse(json.toString());
         JsonElement data = elem.getAsJsonObject().get("data");
         JsonArray newFriends = data.getAsJsonArray();
-        for(JsonElement friend : newFriends) {
+        for (JsonElement friend : newFriends) {
             JsonObject newFriend = friend.getAsJsonObject();
-            if(newFriend.has("installed") && newFriend.get("installed").getAsString().equals("true")) {
+            if (newFriend.has("installed") && newFriend.get("installed").getAsString().equals("true")) {
                 String friendName = newFriend.get("name").getAsString().split(" ")[0];
                 String friendId = newFriend.get("id").getAsString();
                 friends.add(new Friend(friendName, friendId));
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.profile, menu);
-        return true;
     }
 
 }
