@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/post_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -20,45 +21,48 @@
     <EditText
         android:id="@+id/caption_field"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/image_thumb"
         android:textSize="14sp"
         android:inputType="textMultiLine|textCapSentences"
-        android:maxLines="5"
+        android:maxLines="4"
         android:maxLength="65"
         android:hint="@string/caption_hint"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/image_thumb"
+        android:layout_below="@id/caption_field">
+
+        <ImageView
+            android:id="@+id/location_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_action_place"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/location_icon"
+            android:textSize="14sp"
+            android:inputType="textCapWords"
+            android:maxLength="25"
+            android:singleLine="true"
+            android:hint="Location (optional)"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_below="@+id/caption_field"
         android:layout_centerHorizontal="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
-
-            <ImageView
-                android:id="@+id/location_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/ic_action_place"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/location_icon"
-                android:inputType="textCapWords"
-                android:maxLength="20"
-                android:singleLine="true"
-                android:hint="Name this location (optional)"/>
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -152,9 +156,11 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/share_button"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
-        android:text="Share"/>
+        android:text="Share"
+        android:enabled="false"/>
 
 </RelativeLayout>

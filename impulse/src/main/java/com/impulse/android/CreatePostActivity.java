@@ -1,5 +1,8 @@
 package com.impulse.android;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -9,12 +12,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.http.HttpStatus;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class CreatePostActivity extends ActionBarActivity {
 
@@ -31,12 +46,13 @@ public class CreatePostActivity extends ActionBarActivity {
 
     private int mRotation;
     private EditText mCaptionEditText;
-    private RadioGroup mAudienceButtons;
     private TextView mExpirationText;
+    private Button mShareButton;
+    private ProgressDialog mUploadingProgress;
 
     private String mImagePath;
     private String mAudience;
-    private int mExpirationTime;
+    private int mExpirationTime = 48 * 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +61,23 @@ public class CreatePostActivity extends ActionBarActivity {
 
         displayImage();
         initLayout();
-        saveImageToCache();
+
+        // save the image data in a background thread
+        mImagePath = MediaFileHelper.getInternalCachePath(getApplicationContext());
+        new SaveImageTask().execute(mImagePath);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        File image = new File(mImagePath);
+        boolean success = image.delete();
+
+        if (success)
+            Log.d(TAG, "deleting cached image...SUCCESS");
+        else
+            Log.d(TAG, "deleting cached image...FAILED");
     }
 
     private void displayImage() {
@@ -66,17 +98,20 @@ public class CreatePostActivity extends ActionBarActivity {
     }
 
     private void initLayout() {
+        // get the caption field
         mCaptionEditText = (EditText) findViewById(R.id.caption_field);
 
-        mAudienceButtons = (RadioGroup) findViewById(R.id.audience_radio);
-        mAudienceButtons.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        // handle the audience radio button listeners
+        RadioGroup audienceButtons = (RadioGroup) findViewById(R.id.audience_radio);
+        audienceButtons.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 audienceSelectionChanged(checkedId);
             }
         });
-        mAudienceButtons.check(R.id.everyone);
+        audienceButtons.check(R.id.everyone);
 
+        // handle the sliding bar changes
         mExpirationText = (TextView) findViewById(R.id.expiration_time);
         ((SeekBar) findViewById(R.id.time_slider)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -93,6 +128,28 @@ public class CreatePostActivity extends ActionBarActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int step = Math.round((float) seekBar.getProgress() / TIME_STEP);
                 seekBar.setProgress(step * (int) TIME_STEP);
+            }
+        });
+
+        // set the share button's on click listener
+        mShareButton = (Button) findViewById(R.id.share_button);
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareButtonClick();
+            }
+        });
+
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.post_container);
+        // set the root layout to receive touch events to hide keyboard
+        container.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // hide the keyboard if touch is received outside of keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+                return true;
             }
         });
     }
@@ -156,27 +213,82 @@ public class CreatePostActivity extends ActionBarActivity {
         }
     }
 
-    private void saveImageToCache() {
-        mImagePath = MediaFileHelper.getInternalCachePath(getApplicationContext(),
-                                            MediaFileHelper.MEDIA_TYPE_IMAGE);
+    private void shareButtonClick() {
+        // get the user's unique facebook ID from shared preferences
+        String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        String caption = mCaptionEditText.getText().toString();
+        if (caption.equals(""))
+            caption = userId;
 
-        new SaveImage().execute(mImagePath);
+        Log.d(TAG, "uploading new post with...");
+        Log.d(TAG, "user ID: " + userId);
+        Log.d(TAG, "caption text: " + caption);
+        Log.d(TAG, "audience: " + mAudience);
+        Log.d(TAG, "timeout in minutes: " + mExpirationTime);
+        Log.d(TAG, "rotate image: " + mRotation);
+
+        RestClient client = new RestClient();
+        client.postFile(userId, caption, 0, 0, mImagePath, "jpg", mExpirationTime, mRotation, new PostCallback() {
+            @Override
+            public void onPostSuccess(String result) {
+                mUploadingProgress.dismiss();
+
+                if (Integer.parseInt(result) == HttpStatus.SC_OK) {
+                    Log.d(TAG, "Uploading...SUCCESS");
+
+                    Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+                else {
+                    Log.d(TAG, "Uploading...FAILED");
+                }
+            }
+        });
+
+        // display a loading spinner while the image is uploading
+        mUploadingProgress = new ProgressDialog(this);
+        mUploadingProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mUploadingProgress.setTitle("Uploading Post...");
+        mUploadingProgress.setMessage("Your post is being created.");
+        mUploadingProgress.setIndeterminate(true);
+        mUploadingProgress.setCancelable(false);
+        mUploadingProgress.show();
     }
 
-    private class SaveImage extends AsyncTask<String, String, Boolean> {
+    private class SaveImageTask extends AsyncTask<String, String, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... args) {
 
-            Log.d(TAG, "path: " + args[0]);
+            // try to write the image data to storage
+            try {
+                FileOutputStream fos = new FileOutputStream(args[0]);
+                fos.write(CameraActivity.imageData);
+                fos.close();
+            }
+            catch (FileNotFoundException e) {
+                Log.d(TAG, "File not found: " + e.getMessage());
+                return false;
+            }
+            catch (IOException e) {
+                Log.d(TAG, "Error writing to file: " + e.getMessage());
+                return false;
+            }
 
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (result)
-                Log.d(TAG, "async task done");
+            if (result) {
+                mShareButton.setEnabled(true);
+                Log.d(TAG, "saving image to internal cache...SUCCESS");
+                CameraActivity.imageData = null;
+            }
+            else {
+                Log.d(TAG, "saving image to internal cache...FAILED");
+            }
         }
     }
 }
