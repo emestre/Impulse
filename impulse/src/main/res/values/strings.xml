@@ -25,10 +25,10 @@
     <string name="menu_create_text">Create</string>
     <string name="submenu_save_text">Save to SD Card</string>
     <string name="submenu_post_text">Upload New Post</string>
-    <string name="title_activity_create_post">New Post</string>
+    <string name="title_activity_create_post">Post</string>
     <string name="menu_home_text">Home</string>
     <string name="toggle_button_text">Video</string>
-    <string name="caption_hint">Enter a caption</string>
+    <string name="caption_hint">Write a caption…</string>
     <string name="caption">Caption</string>
     <string name="menu_expire_text">Expiration</string>
     <string name="submenu_1_text">1 hour</string>
@@ -39,6 +39,8 @@
     <string name="submenu_72_text">72 hours</string>
     <string name="title_activity_drawer">DrawerActivity</string>
     <string name="user_posts">View active posts</string>
+    <string name="preview_description">Preview image.</string>
+    <string name="accept_post_text">Accept</string>
     <string-array name="pages_array">
         <item>Profile</item>
         <item>Posts</item>

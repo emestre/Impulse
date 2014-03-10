@@ -7,10 +7,16 @@
     android:background="#000000" >
 
     <FrameLayout
+        android:id="@+id/image_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
     </FrameLayout>
 
     <Button

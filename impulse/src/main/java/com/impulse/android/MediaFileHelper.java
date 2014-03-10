@@ -1,13 +1,8 @@
 package com.impulse.android;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-
-import com.google.common.io.Files;
 
 import org.apache.http.entity.mime.content.FileBody;
 
@@ -54,24 +49,9 @@ public class MediaFileHelper {
         return context.getExternalCacheDir() + File.separator + prefix + timeStamp + extension;
     }
 
-    public static String getInternalCachePath(Context context, int type) {
+    public static String getInternalCachePath(Context context) {
 
-        String prefix, extension;
-        if (type == MEDIA_TYPE_IMAGE) {
-            prefix = "IMG_";
-            extension = ".jpg";
-        }
-        else if (type == MEDIA_TYPE_VIDEO) {
-            prefix = "VID_";
-            extension = ".mp4";
-        }
-        else {
-            Log.d(TAG, "unsupported media type");
-            return null;
-        }
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-
-        return context.getCacheDir() + File.separator + prefix + timeStamp + extension;
+        return context.getCacheDir() + File.separator +  "IMG_temp.jpg";
     }
 
     public static boolean moveFileToSDCard(String path) {

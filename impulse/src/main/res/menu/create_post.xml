@@ -1,54 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:impulse="http://schemas.android.com/apk/res-auto">
-
-    <item
-        android:id="@+id/menu_expiration"
-        android:title="@string/menu_expire_text"
-        impulse:showAsAction="always|withText">
-        <menu>
-            <item
-                android:id="@+id/submenu_1"
-                android:title="@string/submenu_1_text"/>
-            <item
-                android:id="@+id/submenu_6"
-                android:title="@string/submenu_6_text"/>
-            <item
-                android:id="@+id/submenu_12"
-                android:title="@string/submenu_12_text"/>
-            <item
-                android:id="@+id/submenu_24"
-                android:title="@string/submenu_24_text"/>
-            <item
-                android:id="@+id/submenu_48"
-                android:title="@string/submenu_48_text"/>
-            <item
-                android:id="@+id/submenu_72"
-                android:title="@string/submenu_72_text"/>
-        </menu>
-    </item>
+    tools:context="com.impulse.android.CreatePostActivity" >
     
-    <item
-        android:id="@+id/menu_upload"
-        android:title="@string/menu_create_text"
-        impulse:showAsAction="always|withText" >
-
-        <menu>
-            <item
-                android:id="@+id/submenu_save"
-                android:title="@string/submenu_save_text"/>
-            <item
-                android:id="@+id/submenu_post"
-                android:title="@string/submenu_post_text"/>
-        </menu>
-
-    </item>
-
-    <item
-        android:id="@+id/menu_home"
-        android:title="@string/menu_home_text"
-        impulse:showAsAction="ifRoom|withText">
-
-    </item>
-
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

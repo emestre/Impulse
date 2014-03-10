@@ -3,16 +3,11 @@ package com.impulse.android;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
@@ -155,7 +150,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
     private Camera.Size getOptimalPictureSize(List<Camera.Size> list) {
         final double TARGET_RATIO = 4.0 / 3.0;
-        final int TARGET_WIDTH = 900;
+        final int TARGET_WIDTH = 480;
         int diff = Integer.MAX_VALUE;
         Camera.Size best = list.get(list.size() - 1);
 
