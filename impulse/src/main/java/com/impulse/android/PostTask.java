@@ -44,6 +44,8 @@ public class PostTask extends AsyncTask<String, String, String> {
     private String extension;
     private int timeout;
     private int rotation;
+    private String audience;
+    private String location;
 
     /**
      * Creates a new instance of PostTask with the specified URL, callback, and
@@ -61,7 +63,7 @@ public class PostTask extends AsyncTask<String, String, String> {
         this.callback = callback;
     }
 
-    public PostTask(String url, String userKey, String caption, double latitude, double longitude, String filePath, String extension, int timeout, int rotation, RestTaskCallback callback) {
+    public PostTask(String url, String userKey, String caption, double latitude, double longitude, String filePath, String extension, int timeout, int rotation, String audience, String location, RestTaskCallback callback) {
         this.url = url;
         this.userKey = userKey;
         this.caption = caption;
@@ -71,6 +73,8 @@ public class PostTask extends AsyncTask<String, String, String> {
         this.extension = extension;
         this.timeout = timeout;
         this.rotation = rotation;
+        this.audience = audience;
+        this.location = location;
         this.callback = callback;
     }
 
@@ -112,6 +116,8 @@ public class PostTask extends AsyncTask<String, String, String> {
             entity.addTextBody("longitude", String.valueOf(this.longitude));
             entity.addTextBody("timeout", String.valueOf(this.timeout));
             entity.addTextBody("rotation", String.valueOf(this.rotation));
+            entity.addTextBody("audience", this.audience);
+            entity.addTextBody("location", this.location);
             entity.addPart("image", new FileBody(new File(filePath)));
 
             try {
