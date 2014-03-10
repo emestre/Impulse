@@ -40,20 +40,15 @@ public class GetTask extends AsyncTask<String, String, String> {
             if (userId != null) {
                 url += "?userKey=" + userId;
                 get = new HttpGet(url);
-                try {
-                    resp = client.execute(get);
-                    result = (new BasicResponseHandler()).handleResponse(resp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    resp = client.execute(get);
-                    result = (new BasicResponseHandler()).handleResponse(resp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
+
+            try {
+                resp = client.execute(get);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             if (result != null)
                 return result;
 
