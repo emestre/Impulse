@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -140,7 +141,7 @@ public class CreatePostActivity extends ActionBarActivity {
             }
         });
 
-        RelativeLayout container = (RelativeLayout) findViewById(R.id.post_container);
+        LinearLayout container = (LinearLayout) findViewById(R.id.post_container);
         // set the root layout to receive touch events to hide keyboard
         container.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -152,25 +153,6 @@ public class CreatePostActivity extends ActionBarActivity {
                 return true;
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.create_post, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void audienceSelectionChanged(int id) {
