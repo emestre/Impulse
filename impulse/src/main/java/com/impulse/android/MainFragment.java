@@ -87,7 +87,7 @@ public class MainFragment extends Fragment {
                                       Exception exception) {
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
-            Intent intent = new Intent(getActivity(), HomeScreen.class);
+            Intent intent = new Intent(getActivity(), DrawerActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);

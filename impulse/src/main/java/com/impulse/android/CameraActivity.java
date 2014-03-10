@@ -28,7 +28,6 @@ import java.util.Arrays;
 public class CameraActivity extends FragmentActivity {
 
     private static final String TAG = "CameraActivity";
-    public static final String PATH_KEY = "path";
     public static final String IMAGE_ROTATION_KEY = "rotation";
     public static final int BACK_CAMERA = 0;
     public static final int FRONT_CAMERA = 1;
@@ -172,7 +171,6 @@ public class CameraActivity extends FragmentActivity {
         mOrientationListener.enable();
     }
 
-    /** A safe way to get an instance of the Camera object. */
     private static Camera getCameraInstance(int id) {
         Camera c = null;
 
@@ -278,7 +276,7 @@ public class CameraActivity extends FragmentActivity {
             });
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            PreviewFragment fragment = new PreviewFragment();
+            ImageFragment fragment = new ImageFragment();
             fragment.setArguments(bundle);
             fragmentTransaction.add(R.id.image_fragment_container, fragment);
             fragmentTransaction.addToBackStack(null);
@@ -289,38 +287,6 @@ public class CameraActivity extends FragmentActivity {
             if (mNumCams >= 2)
                 mSwitchCamera.setVisibility(View.GONE);
             mCamera.startPreview();
-
-
-
-//            // get the path to the new image file in internal storage
-//            String path = MediaFileHelper.getInternalCachePath(getApplicationContext(),
-//                                            MediaFileHelper.MEDIA_TYPE_IMAGE);
-//
-//            // try to write the image data to storage
-//            try {
-//                FileOutputStream fos = new FileOutputStream(path);
-//                fos.write(data);
-//                fos.close();
-//            }
-//            catch (FileNotFoundException e) {
-//                Log.d(TAG, "File not found: " + e.getMessage());
-//            }
-//            catch (IOException e) {
-//                Log.d(TAG, "Error writing to file: " + e.getMessage());
-//            }
-//
-//            Intent intent = new Intent(getApplicationContext(), CreatePost.class);
-//            // store the media type in the intent
-//            intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_IMAGE);
-//            // store which camera we took the picture with
-//            intent.putExtra(CAMERA_ID_KEY, mCameraId);
-//            // store the rotation
-//            intent.putExtra(IMAGE_ROTATION_KEY, mRotation);
-//            // store the path to the picture
-//            intent.putExtra(PATH_KEY, path);
-//
-//            // start the preview post activity
-//            startActivity(intent);
         }
     };
 
@@ -431,14 +397,6 @@ public class CameraActivity extends FragmentActivity {
             mCamera.lock();
             Log.d(TAG, "camera locked after recording stopped");
         }
-
-//        Intent intent = new Intent(getApplicationContext(), CreatePost.class);
-//        // store the media type in the intent
-//        intent.putExtra(MEDIA_TYPE_KEY, MediaFileHelper.MEDIA_TYPE_VIDEO);
-//        // store the path to the media
-//        intent.putExtra(PATH_KEY, mVideoPath);
-//        // start the preview post activity
-//        startActivity(intent);
 
         Log.d(TAG, "recording stopped");
     }

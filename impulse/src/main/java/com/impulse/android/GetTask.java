@@ -13,7 +13,7 @@ import java.net.URLEncoder;
 
 public class GetTask extends AsyncTask<String, String, String> {
     private String url;
-    private String fileName;
+    private String userId;
     private RestTaskCallback callback;
 
     public GetTask(String url, RestTaskCallback callback) {
@@ -21,9 +21,9 @@ public class GetTask extends AsyncTask<String, String, String> {
         this.callback = callback;
     }
 
-    public GetTask(String url, String fileName, RestTaskCallback callback) {
+    public GetTask(String url, String userId, RestTaskCallback callback) {
         this.url = url;
-        this.fileName = fileName;
+        this.userId = userId;
         this.callback = callback;
     }
 
@@ -37,7 +37,12 @@ public class GetTask extends AsyncTask<String, String, String> {
         String type = url.substring(url.lastIndexOf("/"));
 
         if (type.equals("/getPostList")) {
-            try{
+            if (userId != null) {
+                url += "?userKey=" + userId;
+                get = new HttpGet(url);
+            }
+
+            try {
                 resp = client.execute(get);
                 result = (new BasicResponseHandler()).handleResponse(resp);
             } catch (IOException e) {

@@ -258,7 +258,7 @@ public class CreatePostActivity extends ActionBarActivity {
                 client.getPostList(new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("POST_LIST", response);
                         startActivity(intent);
@@ -295,7 +295,7 @@ public class CreatePostActivity extends ActionBarActivity {
                 client.getPostList(new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("POST_LIST", response);
                         startActivity(intent);

@@ -65,6 +65,10 @@ public class PostFragment extends Fragment {
         return fragment;
     }
 
+    public PostFragment() {
+    }
+
+
     public PostFragment(Post post) {
         this.post = post;
     }

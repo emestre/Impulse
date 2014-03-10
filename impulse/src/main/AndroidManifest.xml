@@ -26,25 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.impulse.android.HomeScreen"
-            android:label="@string/app_name"
-            android:launchMode="singleTop" />
-        <activity
-            android:name="com.impulse.android.PostActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
-        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
         <activity android:name="com.facebook.LoginActivity" />
-        <activity
-            android:name="com.impulse.android.ProfileActivity"
-            android:label="@string/title_activity_profile" />
+
         <activity
             android:name="com.impulse.android.CameraActivity"
             android:screenOrientation="portrait" >
@@ -53,6 +41,12 @@
             android:name="com.impulse.android.CreatePostActivity"
             android:label="@string/title_activity_create_post"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.impulse.android.DrawerActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_drawer" >
+
         </activity>
     </application>
 

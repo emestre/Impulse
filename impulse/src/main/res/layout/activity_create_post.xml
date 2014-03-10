@@ -57,7 +57,7 @@
                 android:inputType="textCapWords"
                 android:maxLength="25"
                 android:singleLine="true"
-                android:hint="Location (optional)"/>
+                android:hint="Check In (optional)"/>
 
         </RelativeLayout>
 
