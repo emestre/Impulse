@@ -20,7 +20,6 @@
 
         <ImageView
             android:id="@+id/image_thumb"
-            android:contentDescription="@string/image_thumb_description"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginRight="5dp"/>
@@ -146,7 +145,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="45dp"
                 android:layout_centerVertical="true"
-                android:text="48 Hours"
                 android:textSize="17sp"/>
 
         </RelativeLayout>

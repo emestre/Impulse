@@ -1,7 +1,9 @@
 package com.impulse.android;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,6 +52,7 @@ public class CreatePostActivity extends ActionBarActivity {
     private TextView mExpirationText;
     private Button mShareButton;
     private ProgressDialog mUploadingProgress;
+    private AlertDialog mUploadStatus;
 
     private String mImagePath;
     private String mAudience;
@@ -114,6 +117,7 @@ public class CreatePostActivity extends ActionBarActivity {
 
         // handle the sliding bar changes
         mExpirationText = (TextView) findViewById(R.id.expiration_time);
+        mExpirationText.setText("48 Hours");
         ((SeekBar) findViewById(R.id.time_slider)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -217,14 +221,14 @@ public class CreatePostActivity extends ActionBarActivity {
 
                 if (Integer.parseInt(result) == HttpStatus.SC_OK) {
                     Log.d(TAG, "Uploading...SUCCESS");
-
-                    Intent intent = new Intent(getApplicationContext(), PostActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    mUploadStatus = buildSuccessDialog();
                 }
                 else {
                     Log.d(TAG, "Uploading...FAILED");
+                    mUploadStatus = buildFailureDialog();
                 }
+
+                mUploadStatus.show();
             }
         });
 
@@ -236,6 +240,71 @@ public class CreatePostActivity extends ActionBarActivity {
         mUploadingProgress.setIndeterminate(true);
         mUploadingProgress.setCancelable(false);
         mUploadingProgress.show();
+    }
+
+    private AlertDialog buildSuccessDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Upload Succeeded");
+        builder.setMessage("Your post was successfully created.");
+        builder.setCancelable(false);
+        builder.setPositiveButton("View Posts", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                RestClient client = new RestClient();
+                client.getPostList(new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("POST_LIST", response);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+
+        return builder.create();
+    }
+
+    private AlertDialog buildFailureDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Upload Failed");
+        builder.setMessage("Sorry, there was a problem uploading your post.");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                shareButtonClick();
+            }
+        });
+        builder.setNegativeButton("Abandon", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+
+                RestClient client = new RestClient();
+                client.getPostList(new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("POST_LIST", response);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+
+        return builder.create();
     }
 
     private class SaveImageTask extends AsyncTask<String, String, Boolean> {
