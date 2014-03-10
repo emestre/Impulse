@@ -9,11 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,10 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpStatus;
 
@@ -49,6 +45,7 @@ public class CreatePostActivity extends ActionBarActivity {
 
     private int mRotation;
     private EditText mCaptionEditText;
+    private EditText mCheckInEditText;
     private TextView mExpirationText;
     private Button mShareButton;
     private ProgressDialog mUploadingProgress;
@@ -104,6 +101,8 @@ public class CreatePostActivity extends ActionBarActivity {
     private void initLayout() {
         // get the caption field
         mCaptionEditText = (EditText) findViewById(R.id.caption_field);
+        // get the check in text field
+        mCheckInEditText = (EditText) findViewById(R.id.checkin_field);
 
         // handle the audience radio button listeners
         RadioGroup audienceButtons = (RadioGroup) findViewById(R.id.audience_radio);
@@ -201,22 +200,31 @@ public class CreatePostActivity extends ActionBarActivity {
 
     private void shareButtonClick() {
         // get the user's unique facebook ID from shared preferences
-        String userId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        String userId = getSharedPreferences("com.impulse",
+                            Context.MODE_PRIVATE).getString("UserId", "");
+
         String caption = mCaptionEditText.getText().toString();
         if (caption.equals(""))
             caption = userId;
 
+        String checkIn = mCheckInEditText.getText().toString();
+        if (checkIn.equals(""))
+            checkIn = userId;
+
         Log.d(TAG, "uploading new post with...");
         Log.d(TAG, "user ID: " + userId);
         Log.d(TAG, "caption text: " + caption);
+        Log.d(TAG, "check in text: " + checkIn);
         Log.d(TAG, "audience: " + mAudience);
         Log.d(TAG, "timeout in minutes: " + mExpirationTime);
         Log.d(TAG, "rotate image: " + mRotation);
 
         RestClient client = new RestClient();
-        client.postFile(userId, caption, 0, 0, mImagePath, "jpg", mExpirationTime, mRotation, new PostCallback() {
+        client.postFile(userId, caption, 0, 0, mImagePath, "jpg", mExpirationTime,
+                        mRotation, mAudience, checkIn, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
+
                 mUploadingProgress.dismiss();
 
                 if (Integer.parseInt(result) == HttpStatus.SC_OK) {
@@ -258,7 +266,8 @@ public class CreatePostActivity extends ActionBarActivity {
                 client.getPostList(new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),
+                                            DrawerActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("POST_LIST", response);
                         startActivity(intent);
@@ -295,7 +304,8 @@ public class CreatePostActivity extends ActionBarActivity {
                 client.getPostList(new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),
+                                            DrawerActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("POST_LIST", response);
                         startActivity(intent);

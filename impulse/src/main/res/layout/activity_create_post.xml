@@ -50,6 +50,7 @@
                 android:src="@drawable/ic_action_place"/>
 
             <EditText
+                android:id="@+id/checkin_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/location_icon"
