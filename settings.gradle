@@ -1,2 +1,1 @@
-include ':impulse'
-include ':libraries:facebook'
+include ':libraries:facebook', ':impulse'

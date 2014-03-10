@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="commons-codec-1.6">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/Impulse/libs/commons-codec-1.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/impulse/libs/commons-codec-1.6.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
