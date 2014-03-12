@@ -67,6 +67,8 @@ public class PostActivity extends Fragment {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
+        mPager.setPageMargin(5);
+        mPager.setClipToPadding(false);
         mPager.setAdapter(mPagerAdapter);
    /*     mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -167,6 +169,9 @@ public class PostActivity extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
     /**
      * A simple pager adapter that represents 5 {@link PostFragment} objects, in
