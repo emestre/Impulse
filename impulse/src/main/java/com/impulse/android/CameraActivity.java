@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class CameraActivity extends FragmentActivity {
     private FrameLayout mPreviewFrame;
     private SurfaceView mPreviewSurface;
     private CameraPreview mPreview;
-    private Button mCaptureButton;
+    private ImageButton mCaptureButton;
     private Button mSwitchCamera;
     private Button mToggleButton;
 
@@ -94,7 +95,7 @@ public class CameraActivity extends FragmentActivity {
     private void initLayout() {
 
         // set the capture button's on click listener
-        mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
+        mCaptureButton = (ImageButton) findViewById(R.id.camera_capture_button);
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +108,7 @@ public class CameraActivity extends FragmentActivity {
             }
         });
 
-        // check if this device has a front facing camera
+        // image_check if this device has a front facing camera
         if (mNumCams >= 2) {
             mSwitchCamera  = (Button) findViewById(R.id.switch_camera_button);
             mSwitchCamera.setEnabled(true);

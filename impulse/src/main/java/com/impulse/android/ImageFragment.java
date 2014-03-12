@@ -10,13 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class ImageFragment extends Fragment {
 
     private static final String TAG = "ImageFragment";
 
-    private Button mAcceptButton;
+    private ImageButton mAcceptButton;
     private int mRotation;
 
     @Override
@@ -24,7 +25,7 @@ public class ImageFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_image, container, false);
         ImageView image = (ImageView) view.findViewById(R.id.image_preview);
-        mAcceptButton = (Button) view.findViewById(R.id.accept_post_button);
+        mAcceptButton = (ImageButton) view.findViewById(R.id.accept_post_button);
 
         // create the picture from the static data array
         Bitmap bitmap = BitmapFactory.decodeByteArray(CameraActivity.imageData, 0,

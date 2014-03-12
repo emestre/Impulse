@@ -101,7 +101,7 @@ public class CreatePostActivity extends ActionBarActivity {
     private void initLayout() {
         // get the caption field
         mCaptionEditText = (EditText) findViewById(R.id.caption_field);
-        // get the check in text field
+        // get the image_check in text field
         mCheckInEditText = (EditText) findViewById(R.id.checkin_field);
 
         // handle the audience radio button listeners
@@ -214,7 +214,7 @@ public class CreatePostActivity extends ActionBarActivity {
         Log.d(TAG, "uploading new post with...");
         Log.d(TAG, "user ID: " + userId);
         Log.d(TAG, "caption text: " + caption);
-        Log.d(TAG, "check in text: " + checkIn);
+        Log.d(TAG, "image_check in text: " + checkIn);
         Log.d(TAG, "audience: " + mAudience);
         Log.d(TAG, "timeout in minutes: " + mExpirationTime);
         Log.d(TAG, "rotate image: " + mRotation);

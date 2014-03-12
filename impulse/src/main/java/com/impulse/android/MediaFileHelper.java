@@ -26,7 +26,7 @@ public class MediaFileHelper {
     }
 
     public static String getExternalCachePath(Context context, int type) {
-        // check if the SD card is mounted for r/w
+        // image_check if the SD card is mounted for r/w
         if (!isExternalStorageMounted()) {
             return null;
         }
@@ -55,7 +55,7 @@ public class MediaFileHelper {
     }
 
     public static boolean moveFileToSDCard(String path) {
-        // check if the SD card is mounted for r/w
+        // image_check if the SD card is mounted for r/w
         if (!isExternalStorageMounted()) {
             return false;
         }
