@@ -49,7 +49,6 @@ public class ImageFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         mAcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -87,11 +87,8 @@ public class CameraActivity extends FragmentActivity {
         mPreviewSurface = new SurfaceView(this);
         mPreviewSurface.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                                                    ViewGroup.LayoutParams.MATCH_PARENT));
-        mPreviewFrame.addView(mPreviewSurface);
         // create our Preview object
         mPreview = new CameraPreview(this, mPreviewSurface);
-        // set the preview object as the view of the FrameLayout
-        mPreviewFrame.addView(mPreview);
     }
 
     private void initLayout() {
@@ -164,6 +161,9 @@ public class CameraActivity extends FragmentActivity {
         mPreview.setCamera(mCamera);
         mCamera.startPreview();
 
+        mPreviewFrame.addView(mPreviewSurface);
+        mPreviewFrame.addView(mPreview);
+
         // enable the capture button
         mCaptureButton.setEnabled(true);
 
@@ -204,6 +204,9 @@ public class CameraActivity extends FragmentActivity {
         releaseMediaRecorder();
         // release the camera so it can be used by other applications
         releaseCamera();
+
+        mPreviewFrame.removeView(mPreview);
+        mPreviewFrame.removeView(mPreviewSurface);
     }
 
     private void releaseCamera() {
@@ -238,15 +241,20 @@ public class CameraActivity extends FragmentActivity {
         else
             mCameraId = BACK_CAMERA;
 
+        // release whatever camera we have no and remove preview surfaces
         releaseCamera();
         mPreviewFrame.removeView(mPreviewSurface);
         mPreviewFrame.removeView(mPreview);
 
         // re-open the camera
         mCamera = getCameraInstance(mCameraId);
-        initPreview();
         // initialize and start the preview
+        initPreview();
         mPreview.setCamera(mCamera);
+        mCamera.startPreview();
+        // add the preview surfaces back to the screen
+        mPreviewFrame.addView(mPreviewSurface);
+        mPreviewFrame.addView(mPreview);
     }
 
     /** Callback to run when a picture has been taken. */
