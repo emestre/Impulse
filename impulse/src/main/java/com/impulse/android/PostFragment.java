@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -91,6 +92,7 @@ public class PostFragment extends Fragment {
         if(view == null || post == null)
             return view;
 
+
         image = (ImageView) view.findViewById(R.id.post_image);
         userName = (TextView) view.findViewById(R.id.post_user);
         mutualFriends = (TextView) view.findViewById(R.id.post_mutual_friends);
@@ -109,7 +111,17 @@ public class PostFragment extends Fragment {
         timeout.setText(post.timeOut);
         Picasso.with(getActivity().getApplicationContext())
                 .load(RestClient.getFile(post.fileName))
-                .rotate(post.rotation).into(image);
+                .fit()
+                .into(image);
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FullScreenActivity.class);
+                intent.putExtra("FILE_PATH", post.fileName);
+                getActivity().startActivity(intent);
+            }
+        });
         return view;
     }
 

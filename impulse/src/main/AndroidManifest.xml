@@ -38,6 +38,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.impulse.android.FullScreenActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.impulse.android.CreatePostActivity"
             android:label="@string/title_activity_create_post"
             android:screenOrientation="portrait" >
