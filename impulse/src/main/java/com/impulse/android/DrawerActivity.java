@@ -164,11 +164,7 @@ public class DrawerActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        selectItem(1);
-    }
+
 
 
     private void selectItem(final int position) {
