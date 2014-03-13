@@ -4,12 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import org.apache.http.entity.mime.content.FileBody;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -54,10 +49,10 @@ public class MediaFileHelper {
         return context.getCacheDir() + File.separator +  "IMG_temp.jpg";
     }
 
-    public static boolean moveFileToSDCard(String path) {
+    public static String getSdCardPath() {
         // image_check if the SD card is mounted for r/w
         if (!isExternalStorageMounted()) {
-            return false;
+            return null;
         }
 
         // get the Pictures directory on the SD card
@@ -67,29 +62,12 @@ public class MediaFileHelper {
         if (!externalDir.exists()) {
             if (!externalDir.mkdirs()) {
                 Log.d(TAG, "failed to create Impulse directory on SD card");
-                return false;
+                return null;
             }
         }
 
-        File oldPath = new File(path);
-        File newPath = new File(externalDir.getAbsolutePath() + File.separator + oldPath.getName());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
-        FileBody fb = new FileBody(oldPath);
-        FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(newPath);
-            fb.writeTo(fos);
-            fos.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
+        return externalDir.getAbsolutePath() + File.separator + "IMG_" + timeStamp + ".jpg";
     }
 }

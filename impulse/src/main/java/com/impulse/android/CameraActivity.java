@@ -99,6 +99,7 @@ public class CameraActivity extends FragmentActivity {
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imageData = null;
                 // disable after click because multiple presses causes crash
                 mCaptureButton.setEnabled(false);
 
@@ -264,6 +265,8 @@ public class CameraActivity extends FragmentActivity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
+            Log.d(TAG, "image data length: " + data.length);
+
             imageData = Arrays.copyOf(data, data.length);
             Bundle bundle = new Bundle();
             bundle.putInt(IMAGE_ROTATION_KEY, mRotation);
@@ -291,6 +294,7 @@ public class CameraActivity extends FragmentActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
+            // hide the camera preview to show image fragment
             mPreviewFrame.setVisibility(View.GONE);
             mCaptureButton.setVisibility(View.GONE);
             if (mNumCams >= 2)

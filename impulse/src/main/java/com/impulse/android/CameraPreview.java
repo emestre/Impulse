@@ -80,7 +80,8 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             mCamParams.setPictureSize(mPictureSize.width, mPictureSize.height);
             Log.d(TAG, "picture size set to: " + mPictureSize.width + " x " + mPictureSize.height);
 
-            mCamParams.setJpegQuality(50);
+            // decrease JPG quality to reduce file size
+            mCamParams.setJpegQuality(25);
             mCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
             // update the camera object parameters
