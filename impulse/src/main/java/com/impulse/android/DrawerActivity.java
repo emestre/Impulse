@@ -19,7 +19,9 @@ package com.impulse.android;
 import java.util.Locale;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -41,7 +43,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphUser;
 
 public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
@@ -94,7 +99,29 @@ public class DrawerActivity extends ActionBarActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         selectItem(1);
+        Session session = Session.getActiveSession();
+        Request.newMeRequest(session, new Request.GraphUserCallback() {
 
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    SharedPreferences prefs = getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
+                    if (!prefs.getString("UserId", "").equals(user.getId())) {
+                        prefs.edit().putString("UserId", user.getId()).commit();
+                        registerUser(prefs, user.getId());
+                    }
+                }
+            }
+        }).executeAsync();
+    }
+
+    private void registerUser(final SharedPreferences prefs, final String userId) {
+        RestClient db_client = new RestClient();
+        db_client.postUser(userId, new PostCallback() {
+            @Override
+            public void onPostSuccess(String result) {
+            }
+        });
     }
 
     @Override
