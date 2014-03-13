@@ -8,15 +8,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -26,9 +25,6 @@ import android.widget.TextView;
 import org.apache.http.HttpStatus;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class CreatePostActivity extends ActionBarActivity {
 
@@ -36,18 +32,13 @@ public class CreatePostActivity extends ActionBarActivity {
     private static final String FRIENDS = "friends";
     private static final String EVERYONE = "everyone";
 
-    private static final float TIME_STEP = 25;
-    private static final int ONE_HOUR = 0;
-    private static final int THREE_HOURS = 1;
-    private static final int TWELVE_HOURS = 2;
-    private static final int ONE_DAY = 3;
-    private static final int TWO_DAYS = 4;
+    private static final float TIME_STEP = 10;
 
     private int mRotation;
     private EditText mCaptionEditText;
     private EditText mCheckInEditText;
     private TextView mExpirationText;
-    private Button mShareButton;
+    private ImageButton mShareButton;
     private ProgressDialog mUploadingProgress;
     private AlertDialog mUploadStatus;
 
@@ -65,7 +56,19 @@ public class CreatePostActivity extends ActionBarActivity {
 
         // save the image data in a background thread
         mImagePath = MediaFileHelper.getInternalCachePath(getApplicationContext());
-        new SaveImageTask().execute(mImagePath);
+        new SaveImageTask(mImagePath, new SaveImageCallback() {
+
+            @Override
+            public void onTaskComplete(boolean result, String path) {
+                if (result) {
+                    mShareButton.setEnabled(true);
+                    CameraActivity.imageData = null;
+                }
+                else {
+                    Log.d(TAG, "image couldn't be saved, can't upload");
+                }
+            }
+        }).execute();
     }
 
     @Override
@@ -87,6 +90,7 @@ public class CreatePostActivity extends ActionBarActivity {
                 CameraActivity.imageData.length);
         mRotation = (Integer) getIntent().getExtras().get(CameraActivity.IMAGE_ROTATION_KEY);
 
+        Log.d(TAG, "image view dimensions: " + image.getWidth() + " x " + image.getHeight());
         // rotate the image
         if (mRotation != 0) {
             // create the rotation matrix
@@ -101,7 +105,7 @@ public class CreatePostActivity extends ActionBarActivity {
     private void initLayout() {
         // get the caption field
         mCaptionEditText = (EditText) findViewById(R.id.caption_field);
-        // get the check in text field
+        // get the image_check in text field
         mCheckInEditText = (EditText) findViewById(R.id.checkin_field);
 
         // handle the audience radio button listeners
@@ -136,7 +140,7 @@ public class CreatePostActivity extends ActionBarActivity {
         });
 
         // set the share button's on click listener
-        mShareButton = (Button) findViewById(R.id.share_button);
+        mShareButton = (ImageButton) findViewById(R.id.share_button);
         mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,27 +175,57 @@ public class CreatePostActivity extends ActionBarActivity {
         int time = Math.round(progress / TIME_STEP);
 
         switch (time) {
-            case ONE_HOUR:
+            case 0:
                 mExpirationText.setText("1 Hour");
                 mExpirationTime = 60;
                 break;
 
-            case THREE_HOURS:
+            case 1:
+                mExpirationText.setText("2 Hours");
+                mExpirationTime = 2 * 60;
+                break;
+
+            case 2:
                 mExpirationText.setText("3 Hours");
                 mExpirationTime = 3 * 60;
                 break;
 
-            case TWELVE_HOURS:
+            case 3:
+                mExpirationText.setText("4 Hours");
+                mExpirationTime = 4 * 60;
+                break;
+
+            case 4:
+                mExpirationText.setText("5 Hours");
+                mExpirationTime = 5 * 60;
+                break;
+
+            case 5:
+                mExpirationText.setText("6 Hours");
+                mExpirationTime = 6 * 60;
+                break;
+
+            case 6:
+                mExpirationText.setText("8 Hours");
+                mExpirationTime = 8 * 60;
+                break;
+
+            case 7:
+                mExpirationText.setText("10 Hours");
+                mExpirationTime = 10 * 60;
+                break;
+
+            case 8:
                 mExpirationText.setText("12 Hours");
                 mExpirationTime = 12 * 60;
                 break;
 
-            case ONE_DAY:
+            case 9:
                 mExpirationText.setText("24 Hours");
                 mExpirationTime = 24 * 60;
                 break;
 
-            case TWO_DAYS:
+            case 10:
                 mExpirationText.setText("48 Hours");
                 mExpirationTime = 48 * 60;
                 break;
@@ -214,7 +248,7 @@ public class CreatePostActivity extends ActionBarActivity {
         Log.d(TAG, "uploading new post with...");
         Log.d(TAG, "user ID: " + userId);
         Log.d(TAG, "caption text: " + caption);
-        Log.d(TAG, "check in text: " + checkIn);
+        Log.d(TAG, "location check in text: " + checkIn);
         Log.d(TAG, "audience: " + mAudience);
         Log.d(TAG, "timeout in minutes: " + mExpirationTime);
         Log.d(TAG, "rotate image: " + mRotation);
@@ -315,41 +349,5 @@ public class CreatePostActivity extends ActionBarActivity {
         });
 
         return builder.create();
-    }
-
-    private class SaveImageTask extends AsyncTask<String, String, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(String... args) {
-
-            // try to write the image data to storage
-            try {
-                FileOutputStream fos = new FileOutputStream(args[0]);
-                fos.write(CameraActivity.imageData);
-                fos.close();
-            }
-            catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-                return false;
-            }
-            catch (IOException e) {
-                Log.d(TAG, "Error writing to file: " + e.getMessage());
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                mShareButton.setEnabled(true);
-                Log.d(TAG, "saving image to internal cache...SUCCESS");
-                CameraActivity.imageData = null;
-            }
-            else {
-                Log.d(TAG, "saving image to internal cache...FAILED");
-            }
-        }
     }
 }

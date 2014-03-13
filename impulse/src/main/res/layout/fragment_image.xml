@@ -2,7 +2,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <ImageView
         android:id="@+id/image_preview"
@@ -11,13 +12,35 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/accept_post_button"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_width="80dp"
+        android:layout_height="72dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:text="@string/accept_post_text"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/button_check"/>
+
+    <ImageButton
+        android:id="@+id/save_button"
+        android:layout_width="80dp"
+        android:layout_height="72dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/accept_post_button"
+        android:layout_marginBottom="7dp"
+        android:background="@drawable/button_save"/>
+
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/button_close"/>
 
 </RelativeLayout>

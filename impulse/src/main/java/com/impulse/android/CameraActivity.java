@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class CameraActivity extends FragmentActivity {
     private FrameLayout mPreviewFrame;
     private SurfaceView mPreviewSurface;
     private CameraPreview mPreview;
-    private Button mCaptureButton;
+    private ImageButton mCaptureButton;
     private Button mSwitchCamera;
     private Button mToggleButton;
 
@@ -87,20 +88,18 @@ public class CameraActivity extends FragmentActivity {
         mPreviewSurface = new SurfaceView(this);
         mPreviewSurface.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                                                    ViewGroup.LayoutParams.MATCH_PARENT));
-        mPreviewFrame.addView(mPreviewSurface);
         // create our Preview object
         mPreview = new CameraPreview(this, mPreviewSurface);
-        // set the preview object as the view of the FrameLayout
-        mPreviewFrame.addView(mPreview);
     }
 
     private void initLayout() {
 
         // set the capture button's on click listener
-        mCaptureButton = (Button) findViewById(R.id.camera_capture_button);
+        mCaptureButton = (ImageButton) findViewById(R.id.camera_capture_button);
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imageData = null;
                 // disable after click because multiple presses causes crash
                 mCaptureButton.setEnabled(false);
 
@@ -110,7 +109,7 @@ public class CameraActivity extends FragmentActivity {
             }
         });
 
-        // check if this device has a front facing camera
+        // image_check if this device has a front facing camera
         if (mNumCams >= 2) {
             mSwitchCamera  = (Button) findViewById(R.id.switch_camera_button);
             mSwitchCamera.setEnabled(true);
@@ -164,6 +163,9 @@ public class CameraActivity extends FragmentActivity {
         mPreview.setCamera(mCamera);
         mCamera.startPreview();
 
+        mPreviewFrame.addView(mPreviewSurface);
+        mPreviewFrame.addView(mPreview);
+
         // enable the capture button
         mCaptureButton.setEnabled(true);
 
@@ -204,6 +206,9 @@ public class CameraActivity extends FragmentActivity {
         releaseMediaRecorder();
         // release the camera so it can be used by other applications
         releaseCamera();
+
+        mPreviewFrame.removeView(mPreview);
+        mPreviewFrame.removeView(mPreviewSurface);
     }
 
     private void releaseCamera() {
@@ -238,15 +243,20 @@ public class CameraActivity extends FragmentActivity {
         else
             mCameraId = BACK_CAMERA;
 
+        // release whatever camera we have no and remove preview surfaces
         releaseCamera();
         mPreviewFrame.removeView(mPreviewSurface);
         mPreviewFrame.removeView(mPreview);
 
         // re-open the camera
         mCamera = getCameraInstance(mCameraId);
-        initPreview();
         // initialize and start the preview
+        initPreview();
         mPreview.setCamera(mCamera);
+        mCamera.startPreview();
+        // add the preview surfaces back to the screen
+        mPreviewFrame.addView(mPreviewSurface);
+        mPreviewFrame.addView(mPreview);
     }
 
     /** Callback to run when a picture has been taken. */
@@ -254,6 +264,8 @@ public class CameraActivity extends FragmentActivity {
 
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
+
+            Log.d(TAG, "image data length: " + data.length);
 
             imageData = Arrays.copyOf(data, data.length);
             Bundle bundle = new Bundle();
@@ -282,6 +294,7 @@ public class CameraActivity extends FragmentActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
+            // hide the camera preview to show image fragment
             mPreviewFrame.setVisibility(View.GONE);
             mCaptureButton.setVisibility(View.GONE);
             if (mNumCams >= 2)
