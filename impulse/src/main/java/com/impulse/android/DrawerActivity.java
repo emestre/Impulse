@@ -30,7 +30,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Request;
@@ -88,12 +91,12 @@ public class DrawerActivity extends ActionBarActivity {
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
+                //getSupportActionBar().setTitle(mTitle);
                 supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
+                //getSupportActionBar().setTitle(mDrawerTitle);
                 supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -113,6 +116,7 @@ public class DrawerActivity extends ActionBarActivity {
                 }
             }
         }).executeAsync();
+
     }
 
     private void registerUser(final SharedPreferences prefs, final String userId) {
@@ -134,7 +138,6 @@ public class DrawerActivity extends ActionBarActivity {
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -159,6 +162,14 @@ public class DrawerActivity extends ActionBarActivity {
             selectItem(position);
         }
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        selectItem(1);
+    }
+
 
     private void selectItem(final int position) {
         // update the main content by replacing fragments
@@ -210,7 +221,7 @@ public class DrawerActivity extends ActionBarActivity {
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mPageTitles[position]);
+        //setTitle(mPageTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
