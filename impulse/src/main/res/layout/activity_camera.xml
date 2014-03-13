@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
         android:text="@string/switch_camera_text"
         android:visibility="gone"
         android:enabled="false" />
@@ -41,12 +41,13 @@
         android:layout_alignParentLeft="true"
         android:visibility="gone"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/camera_capture_button"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="15dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/capture_button_text" />
+        android:background="@drawable/button_capture"/>
 
 </RelativeLayout>

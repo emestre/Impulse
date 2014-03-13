@@ -160,12 +160,13 @@
 
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/share_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="15"
-        android:text="Share"
+        android:background="@drawable/button_share"
+        android:src="@drawable/image_share"
         android:enabled="false"/>
 
 </LinearLayout>

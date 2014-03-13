@@ -1,15 +1,14 @@
 package com.impulse.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -18,11 +17,11 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.ProfilePictureView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -30,27 +29,31 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends Fragment {
 
+    private static final String TAG = "ProfileActivity";
+
     private TextView userName;
-    private ProfilePictureView profPic;
+//    private ProfilePictureView profPic;
     private HorizontalListView friendsList;
     private ArrayList<Friend> friends;
     private FriendViewAdapter friendsAdapter;
     private Button viewPosts;
     private String userId;
+    private TextView mFriendsText;
+    private ImageView profPic;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_profile, container, false);
-
 
         friends = new ArrayList<Friend>();
         friendsAdapter = new FriendViewAdapter(getActivity(), friends);
         final Session session = Session.getActiveSession();
         userName = (TextView) root.findViewById(R.id.user_name);
-        profPic = (ProfilePictureView) root.findViewById(R.id.profile_picture);
         friendsList = (HorizontalListView) root.findViewById(R.id.friends_list);
-        viewPosts = (Button) root.findViewById(R.id.user_posts);
+        viewPosts = (Button) root.findViewById(R.id.button_user_posts);
         friendsList.setAdapter(friendsAdapter);
-
+        profPic = (ImageView) root.findViewById(R.id.profile_picture);
+        mFriendsText = (TextView) root.findViewById(R.id.friends_text_field);
 
         Request.newMeRequest(session, new Request.GraphUserCallback() {
 
@@ -58,21 +61,32 @@ public class ProfileActivity extends Fragment {
             @Override
             public void onCompleted(GraphUser user, Response response) {
                 if (user != null) {
-                    userName.setText(user.getName().split(" ")[0]);
-                    profPic.setProfileId(user.getId());
+                    // get the facebook user ID
                     userId = user.getId();
+                    // set this user's name
+                    userName.setText(user.getName().split(" ")[0]);
+                    // get this user's list of friends on impulse
                     getFriends(session);
+                    // load profile picture
+                    Picasso.with(getActivity())
+                            .load("http://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
+                            .into(profPic);
                 }
             }
         }).executeAsync();
 
-
         friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                userName.setText(((Friend) friendsList.getItemAtPosition(position)).getUser_name());
+                // get the new person's ID
                 userId = ((Friend) friendsList.getItemAtPosition(position)).getUser_id();
-                profPic.setProfileId(userId);
+                // set the new user's name
+                userName.setText(((Friend) friendsList.getItemAtPosition(position)).getUser_name());
+                // load new person's profile picture
+                Picasso.with(getActivity())
+                        .load("http://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
+                        .into(profPic);
+                // update to this user's friends list
                 friends.clear();
                 friendsAdapter.notifyDataSetChanged();
                 getFriends(session);
@@ -88,8 +102,6 @@ public class ProfileActivity extends Fragment {
             }
         });
 
-
-
         return root;
     }
 
@@ -101,6 +113,7 @@ public class ProfileActivity extends Fragment {
             @Override
             public void onCompleted(Response response) {
                 parseFriends(response);
+                mFriendsText.setText("Friends on Impulse (" + friends.size() + ")");
                 friendsAdapter.notifyDataSetChanged();
             }
         }).executeAsync();
