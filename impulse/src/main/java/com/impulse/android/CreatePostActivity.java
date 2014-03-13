@@ -248,7 +248,7 @@ public class CreatePostActivity extends ActionBarActivity {
         Log.d(TAG, "uploading new post with...");
         Log.d(TAG, "user ID: " + userId);
         Log.d(TAG, "caption text: " + caption);
-        Log.d(TAG, "image_check in text: " + checkIn);
+        Log.d(TAG, "location check in text: " + checkIn);
         Log.d(TAG, "audience: " + mAudience);
         Log.d(TAG, "timeout in minutes: " + mExpirationTime);
         Log.d(TAG, "rotate image: " + mRotation);

@@ -76,7 +76,10 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
             Log.d(TAG, "preview size set to: " + mPreviewSize.width + " x " + mPreviewSize.height);
 
-            mPictureSize = getOptimalPictureSize(mSupportedPictureSizes);
+//            Log.d(TAG, "supported picture sizes:");
+//            for (Camera.Size size: mSupportedPictureSizes)
+//                Log.d(TAG, size.width + " x " + size.height);
+
             mCamParams.setPictureSize(mPictureSize.width, mPictureSize.height);
             Log.d(TAG, "picture size set to: " + mPictureSize.width + " x " + mPictureSize.height);
 
@@ -107,6 +110,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         if (mSupportedPreviewSizes != null) {
             mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
         }
+        mPictureSize = getOptimalPictureSize(mSupportedPictureSizes, width, height);
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
@@ -144,20 +148,19 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         return optimalSize;
     }
 
-    private Camera.Size getOptimalPictureSize(List<Camera.Size> list) {
-        final double TARGET_RATIO = 4.0 / 3.0;
-        final int TARGET_WIDTH = 480;
-        int diff = Integer.MAX_VALUE;
+    private Camera.Size getOptimalPictureSize(List<Camera.Size> list, int w, int h) {
+        final double ASPECT_TOLERANCE = 0.1;
+        double targetRatio = (double) h / (double) w;
+        int targetHeight = 720;
+        int small = Integer.MAX_VALUE;
+        int diff;
         Camera.Size best = list.get(list.size() - 1);
 
-        // get all the sizes that have a 4:3 ratio
-        // then get the size that has height closest to 900px
         for (Camera.Size size : list) {
-            if ((double)size.width / (double)size.height == TARGET_RATIO) {
-
-                int temp = Math.abs(size.height - TARGET_WIDTH);
-                if (temp < diff) {
-                    diff = temp;
+            if (Math.abs((double)size.width / (double)size.height - targetRatio) <= ASPECT_TOLERANCE) {
+                diff = Math.abs(size.height - targetHeight);
+                if (diff < small) {
+                    small = diff;
                     best = size;
                 }
             }
