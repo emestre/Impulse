@@ -271,6 +271,14 @@ public class CameraActivity extends FragmentActivity {
             Bundle bundle = new Bundle();
             bundle.putInt(IMAGE_ROTATION_KEY, mRotation);
 
+            findViewById(R.id.image_fragment_container).setVisibility(View.VISIBLE);
+            // hide the camera preview to show image fragment
+            mPreviewFrame.setVisibility(View.GONE);
+            mCaptureButton.setVisibility(View.GONE);
+            if (mNumCams >= 2)
+                mSwitchCamera.setVisibility(View.GONE);
+            mCamera.startPreview();
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
                 @Override
@@ -293,13 +301,6 @@ public class CameraActivity extends FragmentActivity {
             fragmentTransaction.add(R.id.image_fragment_container, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-
-            // hide the camera preview to show image fragment
-            mPreviewFrame.setVisibility(View.GONE);
-            mCaptureButton.setVisibility(View.GONE);
-            if (mNumCams >= 2)
-                mSwitchCamera.setVisibility(View.GONE);
-            mCamera.startPreview();
         }
     };
 

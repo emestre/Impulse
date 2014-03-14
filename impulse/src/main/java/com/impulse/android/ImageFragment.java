@@ -51,7 +51,7 @@ public class ImageFragment extends Fragment {
         }
 
         image.setImageBitmap(bitmap);
-        container.setVisibility(View.VISIBLE);
+//        container.setVisibility(View.VISIBLE);
 
         return view;
     }
