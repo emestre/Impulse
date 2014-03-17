@@ -55,6 +55,24 @@ public class GetTask extends AsyncTask<String, String, String> {
             return "Error Occurred";
         }
 
+        else if (type.equals("/removeFile")) {
+            if (userId != null) {
+                url += "?fileName=" + userId;
+                get = new HttpGet(url);
+            }
+
+            try {
+                resp = client.execute(get);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (resp != null)
+                return String.valueOf(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
         return "Invalid URL";
     }
 
