@@ -99,12 +99,9 @@ public class PostFragment extends Fragment {
         caption = (TextView) view.findViewById(R.id.post_caption);
         timeout = (TextView) view.findViewById(R.id.post_timeout);
 
-        int firstQuote = post.fileName.indexOf("\"") + 1;
-        int lastQuote = post.fileName.lastIndexOf("\"");
-        String userId = post.fileName.substring(firstQuote, lastQuote);
 
         Session session = Session.getActiveSession();
-        getUserName(session, userId);
+        getUserName(session, post.userKey);
        // getMutualFriendsCount(session, userId);
 
         caption.setText(post.caption);

@@ -95,13 +95,14 @@ public class PostActivity extends Fragment {
             String caption = toAdd.get("caption").getAsString();
             String fileName = toAdd.get("fileName").getAsString();
             String timeOut = toAdd.get("timeout").getAsString();
+            String userKey = toAdd.get("userKey").getAsString();
             int rotation = toAdd.get("rotation").getAsInt();
             String calculatedTimeout = calculateTimeout(timeOut);
 
             if (calculatedTimeout.isEmpty())
                 continue;
 
-            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout, rotation);
+            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout, rotation, userKey);
             posts.add(newPost);
         }
     }
