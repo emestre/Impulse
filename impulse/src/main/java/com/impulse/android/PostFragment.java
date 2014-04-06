@@ -2,13 +2,7 @@ package com.impulse.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -25,17 +18,10 @@ import com.facebook.Session;
 import com.facebook.model.GraphObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class PostFragment extends Fragment {
 
@@ -92,27 +78,22 @@ public class PostFragment extends Fragment {
         if(view == null || post == null)
             return view;
 
-
         image = (ImageView) view.findViewById(R.id.post_image);
         userName = (TextView) view.findViewById(R.id.post_user);
         mutualFriends = (TextView) view.findViewById(R.id.post_mutual_friends);
         caption = (TextView) view.findViewById(R.id.post_caption);
         timeout = (TextView) view.findViewById(R.id.post_timeout);
 
-        int firstQuote = post.fileName.indexOf("\"") + 1;
-        int lastQuote = post.fileName.lastIndexOf("\"");
-        String userId = post.fileName.substring(firstQuote, lastQuote);
-
         Session session = Session.getActiveSession();
-        getUserName(session, userId);
+        getUserName(session, post.userKey);
        // getMutualFriendsCount(session, userId);
 
         caption.setText(post.caption);
         timeout.setText(post.timeOut);
         Picasso.with(getActivity().getApplicationContext())
-                .load(RestClient.getFile(post.fileName))
-                .fit()
-                .into(image);
+               .load(RestClient.getFile(post.fileName))
+               .fit()
+               .into(image);
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override

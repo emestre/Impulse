@@ -3,7 +3,6 @@ package com.impulse.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,10 +67,9 @@ public class ProfileActivity extends Fragment {
                     userName.setText(user.getName().split(" ")[0]);
                     // get this user's list of friends on impulse
                     getFriends(session);
-                    Log.d(TAG, "user ID: " + userId);
                     // load profile picture
                     Picasso.with(getActivity())
-                            .load("http://graph.facebook.com/" + userId + "/picture?type=large")
+                            .load("https://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
                             .into(profPic);
                 }
             }
@@ -86,7 +84,7 @@ public class ProfileActivity extends Fragment {
                 userName.setText(((Friend) friendsList.getItemAtPosition(position)).getUser_name());
                 // load new person's profile picture
                 Picasso.with(getActivity())
-                        .load("http://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
+                        .load("https://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
                         .into(profPic);
                 // update to this user's friends list
                 friends.clear();
