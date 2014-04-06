@@ -101,7 +101,7 @@ public class PostActivity extends Fragment {
             String timeOut = toAdd.get("timeout").getAsString();
             String userKey = toAdd.get("userKey").getAsString();
             int rotation = toAdd.get("rotation").getAsInt();
-            String dateStr = toAdd.get("timeout").getAsString();
+            String dateStr = toAdd.get("timestamp").getAsString();
             SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
             Date date = null;
             try {
