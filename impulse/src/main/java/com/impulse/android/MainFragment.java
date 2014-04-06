@@ -1,6 +1,8 @@
 package com.impulse.android;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,12 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 public class MainFragment extends Fragment {
 
@@ -87,6 +93,26 @@ public class MainFragment extends Fragment {
                                       Exception exception) {
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
+            try {
+                Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            SharedPreferences prefs = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
+                            if (!prefs.getString("UserId", "").equals(user.getId())) {
+                                prefs.edit().putString("UserId", user.getId()).commit();
+                                registerUser(prefs, user.getId());
+
+                            }
+                        }
+                    }
+                }).executeAsync().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             Intent intent = new Intent(getActivity(), DrawerActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -95,5 +121,14 @@ public class MainFragment extends Fragment {
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }
+    }
+
+    private void registerUser(final SharedPreferences prefs, final String userId) {
+        RestClient db_client = new RestClient();
+        db_client.postUser(userId, new PostCallback() {
+            @Override
+            public void onPostSuccess(String result) {
+            }
+        });
     }
 }

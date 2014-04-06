@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="fluent-hc-4.3.2">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/impulse/libs/fluent-hc-4.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Impulse/libs/fluent-hc-4.3.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

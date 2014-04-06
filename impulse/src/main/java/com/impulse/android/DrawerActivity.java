@@ -102,31 +102,11 @@ public class DrawerActivity extends ActionBarActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         selectItem(1);
-        Session session = Session.getActiveSession();
-        Request.newMeRequest(session, new Request.GraphUserCallback() {
 
-            @Override
-            public void onCompleted(GraphUser user, Response response) {
-                if (user != null) {
-                    SharedPreferences prefs = getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
-                    if (!prefs.getString("UserId", "").equals(user.getId())) {
-                        prefs.edit().putString("UserId", user.getId()).commit();
-                        registerUser(prefs, user.getId());
-                    }
-                }
-            }
-        }).executeAsync();
 
     }
 
-    private void registerUser(final SharedPreferences prefs, final String userId) {
-        RestClient db_client = new RestClient();
-        db_client.postUser(userId, new PostCallback() {
-            @Override
-            public void onPostSuccess(String result) {
-            }
-        });
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
