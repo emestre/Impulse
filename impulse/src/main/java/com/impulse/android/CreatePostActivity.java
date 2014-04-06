@@ -25,6 +25,7 @@ import android.widget.TextView;
 import org.apache.http.HttpStatus;
 
 import java.io.File;
+import java.util.Date;
 
 public class CreatePostActivity extends ActionBarActivity {
 
@@ -44,6 +45,7 @@ public class CreatePostActivity extends ActionBarActivity {
 
     private String mImagePath;
     private String mAudience;
+    private String userKey;
     private int mExpirationTime = 48 * 60;
 
     @Override
@@ -53,7 +55,7 @@ public class CreatePostActivity extends ActionBarActivity {
 
         displayImage();
         initLayout();
-
+        userKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         // save the image data in a background thread
         mImagePath = MediaFileHelper.getInternalCachePath(getApplicationContext());
         new SaveImageTask(mImagePath, new SaveImageCallback() {
@@ -297,7 +299,7 @@ public class CreatePostActivity extends ActionBarActivity {
                 dialog.dismiss();
 
                 RestClient client = new RestClient();
-                client.getPostList(new GetCallback() {
+                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
                         Intent intent = new Intent(getApplicationContext(),
@@ -335,7 +337,7 @@ public class CreatePostActivity extends ActionBarActivity {
 
 
                 RestClient client = new RestClient();
-                client.getPostList(new GetCallback() {
+                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
                         Intent intent = new Intent(getApplicationContext(),

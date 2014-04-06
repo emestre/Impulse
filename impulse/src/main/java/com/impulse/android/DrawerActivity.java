@@ -16,46 +16,33 @@
 
 package com.impulse.android;
 
-import java.util.Locale;
-
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.model.GraphUser;
+
+import java.util.Date;
 
 public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private String userKey;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPageTitles;
@@ -76,6 +63,7 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPageTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        userKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,31 +90,11 @@ public class DrawerActivity extends ActionBarActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         selectItem(1);
-        Session session = Session.getActiveSession();
-        Request.newMeRequest(session, new Request.GraphUserCallback() {
 
-            @Override
-            public void onCompleted(GraphUser user, Response response) {
-                if (user != null) {
-                    SharedPreferences prefs = getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
-                    if (!prefs.getString("UserId", "").equals(user.getId())) {
-                        prefs.edit().putString("UserId", user.getId()).commit();
-                        registerUser(prefs, user.getId());
-                    }
-                }
-            }
-        }).executeAsync();
 
     }
 
-    private void registerUser(final SharedPreferences prefs, final String userId) {
-        RestClient db_client = new RestClient();
-        db_client.postUser(userId, new PostCallback() {
-            @Override
-            public void onPostSuccess(String result) {
-            }
-        });
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,10 +131,6 @@ public class DrawerActivity extends ActionBarActivity {
         }
     }
 
-
-
-
-
     private void selectItem(final int position) {
         // update the main content by replacing fragments
         Fragment fragment;
@@ -188,7 +152,7 @@ public class DrawerActivity extends ActionBarActivity {
                     }, extras.getString("USER_ID"));
                     extras.remove("USER_ID");
                 } else {
-                    client.getPostList(new GetCallback() {
+                    client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
                             Fragment frag = PostActivity.create(response);

@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="commons-lang3-3.2.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/impulse/libs/commons-lang3-3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Impulse/libs/commons-lang3-3.2.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

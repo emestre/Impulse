@@ -14,27 +14,69 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="15">
+        android:layout_weight="10">
+
+        <ImageView
+            android:id="@+id/post_userpicture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
 
         <TextView
             android:id="@+id/post_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:textSize="@dimen/post_text_size"
+            android:text="Alex, 21"/>
 
         <TextView
             android:id="@+id/post_timeout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/post_text_size"
+            android:text="1 hr left"/>
 
         <TextView
-            android:id="@+id/post_mutual_friends"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/post_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:layout_below="@id/post_user"
+            android:textSize="@dimen/post_text_size"/>
 
-        <TextView
-            android:id="@+id/post_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/post_timeout">
+
+            <ImageView
+                android:id="@+id/location_pin"
+                android:layout_width="10dp"
+                android:layout_height="12dp"
+                android:src="@drawable/image_location_pin"/>
+
+            <TextView
+                android:id="@+id/post_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/location_pin"
+                android:textSize="@dimen/post_text_size"
+                android:textColor="#006E8A"
+                android:text="My House"/>
+
+        </RelativeLayout>
+
+
 
     </RelativeLayout>
 
@@ -42,7 +84,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80">
+        android:layout_marginTop="5dp"
+        android:layout_weight="83">
 
         <ImageView
             android:id="@+id/post_image"
@@ -51,11 +94,38 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/post_caption"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
-        android:gravity="center_horizontal" />
+        android:layout_weight="7">
+
+        <Button
+            android:id="@+id/button_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:textSize="@dimen/post_text_size"/>
+
+        <ImageView
+            android:id="@+id/caption_blurb"
+            android:layout_width="14dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/button_like"
+            android:src="@drawable/image_comment_blurb"/>
+
+        <TextView
+            android:id="@+id/post_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/caption_blurb"
+            android:textSize="@dimen/post_text_size"
+            android:text="Where you guys at? It's popping off!"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

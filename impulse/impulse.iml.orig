@@ -56,6 +56,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/.git" />
       <excludeFolder url="file://$MODULE_DIR$/build/apk" />
       <excludeFolder url="file://$MODULE_DIR$/build/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/bundles" />
@@ -69,9 +70,13 @@
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Android API 19 Platform (1)" jdkType="Android SDK" />
 =======
     <orderEntry type="jdk" jdkName="Android API 19 Platform (5)" jdkType="Android SDK" />
+>>>>>>> upstream/master
+=======
+    <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
 >>>>>>> upstream/master
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="appcompat-v7-19.0.1" level="project" />

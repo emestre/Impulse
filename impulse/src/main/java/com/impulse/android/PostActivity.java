@@ -1,6 +1,7 @@
 package com.impulse.android;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +21,11 @@ import com.google.gson.JsonParser;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PostActivity extends Fragment {
 
@@ -36,7 +41,7 @@ public class PostActivity extends Fragment {
      * and next wizard steps.
      */
     private ViewPager mPager;
-
+    private Boolean start = true;
     private String postList;
 
     /**
@@ -83,7 +88,6 @@ public class PostActivity extends Fragment {
         return root;
     }
 
-
     private void parsePosts(String response) {
         Log.i("Response", response);
         JsonParser parser = new JsonParser();
@@ -97,12 +101,25 @@ public class PostActivity extends Fragment {
             String timeOut = toAdd.get("timeout").getAsString();
             String userKey = toAdd.get("userKey").getAsString();
             int rotation = toAdd.get("rotation").getAsInt();
+            String dateStr = toAdd.get("timeout").getAsString();
+            SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+            Date date = null;
+            try {
+                date = formatter.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             String calculatedTimeout = calculateTimeout(timeOut);
 
             if (calculatedTimeout.isEmpty())
                 continue;
 
-            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout, rotation, userKey);
+            boolean liked = toAdd.get("liked").getAsBoolean();
+            long likes = toAdd.get("likes").getAsLong();
+
+            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout,
+                                rotation, userKey, date, liked, likes);
             posts.add(newPost);
         }
     }
@@ -186,6 +203,35 @@ public class PostActivity extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+            RestClient client = new RestClient();
+            if(position == 0 && !start) {
+                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        posts.clear();
+                        start = true;
+                        parsePosts(response);
+                        NUM_PAGES = posts.size();
+                        PostActivity.this.mPagerAdapter.notifyDataSetChanged();
+                    }
+                });
+                return PostFragment.create(position, posts.get(position));
+
+            }
+            if(start)
+                start = false;
+            if(position == PostActivity.this.NUM_PAGES - 1) {
+                client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        parsePosts(response);
+                        NUM_PAGES = posts.size();
+                        PostActivity.this.mPagerAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
             return PostFragment.create(position, posts.get(position));
         }
 
