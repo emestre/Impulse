@@ -41,7 +41,7 @@ public class PostActivity extends Fragment {
      * and next wizard steps.
      */
     private ViewPager mPager;
-
+    private Boolean start = true;
     private String postList;
 
     /**
@@ -200,9 +200,25 @@ public class PostActivity extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+            RestClient client = new RestClient();
+            if(position == 0 && !start) {
+                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        posts.clear();
+                        start = true;
+                        parsePosts(response);
+                        NUM_PAGES = posts.size();
+                        PostActivity.this.mPagerAdapter.notifyDataSetChanged();
+                    }
+                });
+                return PostFragment.create(position, posts.get(position));
+
+            }
+            if(start)
+                start = false;
             if(position == PostActivity.this.NUM_PAGES - 1) {
-                String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-                RestClient client = new RestClient();
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {

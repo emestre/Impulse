@@ -26,4 +26,6 @@ public class Post {
         this.userKey = userKey;
         this.date = date;
     }
+
+    public Post() {}
 }
