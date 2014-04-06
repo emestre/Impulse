@@ -48,11 +48,14 @@ public class GetTask extends AsyncTask<String, String, String> {
         if (type.equals("/getPostList")) {
             url += "?userKey=" + userId;
 
-            if (lat != 0.0 && lon != 0.0 && afterTime != null) {
+            if (lat != 0.0 && lon != 0.0) {
                 url += "&latitude=" + lat;
                 url += "&longitude=" + lon;
-                url += "&afterTime=" + afterTime.toString();
             }
+
+            if(afterTime != null)
+                url += "&afterTime=" + afterTime.toString().replaceAll(" ", "+");
+
             get = new HttpGet(url);
 
             try {

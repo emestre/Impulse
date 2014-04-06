@@ -145,10 +145,6 @@ public class DrawerActivity extends ActionBarActivity {
         }
     }
 
-
-
-
-
     private void selectItem(final int position) {
         // update the main content by replacing fragments
         Fragment fragment;
