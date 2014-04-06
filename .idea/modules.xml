@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Impulse.iml" filepath="$PROJECT_DIR$/Impulse.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries/facebook/facebook.iml" filepath="$PROJECT_DIR$/libraries/facebook/facebook.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Impulse/impulse.iml" filepath="$PROJECT_DIR$/Impulse/impulse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/impulse/impulse.iml" filepath="$PROJECT_DIR$/impulse/impulse.iml" />
       <module fileurl="file://$PROJECT_DIR$/impulse-android.iml" filepath="$PROJECT_DIR$/impulse-android.iml" />
     </modules>
   </component>
