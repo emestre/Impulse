@@ -46,6 +46,7 @@ public class PostTask extends AsyncTask<String, String, String> {
     private int rotation;
     private String audience;
     private String location;
+    private String filename;
 
     /**
      * Creates a new instance of PostTask with the specified URL, callback, and
@@ -59,6 +60,13 @@ public class PostTask extends AsyncTask<String, String, String> {
      */
     public PostTask(String url, String userKey, RestTaskCallback callback){
         this.url = url;
+        this.userKey = userKey;
+        this.callback = callback;
+    }
+
+    public PostTask(String url, String filename, String userKey, RestTaskCallback callback) {
+        this.url = url;
+        this.filename = filename;
         this.userKey = userKey;
         this.callback = callback;
     }
@@ -122,6 +130,24 @@ public class PostTask extends AsyncTask<String, String, String> {
 
             try {
                 post.setEntity(entity.build());
+                resp = client.execute(post);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (resp != null)
+                return Integer.toString(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/likePost")) {
+            url += "?userKey=" + userKey;
+            url += "&postId=" + filename;
+
+            post = new HttpPost(url);
+
+            try {
                 resp = client.execute(post);
             } catch (IOException e) {
                 e.printStackTrace();
