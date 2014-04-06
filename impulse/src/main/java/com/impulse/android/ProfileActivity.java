@@ -69,7 +69,7 @@ public class ProfileActivity extends Fragment {
                     getFriends(session);
                     // load profile picture
                     Picasso.with(getActivity())
-                            .load("http://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
+                            .load("https://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
                             .into(profPic);
                 }
             }
@@ -84,7 +84,7 @@ public class ProfileActivity extends Fragment {
                 userName.setText(((Friend) friendsList.getItemAtPosition(position)).getUser_name());
                 // load new person's profile picture
                 Picasso.with(getActivity())
-                        .load("http://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
+                        .load("https://graph.facebook.com/" + userId + "/picture?type=large&redirect=true&width=400&height=400")
                         .into(profPic);
                 // update to this user's friends list
                 friends.clear();

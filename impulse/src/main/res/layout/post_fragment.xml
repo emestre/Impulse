@@ -1,77 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="15dip">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_weight="100">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="10"
-        android:layout_marginRight="10dip"
-        android:layout_marginLeft="10dip">
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+        <ImageView
+            android:id="@+id/post_userpicture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
 
         <TextView
             android:id="@+id/post_user"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left" />
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:textSize="@dimen/post_text_size"/>
 
         <TextView
             android:id="@+id/post_timeout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="10"
-        android:layout_marginRight="10dip"
-        android:layout_marginLeft="10dip">
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/post_text_size"/>
 
         <TextView
-            android:id="@+id/post_mutual_friends"
-            android:layout_width="match_parent"
+            android:id="@+id/post_likes"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left" />
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:layout_below="@id/post_user"
+            android:textSize="@dimen/post_text_size"/>
 
-        <TextView
-            android:id="@+id/post_location"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right" />
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/post_timeout">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/location_pin"
+                android:layout_width="10dp"
+                android:layout_height="12dp"
+                android:src="@drawable/image_location_pin"/>
+
+            <TextView
+                android:id="@+id/post_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/location_pin"
+                android:textSize="@dimen/post_text_size"
+                android:textColor="#006E8A"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="83">
 
         <ImageView
             android:id="@+id/post_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/post_caption"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="10"
-        android:gravity="center_horizontal" />
+        android:layout_height="0dp"
+        android:layout_weight="7">
+
+        <Button
+            android:id="@+id/button_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:textSize="@dimen/post_text_size"/>
+
+        <ImageView
+            android:id="@+id/caption_blurb"
+            android:layout_width="14dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/button_like"
+            android:src="@drawable/image_comment_blurb"/>
+
+        <TextView
+            android:id="@+id/post_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/caption_blurb"
+            android:textSize="@dimen/post_text_size"/>
+
+    </RelativeLayout>
+
 </LinearLayout>

@@ -15,8 +15,11 @@ public class Post {
     public String userKey;
     public int rotation;
     public Date date;
+    public boolean liked;
+    public long numLikes;
 
-    public Post(double lon, double lat, String caption, String fileName, String timeOut, int rotation, String userKey, Date date) {
+    public Post(double lon, double lat, String caption, String fileName, String timeOut,
+                int rotation, String userKey, Date date, boolean liked, long likes) {
         this.lat = lat;
         this.lon = lon;
         this.caption = caption;
@@ -25,6 +28,8 @@ public class Post {
         this.rotation = rotation;
         this.userKey = userKey;
         this.date = date;
+        this.liked = liked;
+        this.numLikes = likes;
     }
 
     public Post() {}

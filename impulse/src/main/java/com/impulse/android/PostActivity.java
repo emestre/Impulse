@@ -88,7 +88,6 @@ public class PostActivity extends Fragment {
         return root;
     }
 
-
     private void parsePosts(String response) {
         Log.i("Response", response);
         JsonParser parser = new JsonParser();
@@ -116,7 +115,11 @@ public class PostActivity extends Fragment {
             if (calculatedTimeout.isEmpty())
                 continue;
 
-            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout, rotation, userKey, date);
+            boolean liked = toAdd.get("liked").getAsBoolean();
+            long likes = toAdd.get("likes").getAsLong();
+
+            Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout,
+                                rotation, userKey, date, liked, likes);
             posts.add(newPost);
         }
     }
