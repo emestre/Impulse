@@ -27,8 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/post_userpicture"
-            android:textSize="@dimen/post_text_size"
-            android:text="Alex, 21"/>
+            android:textSize="@dimen/post_text_size"/>
 
         <TextView
             android:id="@+id/post_timeout"
@@ -36,8 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
-            android:textSize="@dimen/post_text_size"
-            android:text="1 hr left"/>
+            android:textSize="@dimen/post_text_size"/>
 
         <TextView
             android:id="@+id/post_likes"
@@ -71,12 +69,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/location_pin"
                 android:textSize="@dimen/post_text_size"
-                android:textColor="#006E8A"
-                android:text="My House"/>
+                android:textColor="#006E8A"/>
 
         </RelativeLayout>
-
-
 
     </RelativeLayout>
 
@@ -123,8 +118,7 @@
             android:layout_marginLeft="3dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/caption_blurb"
-            android:textSize="@dimen/post_text_size"
-            android:text="Where you guys at? It's popping off!"/>
+            android:textSize="@dimen/post_text_size"/>
 
     </RelativeLayout>
 

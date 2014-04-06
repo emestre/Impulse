@@ -45,6 +45,7 @@ public class PostFragment extends Fragment {
     private Button mButtonLike;
     private TextView mLikes;
     private String mUserId;
+    private ImageView mCaptionImage;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -92,6 +93,7 @@ public class PostFragment extends Fragment {
         mUserImage = (ImageView) view.findViewById(R.id.post_userpicture);
         mUserName = (TextView) view.findViewById(R.id.post_user);
         mCaption = (TextView) view.findViewById(R.id.post_caption);
+        mCaptionImage = (ImageView) view.findViewById(R.id.caption_blurb);
         mTimeout = (TextView) view.findViewById(R.id.post_timeout);
         mLocation = (TextView) view.findViewById(R.id.post_location);
         mButtonLike = (Button) view.findViewById(R.id.button_like);
@@ -107,6 +109,9 @@ public class PostFragment extends Fragment {
         getUserName(session, mPost.userKey);
 
         mCaption.setText(mPost.caption);
+        if (mPost.caption.equals(""))
+            mCaptionImage.setVisibility(View.GONE);
+
         mTimeout.setText(mPost.timeOut + " left");
         Picasso.with(getActivity().getApplicationContext())
                 .load(RestClient.getFile(mPost.fileName))
