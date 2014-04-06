@@ -49,13 +49,13 @@ public class HomeScreen extends Fragment {
                 final Intent intent = new Intent(getActivity(),
                         PostActivity.class);
                 RestClient client = new RestClient();
-                client.getPostList(new GetCallback() {
+             /*   client.getPostList(new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
                         intent.putExtra("POST_LIST", response);
                         startActivity(intent);
                     }
-                });
+                });*/
             }
         });
 

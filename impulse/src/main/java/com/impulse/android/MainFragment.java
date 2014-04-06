@@ -103,6 +103,7 @@ public class MainFragment extends Fragment {
                             if (!prefs.getString("UserId", "").equals(user.getId())) {
                                 prefs.edit().putString("UserId", user.getId()).commit();
                                 registerUser(prefs, user.getId());
+                                Log.i("USER", user.getId());
 
                             }
                         }
@@ -113,11 +114,14 @@ public class MainFragment extends Fragment {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+            SharedPreferences prefs = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
+            Log.i("USER", prefs.getString("UserId", ""));
             Intent intent = new Intent(getActivity(), DrawerActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);
             getActivity().finish();
+
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }

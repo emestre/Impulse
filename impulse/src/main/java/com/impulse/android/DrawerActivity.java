@@ -16,6 +16,7 @@
 
 package com.impulse.android;
 
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -55,7 +56,7 @@ public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private String userKey;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPageTitles;
@@ -76,6 +77,7 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPageTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        userKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -168,7 +170,7 @@ public class DrawerActivity extends ActionBarActivity {
                     }, extras.getString("USER_ID"));
                     extras.remove("USER_ID");
                 } else {
-                    client.getPostList(new GetCallback() {
+                    client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
                             Fragment frag = PostActivity.create(response);
