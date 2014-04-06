@@ -123,7 +123,7 @@ public class PostFragment extends Fragment {
         });
 
         Picasso.with(getActivity().getApplicationContext())
-                .load("https://graph.facebook.com/" + "100001146099477" + "/picture?type=small")
+                .load("https://graph.facebook.com/" + mPost.userKey + "/picture?type=small")
                 .fit()
                 .into(mUserImage);
 
