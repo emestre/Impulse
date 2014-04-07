@@ -17,9 +17,10 @@ public class Post {
     public Date date;
     public boolean liked;
     public long numLikes;
+    public String location;
 
     public Post(double lon, double lat, String caption, String fileName, String timeOut,
-                int rotation, String userKey, Date date, boolean liked, long likes) {
+                int rotation, String userKey, Date date, boolean liked, long likes, String checkIn) {
         this.lat = lat;
         this.lon = lon;
         this.caption = caption;
@@ -30,6 +31,7 @@ public class Post {
         this.date = date;
         this.liked = liked;
         this.numLikes = likes;
+        this.location = checkIn;
     }
 
     public Post() {}

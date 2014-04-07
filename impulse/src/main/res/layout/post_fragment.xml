@@ -14,12 +14,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="7">
 
         <ImageView
             android:id="@+id/post_userpicture"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
 
         <TextView
             android:id="@+id/post_user"
@@ -41,7 +41,7 @@
             android:id="@+id/post_likes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/post_userpicture"
             android:layout_below="@id/post_user"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/post_timeout">
 
@@ -75,12 +75,11 @@
 
     </RelativeLayout>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="83">
+        android:layout_marginTop="2dp"
+        android:layout_weight="86">
 
         <ImageView
             android:id="@+id/post_image"
@@ -99,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:textSize="@dimen/post_text_size"/>
 
         <ImageView
@@ -108,7 +107,7 @@
             android:layout_height="16dp"
             android:layout_marginLeft="3dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/button_like"
+            android:layout_alignParentLeft="true"
             android:src="@drawable/image_comment_blurb"/>
 
         <TextView
@@ -118,6 +117,7 @@
             android:layout_marginLeft="3dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/caption_blurb"
+            android:layout_toLeftOf="@id/button_like"
             android:textSize="@dimen/post_text_size"/>
 
     </RelativeLayout>
