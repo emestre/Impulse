@@ -94,13 +94,17 @@ public class PostActivity extends Fragment {
         JsonArray results = parser.parse(response).getAsJsonArray();
         for (JsonElement post : results) {
             JsonObject toAdd = post.getAsJsonObject();
+
             double lon = toAdd.get("longitude").getAsDouble();
             double lat = toAdd.get("latitude").getAsDouble();
+            int rotation = toAdd.get("rotation").getAsInt();
+
             String caption = toAdd.get("caption").getAsString();
             String fileName = toAdd.get("fileName").getAsString();
             String timeOut = toAdd.get("timeout").getAsString();
             String userKey = toAdd.get("userKey").getAsString();
-            int rotation = toAdd.get("rotation").getAsInt();
+            String location = toAdd.get("location").getAsString();
+
             String dateStr = toAdd.get("timestamp").getAsString();
             SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
             Date date = null;
@@ -111,7 +115,6 @@ public class PostActivity extends Fragment {
             }
 
             String calculatedTimeout = calculateTimeout(timeOut);
-
             if (calculatedTimeout.isEmpty())
                 continue;
 
@@ -119,7 +122,7 @@ public class PostActivity extends Fragment {
             long likes = toAdd.get("likes").getAsLong();
 
             Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout,
-                                rotation, userKey, date, liked, likes);
+                                rotation, userKey, date, liked, likes, location);
             posts.add(newPost);
         }
     }

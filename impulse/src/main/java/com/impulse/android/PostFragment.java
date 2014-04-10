@@ -40,12 +40,13 @@ public class PostFragment extends Fragment {
     private ImageView mPostImage;
     private TextView mUserName;
     private TextView mCaption;
+    private ImageView mCaptionImage;
     private TextView mTimeout;
     private TextView mLocation;
+    private ImageView mLocationPin;
     private Button mButtonLike;
     private TextView mLikes;
     private String mUserId;
-    private ImageView mCaptionImage;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -96,6 +97,7 @@ public class PostFragment extends Fragment {
         mCaptionImage = (ImageView) view.findViewById(R.id.caption_blurb);
         mTimeout = (TextView) view.findViewById(R.id.post_timeout);
         mLocation = (TextView) view.findViewById(R.id.post_location);
+        mLocationPin = (ImageView) view.findViewById(R.id.location_pin);
         mButtonLike = (Button) view.findViewById(R.id.button_like);
         mLikes = (TextView) view.findViewById(R.id.post_likes);
 
@@ -108,16 +110,21 @@ public class PostFragment extends Fragment {
         Session session = Session.getActiveSession();
         getUserName(session, mPost.userKey);
 
+        // populate caption and check in text fields
+        // hide image icons if fields are empty
         mCaption.setText(mPost.caption);
         if (mPost.caption.equals(""))
             mCaptionImage.setVisibility(View.GONE);
-
         mTimeout.setText(mPost.timeOut + " left");
+        mLocation.setText(mPost.location);
+        if (mPost.location.equals(""))
+            mLocationPin.setVisibility(View.GONE);
+
+        // load the post image
         Picasso.with(getActivity().getApplicationContext())
                 .load(RestClient.getFile(mPost.fileName))
                 .fit()
                 .into(mPostImage);
-
         mPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,9 +134,9 @@ public class PostFragment extends Fragment {
             }
         });
 
+        // load the user profile picture
         Picasso.with(getActivity().getApplicationContext())
-                .load("https://graph.facebook.com/" + mPost.userKey + "/picture?type=small")
-                .fit()
+                .load("https://graph.facebook.com/" + mPost.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
                 .into(mUserImage);
 
         // handle the liking functionality
