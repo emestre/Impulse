@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ public class PostFragment extends Fragment {
     private ImageView mLocationPin;
     private Button mButtonLike;
     private TextView mLikes;
+    // the facebook ID of the current user, whoever is logged in to this instance
     private String mUserId;
 
     /**
@@ -109,6 +112,12 @@ public class PostFragment extends Fragment {
     private void initLayout() {
         Session session = Session.getActiveSession();
         getUserName(session, mPost.userKey);
+        mUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadUserProfile();
+            }
+        });
 
         // populate caption and check in text fields
         // hide image icons if fields are empty
@@ -138,6 +147,13 @@ public class PostFragment extends Fragment {
         Picasso.with(getActivity().getApplicationContext())
                 .load("https://graph.facebook.com/" + mPost.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
                 .into(mUserImage);
+        // set profile picture link to user's profile
+        mUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadUserProfile();
+            }
+        });
 
         // handle the liking functionality
         mLikes.setText(mPost.numLikes + " likes");
@@ -182,6 +198,19 @@ public class PostFragment extends Fragment {
                     }
                 }
         ).executeAsync();
+    }
+
+    // loads the post user's profile
+    private void loadUserProfile() {
+        Bundle bundle = new Bundle();
+        bundle.putString("id", mPost.userKey);
+
+        Fragment fragment = new ProfileActivity();
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.content_frame, fragment).commit();
     }
 
 //    private void getMutualFriendsCount(Session session, String userId) {
