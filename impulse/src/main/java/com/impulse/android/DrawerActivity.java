@@ -90,8 +90,6 @@ public class DrawerActivity extends ActionBarActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         selectItem(1);
-
-
     }
 
 
@@ -136,7 +134,13 @@ public class DrawerActivity extends ActionBarActivity {
         Fragment fragment;
         switch (position) {
             case 0:
+                String userId = getSharedPreferences("com.impulse",
+                        Context.MODE_PRIVATE).getString("UserId", "");
+                Bundle bundle = new Bundle();
+                bundle.putString("id", userId);
+
                 fragment = new ProfileActivity();
+                fragment.setArguments(bundle);
                 setFragment(fragment, position);
                 break;
             case 1:
