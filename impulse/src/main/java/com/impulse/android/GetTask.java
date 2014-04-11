@@ -15,6 +15,8 @@ import java.util.Date;
 public class GetTask extends AsyncTask<String, String, String> {
     private String url;
     private String userId;
+    private String otherUserId;
+    private String postId;
     private double lat, lon;
     private Date afterTime;
     private RestTaskCallback callback;
@@ -33,6 +35,14 @@ public class GetTask extends AsyncTask<String, String, String> {
         this.lat = latitude;
         this.lon = longitude;
         this.afterTime = afterTime;
+        this.callback = callback;
+    }
+
+    public GetTask(String url, String myUserId, String otherUserId, String postId, RestTaskCallback callback) {
+        this.url = url;
+        this.userId = myUserId;
+        this.otherUserId = otherUserId;
+        this.postId = postId;
         this.callback = callback;
     }
 
@@ -83,6 +93,59 @@ public class GetTask extends AsyncTask<String, String, String> {
 
             if (resp != null)
                 return String.valueOf(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/aboutUser")) {
+            url += "?userKey=" + userId;
+            get = new HttpGet(url);
+
+            try {
+                resp = client.execute(get);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null)
+                return result;
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/getActiveThreads")) {
+            url += "?userKey=" + userId;
+            get = new HttpGet(url);
+
+            try {
+                resp = client.execute(get);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null)
+                return result;
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/getThread")) {
+            url += "?myUserKey=" + userId;
+            url += "&otherUserKey=" + otherUserId;
+            url += "&postId=" + postId;
+            get = new HttpGet(url);
+
+            try {
+                resp = client.execute(get);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null)
+                return result;
 
             return "Error Occurred";
         }
