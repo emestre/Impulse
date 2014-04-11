@@ -10,6 +10,11 @@ public class RestClient {
     private static final String GET_FILE = "/getFile";
     private static final String REMOVE_FILE = "/removeFile";
     private static final String LIKE_POST = "/likePost";
+    private static final String ABOUT_USER = "/aboutUser";
+    private static final String GET_ACTIVE_THREADS = "/getActiveThreads";
+    private static final String GET_THREAD = "/getThread";
+    private static final String CREATE_MESSAGE = "/createMessage";
+    private static final String EDIT_ABOUT_USER = "/editAboutUser";
 
     public void postUser(String userKey, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
@@ -71,6 +76,56 @@ public class RestClient {
             @Override
             public void onTaskComplete(String result) {
                 callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public void aboutUser(String userKey, final GetCallback callback) {
+        String url = BASE_URL + ABOUT_USER;
+        new GetTask(url, userKey, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public void getActiveThreads(String userKey, final GetCallback callback) {
+        String url = BASE_URL + GET_ACTIVE_THREADS;
+        new GetTask(url, userKey, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public void getThread(String myUserKey, String otherUserKey, String postId, final GetCallback callback) {
+        String url = BASE_URL + GET_THREAD;
+        new GetTask(url, myUserKey, otherUserKey, postId, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public void createMessage(String fromUser, String toUser, String postId, String message, final PostCallback callback) {
+        String url = BASE_URL + CREATE_MESSAGE;
+        new PostTask(url, fromUser, toUser, postId, message, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onPostSuccess(result);
+            }
+        }).execute();
+    }
+
+    public void editAboutUser(String userKey, String aboutMe, final PostCallback callback) {
+        String url = BASE_URL + EDIT_ABOUT_USER;
+        new PostTask(url, aboutMe, userKey, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onPostSuccess(result);
             }
         }).execute();
     }
