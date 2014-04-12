@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pager"
-    android:gravity="center"
-    android:clipToPadding="false"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:background="#EEE6E6"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:gravity="center"
+        android:clipToPadding="false"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="10dp"
+        android:background="#EEE6E6"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <SlidingDrawer
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:content="@+id/content"
+        android:handle="@+id/handle">
+
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="#bfbfbf"
+            android:drawableLeft="@drawable/ic_caret_up"
+            android:drawableRight="@drawable/ic_caret_up"/>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#f2f2f2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send a message"
+                android:gravity="center"
+                android:layout_gravity="center" />
+
+            <EditText
+                android:id="@+id/reply_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:lines="2"
+                android:maxLines="2"
+                android:gravity="center"
+                android:layout_gravity="center" />
+
+            <Button
+                android:id="@+id/reply_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send" />
+
+        </LinearLayout>
+    </SlidingDrawer>
+
+</FrameLayout>

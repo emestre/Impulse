@@ -44,6 +44,7 @@
     <string-array name="pages_array">
         <item>Profile</item>
         <item>Posts</item>
+        <item>Messages</item>
         <item>Logout</item>
     </string-array>
 </resources>

@@ -177,8 +177,11 @@ public class DrawerActivity extends ActionBarActivity {
                 }
 
                 break;
-
             case 2:
+                fragment = new MessagesFragment();
+                setFragment(fragment, position);
+                break;
+            case 3:
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
                 Intent intent = new Intent(this, MainActivity.class);
@@ -194,7 +197,7 @@ public class DrawerActivity extends ActionBarActivity {
     public void setFragment(Fragment fragment, int position) {
         Bundle args = new Bundle();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commitAllowingStateLoss();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);

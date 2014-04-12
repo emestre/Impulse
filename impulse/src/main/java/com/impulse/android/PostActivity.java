@@ -2,6 +2,7 @@ package com.impulse.android;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.SlidingDrawer;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -44,6 +48,9 @@ public class PostActivity extends Fragment {
     private Boolean start = true;
     private String postList;
 
+    private SlidingDrawer mReplyDrawer;
+    private Button mDrawerButton;
+
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
@@ -72,9 +79,26 @@ public class PostActivity extends Fragment {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
+        mReplyDrawer = (SlidingDrawer) root.findViewById(R.id.bottom);
+        mDrawerButton = (Button) root.findViewById(R.id.handle);
+
         mPager.setPageMargin(5);
         mPager.setClipToPadding(false);
         mPager.setAdapter(mPagerAdapter);
+
+        mReplyDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_down, 0, R.drawable.ic_caret_down, 0);
+            }
+        });
+
+        mReplyDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_up, 0, R.drawable.ic_caret_up, 0);
+            }
+        });
    /*     mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
