@@ -233,6 +233,8 @@ public class PostActivity extends Fragment {
         mCaption.setText(post.caption);
         if (post.caption.equals(""))
             mCaptionImage.setVisibility(View.GONE);
+        else
+            mCaptionImage.setVisibility(View.VISIBLE);
         mUserName.setText("");
         mLikes.setText(post.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
