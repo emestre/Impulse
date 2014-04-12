@@ -67,6 +67,9 @@ public class PostActivity extends Fragment {
     private Button mSendButton;
     private EditText mReplyEditText;
 
+    private TextView mCaption;
+    private ImageView mCaptionImage;
+    private Button mButtonLike;
 
     private TextView mUserName;
     private ImageView mUserImage;
@@ -113,9 +116,12 @@ public class PostActivity extends Fragment {
         mLocation = (TextView) root.findViewById(R.id.post_location);
         mLocationPin = (ImageView) root.findViewById(R.id.location_pin);
         mLikes = (TextView) root.findViewById(R.id.post_likes);
+        mCaption = (TextView) root.findViewById(R.id.post_caption);
+        mCaptionImage = (ImageView) root.findViewById(R.id.caption_blurb);
+        mButtonLike = (Button) root.findViewById(R.id.button_like);
 
         myUserKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-        mPager.setPageMargin(5);
+       // mPager.setPageMargin(5);
         mPager.setClipToPadding(false);
         mPager.setAdapter(mPagerAdapter);
         mPager.getCurrentItem();
@@ -222,7 +228,12 @@ public class PostActivity extends Fragment {
         return root;
     }
 
-    private void setPost(Post post) {
+    private void setPost(final Post post) {
+        Session session = Session.getActiveSession();
+        mCaption.setText(post.caption);
+        if (post.caption.equals(""))
+            mCaptionImage.setVisibility(View.GONE);
+        mUserName.setText("");
         mLikes.setText(post.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
                 .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
@@ -231,6 +242,31 @@ public class PostActivity extends Fragment {
         mLocation.setText(post.location);
         if (post.location.equals(""))
             mLocationPin.setVisibility(View.GONE);
+        getUserName(session, post.userKey);
+
+        if (post.liked) {
+            mButtonLike.setEnabled(false);
+            mButtonLike.setText("Liked");
+        }
+        else {
+            mButtonLike.setEnabled(true);
+            mButtonLike.setText("Like");
+
+            mButtonLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RestClient client = new RestClient();
+                    client.likePost(post.fileName, myUserKey, new GetCallback() {
+                        @Override
+                        void onDataReceived(String response) {
+                            mButtonLike.setEnabled(false);
+                            mButtonLike.setText("Liked");
+                            //mLikes.setText(mPost.numLikes+1 + " likes");
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void getUserName(Session session, String userId) {
@@ -274,7 +310,6 @@ public class PostActivity extends Fragment {
 
             double lon = toAdd.get("longitude").getAsDouble();
             double lat = toAdd.get("latitude").getAsDouble();
-            int rotation = toAdd.get("rotation").getAsInt();
 
             String caption = toAdd.get("caption").getAsString();
             String fileName = toAdd.get("fileName").getAsString();
@@ -299,7 +334,7 @@ public class PostActivity extends Fragment {
             long likes = toAdd.get("likes").getAsLong();
 
             Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout,
-                    rotation, userKey, date, liked, likes, location);
+                    userKey, date, liked, likes, location);
             posts.add(newPost);
         }
     }

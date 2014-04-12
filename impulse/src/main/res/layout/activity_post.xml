@@ -5,8 +5,11 @@
 
     <RelativeLayout
         android:id="@+id/post_info"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:background="@drawable/container_dropshadow"
+        android:layout_height="45dp">
 
         <ImageView
             android:id="@+id/post_userpicture"
@@ -73,11 +76,48 @@
         android:clipToPadding="false"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_marginTop="40dp"
-        android:paddingBottom="10dp"
-        android:background="#EEE6E6"
+        android:layout_marginTop="45dp"
+        android:paddingBottom="45dp"
+        android:background="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <Button
+            android:id="@+id/button_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/post_text_size"/>
+
+        <ImageView
+            android:id="@+id/caption_blurb"
+            android:layout_width="14dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/image_comment_blurb"/>
+
+        <TextView
+            android:id="@+id/post_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/caption_blurb"
+            android:layout_toLeftOf="@id/button_like"
+            android:textSize="@dimen/post_text_size"/>
+
+    </RelativeLayout>
 
 
     <SlidingDrawer
