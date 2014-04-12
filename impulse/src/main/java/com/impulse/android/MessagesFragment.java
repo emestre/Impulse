@@ -1,7 +1,9 @@
 package com.impulse.android;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +13,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class MessagesFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     /**
      * The fragment's ListView/GridView.
      */
     private AbsListView mListView;
+    private List<Reply> replies;
 
+    private String response;
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
@@ -25,10 +40,8 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static MessagesFragment newInstance(String param1, String param2) {
-        MessagesFragment fragment = new MessagesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+    public static MessagesFragment create(String response) {
+        MessagesFragment fragment = new MessagesFragment(response);
         return fragment;
     }
 
@@ -39,13 +52,16 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
     public MessagesFragment() {
     }
 
+    public MessagesFragment(String response) {
+        this.response = response;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String links[] =  {"a", "b"};
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, links);
+        replies = new ArrayList<Reply>();
+        parsePosts(response);
+        mAdapter = new ReplyPostAdapter(getActivity(), R.layout.post_reply_item, replies);
     }
 
     @Override
@@ -70,16 +86,22 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
         activity.setFragment(new ThreadsFragment(), 2);
     }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
+    private void parsePosts(String response) {
+        Log.i("Response", response);
+        JsonParser parser = new JsonParser();
+        JsonArray results = parser.parse(response).getAsJsonArray();
+        for (JsonElement post : results) {
+            JsonObject toAdd = post.getAsJsonObject();
 
-        if (emptyText instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
+            String postId = toAdd.get("postId").getAsString();
+            String timeOut = toAdd.get("timeout").getAsString();
+            String userKey = toAdd.get("userKey").getAsString();
+
+            String calculatedTimeout = PostActivity.calculateTimeout(timeOut);
+            if (calculatedTimeout.isEmpty())
+                continue;
+
+            replies.add(new Reply(postId, userKey, calculatedTimeout));
         }
     }
 }

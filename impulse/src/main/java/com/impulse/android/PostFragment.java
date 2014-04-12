@@ -75,6 +75,10 @@ public class PostFragment extends Fragment {
         return mPageNumber;
     }
 
+    public Post getPost() {
+        return mPost;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

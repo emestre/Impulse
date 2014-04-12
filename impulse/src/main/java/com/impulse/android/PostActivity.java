@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SlidingDrawer;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -47,9 +50,12 @@ public class PostActivity extends Fragment {
     private ViewPager mPager;
     private Boolean start = true;
     private String postList;
+    private String myUserKey;
 
     private SlidingDrawer mReplyDrawer;
     private Button mDrawerButton;
+    private Button mSendButton;
+    private EditText mReplyEditText;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -72,7 +78,7 @@ public class PostActivity extends Fragment {
         View root = inflater.inflate(R.layout.activity_post, container, false);
 
         posts = new ArrayList<Post>();
-        if(postList != null)
+        if (postList != null)
             parsePosts(postList);
         NUM_PAGES = posts.size();
 
@@ -81,15 +87,20 @@ public class PostActivity extends Fragment {
         mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
         mReplyDrawer = (SlidingDrawer) root.findViewById(R.id.bottom);
         mDrawerButton = (Button) root.findViewById(R.id.handle);
+        mSendButton = (Button) root.findViewById(R.id.reply_button);
+        mReplyEditText = (EditText) root.findViewById(R.id.reply_editText);
 
+        myUserKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         mPager.setPageMargin(5);
         mPager.setClipToPadding(false);
         mPager.setAdapter(mPagerAdapter);
+        mPager.getCurrentItem();
 
         mReplyDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
                 mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_down, 0, R.drawable.ic_caret_down, 0);
+                Log.i("CURRENT_POST", mPager.getCurrentItem() + "");
             }
         });
 
@@ -99,6 +110,34 @@ public class PostActivity extends Fragment {
                 mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_up, 0, R.drawable.ic_caret_up, 0);
             }
         });
+
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int curPos = mPager.getCurrentItem();
+                Post currentPost = posts.get(curPos);
+
+                RestClient client = new RestClient();
+                String postId = currentPost.fileName;
+                String userKey = currentPost.userKey;
+                String message = mReplyEditText.getText().toString();
+                client.createMessage(myUserKey, userKey, postId, message, new PostCallback() {
+                    @Override
+                    public void onPostSuccess(String result) {
+                        if(result.equals("200"))
+                            Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                mReplyEditText.setText("");
+                mReplyDrawer.animateClose();
+
+            }
+        });
+
+
    /*     mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -146,7 +185,7 @@ public class PostActivity extends Fragment {
             long likes = toAdd.get("likes").getAsLong();
 
             Post newPost = new Post(lon, lat, caption, fileName, calculatedTimeout,
-                                rotation, userKey, date, liked, likes, location);
+                    rotation, userKey, date, liked, likes, location);
             posts.add(newPost);
         }
     }
@@ -155,7 +194,7 @@ public class PostActivity extends Fragment {
         return date2.getMillis() - date1.getMillis();
     }
 
-    private String calculateTimeout(String timeOut) {
+    public static String calculateTimeout(String timeOut) {
         String calculatedTimeout;
         DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss zzz yyyy");
         DateTime dt = formatter.parseDateTime(timeOut);
@@ -217,8 +256,6 @@ public class PostActivity extends Fragment {
     }
 
 
-
-
     /**
      * A simple pager adapter that represents 5 {@link PostFragment} objects, in
      * sequence.
@@ -232,7 +269,7 @@ public class PostActivity extends Fragment {
         public Fragment getItem(int position) {
             String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
             RestClient client = new RestClient();
-            if(position == 0 && !start) {
+            if (position == 0 && !start) {
                 client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
@@ -246,9 +283,9 @@ public class PostActivity extends Fragment {
                 return PostFragment.create(position, posts.get(position));
 
             }
-            if(start)
+            if (start)
                 start = false;
-            if(position == PostActivity.this.NUM_PAGES - 1) {
+            if (position == PostActivity.this.NUM_PAGES - 1) {
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {

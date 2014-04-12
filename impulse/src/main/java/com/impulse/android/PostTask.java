@@ -164,8 +164,8 @@ public class PostTask extends AsyncTask<String, String, String> {
         else if (type.equals("/createMessage")) {
             MultipartEntityBuilder entity = MultipartEntityBuilder.create();
             entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            entity.addTextBody("fromUser", this.fromUser);
-            entity.addTextBody("toUser", this.toUser);
+            entity.addTextBody("fromUserKey", this.fromUser);
+            entity.addTextBody("toUserKey", this.toUser);
             entity.addTextBody("postId", this.postId);
             entity.addTextBody("message", this.message);
 
