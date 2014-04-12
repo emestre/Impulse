@@ -58,7 +58,6 @@ public class PostActivity extends Fragment {
      * and next wizard steps.
      */
     private ViewPager mPager;
-    private Boolean start = true;
     private String postList;
     private String myUserKey;
 
@@ -77,6 +76,7 @@ public class PostActivity extends Fragment {
     private TextView mLocation;
     private ImageView mLocationPin;
     private TextView mLikes;
+    private boolean myPosts;
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
@@ -85,12 +85,13 @@ public class PostActivity extends Fragment {
     public PostActivity() {
     }
 
-    public static PostActivity create(String posts) {
-        return new PostActivity(posts);
+    public static PostActivity create(String posts, boolean myPosts) {
+        return new PostActivity(posts, myPosts);
     }
 
-    public PostActivity(String postList) {
+    public PostActivity(String postList, boolean myPosts) {
         this.postList = postList;
+        this.myPosts = myPosts;
     }
 
     @Override
@@ -177,6 +178,7 @@ public class PostActivity extends Fragment {
             @Override
             public void onDrawerOpened() {
                 mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_down, 0, R.drawable.ic_caret_down, 0);
+                mReplyDrawer.bringToFront();
                 Log.i("CURRENT_POST", mPager.getCurrentItem() + "");
             }
         });
@@ -239,11 +241,14 @@ public class PostActivity extends Fragment {
         mLikes.setText(post.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
                 .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
+                .transform(new RoundedTransformation(45, 2))
                 .into(mUserImage);
         mTimeout.setText(post.timeOut + " left");
         mLocation.setText(post.location);
         if (post.location.equals(""))
             mLocationPin.setVisibility(View.GONE);
+        else
+            mLocationPin.setVisibility(View.VISIBLE);
         getUserName(session, post.userKey);
 
         if (post.liked) {
@@ -263,7 +268,7 @@ public class PostActivity extends Fragment {
                         void onDataReceived(String response) {
                             mButtonLike.setEnabled(false);
                             mButtonLike.setText("Liked");
-                            //mLikes.setText(mPost.numLikes+1 + " likes");
+                            mLikes.setText(post.numLikes+1 + " likes");
                         }
                     });
                 }
@@ -420,23 +425,7 @@ public class PostActivity extends Fragment {
         public Fragment getItem(int position) {
             String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
             RestClient client = new RestClient();
-            if (position == 0 && !start) {
-                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
-                    @Override
-                    void onDataReceived(String response) {
-                        posts.clear();
-                        start = true;
-                        parsePosts(response);
-                        NUM_PAGES = posts.size();
-                        PostActivity.this.mPagerAdapter.notifyDataSetChanged();
-                    }
-                });
-                return PostFragment.create(position, posts.get(position));
-
-            }
-            if (start)
-                start = false;
-            if (position == PostActivity.this.NUM_PAGES - 1) {
+            if (position == PostActivity.this.NUM_PAGES - 1 && !myPosts) {
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
