@@ -1,5 +1,6 @@
 package com.impulse.android;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -28,15 +29,17 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
 
     private List<Thread> threads;
     private String response;
+    private String postId;
 
     // TODO: Rename and change types of parameters
-    public static ThreadsFragment create(String response) {
-        ThreadsFragment fragment = new ThreadsFragment(response);
+    public static ThreadsFragment create(String response, String postId) {
+        ThreadsFragment fragment = new ThreadsFragment(response, postId);
         return fragment;
     }
 
-    public ThreadsFragment(String response) {
+    public ThreadsFragment(String response, String postId) {
         this.response = response;
+        this.postId = postId;
     }
 
     public ThreadsFragment() {
@@ -70,8 +73,16 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        DrawerActivity activity = (DrawerActivity) getActivity();
-        activity.setFragment(new MessageThreadFragment(), 2);
+        String userKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        RestClient client = new RestClient();
+        Thread thread = threads.get(position);
+        client.getThread(userKey, thread.userKey, postId, new GetCallback() {
+            @Override
+            void onDataReceived(String response) {
+                DrawerActivity activity = (DrawerActivity) getActivity();
+                activity.setFragment(new MessageThreadFragment(), 2);
+            }
+        });
     }
 
     private void parsePosts(String response) {
