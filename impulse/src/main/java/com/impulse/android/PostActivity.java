@@ -29,6 +29,8 @@ import java.util.Date;
 
 public class PostActivity extends Fragment {
 
+    private static final String TAG = "PostActivity";
+
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
@@ -57,12 +59,15 @@ public class PostActivity extends Fragment {
     }
 
     public PostActivity(String postList) {
+        Log.d(TAG, "posts: " + postList);
         this.postList = postList;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_post, container, false);
+
+        Log.d(TAG, "creating a new post activity fragment...");
 
         posts = new ArrayList<Post>();
         if(postList != null)
@@ -89,7 +94,8 @@ public class PostActivity extends Fragment {
     }
 
     private void parsePosts(String response) {
-        Log.i("Response", response);
+//        Log.i("Response", response);
+        Log.d(TAG, "parsing posts...");
         JsonParser parser = new JsonParser();
         JsonArray results = parser.parse(response).getAsJsonArray();
         for (JsonElement post : results) {
