@@ -38,6 +38,13 @@ public class GetTask extends AsyncTask<String, String, String> {
         this.callback = callback;
     }
 
+    public GetTask(String url, String userId, String postId, RestTaskCallback callback) {
+        this.url = url;
+        this.userId = userId;
+        this.postId = postId;
+        this.callback = callback;
+    }
+
     public GetTask(String url, String myUserId, String otherUserId, String postId, RestTaskCallback callback) {
         this.url = url;
         this.userId = myUserId;
@@ -135,6 +142,25 @@ public class GetTask extends AsyncTask<String, String, String> {
             url += "?myUserKey=" + userId;
             url += "&otherUserKey=" + otherUserId;
             url += "&postId=" + postId;
+            get = new HttpGet(url);
+
+            try {
+                resp = client.execute(get);
+                result = (new BasicResponseHandler()).handleResponse(resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null)
+                return result;
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/getActiveThread")) {
+            url += "?userKey=" + userId;
+            url += "&postId=" + postId;
+
             get = new HttpGet(url);
 
             try {
