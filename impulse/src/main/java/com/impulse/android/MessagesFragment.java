@@ -81,9 +81,28 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
 
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        DrawerActivity activity = (DrawerActivity) getActivity();
-        activity.setFragment(new ThreadsFragment(), 2);
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        String userKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        RestClient client = new RestClient();
+        if(!userKey.equals(replies.get(position).userKey)) {
+            client.getThread(userKey, replies.get(position).userKey, replies.get(position).postId, new GetCallback() {
+                @Override
+                void onDataReceived(String response) {
+                    DrawerActivity activity = (DrawerActivity) getActivity();
+                    activity.setFragment(MessageThreadFragment.create(response, replies.get(position).userKey, replies.get(position).postId), 2);
+                }
+            });
+        }
+        else {
+            client.getActiveUserThreads(userKey, replies.get(position).postId, new GetCallback() {
+                @Override
+                void onDataReceived(String response) {
+                    DrawerActivity activity = (DrawerActivity) getActivity();
+                    activity.setFragment(ThreadsFragment.create(response, replies.get(position).postId), 2);
+                }
+            });
+        }
+
     }
 
     private void parsePosts(String response) {

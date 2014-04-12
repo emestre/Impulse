@@ -96,6 +96,35 @@ public class PostActivity extends Fragment {
         mPager.setAdapter(mPagerAdapter);
         mPager.getCurrentItem();
 
+        if(NUM_PAGES != 0 && posts.get(0).userKey.equals(myUserKey)) {
+            mReplyDrawer.setVisibility(View.INVISIBLE);
+        }
+
+        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Post currentPost = posts.get(position);
+                if(currentPost.userKey.equals(myUserKey)) {
+                    Log.i("REPLYDRAWER", "MY POST");
+                    mReplyDrawer.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    Log.i("REPLYDRAWER", "NOT MY POST");
+                    mReplyDrawer.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mReplyDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {

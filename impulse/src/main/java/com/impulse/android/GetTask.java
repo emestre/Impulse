@@ -157,7 +157,7 @@ public class GetTask extends AsyncTask<String, String, String> {
             return "Error Occurred";
         }
 
-        else if (type.equals("/getActiveThread")) {
+        else if (type.equals("/getActiveUserThreads")) {
             url += "?userKey=" + userId;
             url += "&postId=" + postId;
 

@@ -75,12 +75,12 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String userKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         RestClient client = new RestClient();
-        Thread thread = threads.get(position);
+        final Thread thread = threads.get(position);
         client.getThread(userKey, thread.userKey, postId, new GetCallback() {
             @Override
             void onDataReceived(String response) {
                 DrawerActivity activity = (DrawerActivity) getActivity();
-                activity.setFragment(new MessageThreadFragment(), 2);
+                activity.setFragment(MessageThreadFragment.create(response, thread.userKey, postId), 2);
             }
         });
     }
