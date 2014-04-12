@@ -65,7 +65,8 @@
             android:inputType="textCapSentences|textMultiLine"
             android:textSize="@dimen/profile_text_size"
             android:hint="Bio..."
-            android:enabled="false"/>
+            android:enabled="false"
+            android:background="#00000000"/>
 
     </RelativeLayout>
 

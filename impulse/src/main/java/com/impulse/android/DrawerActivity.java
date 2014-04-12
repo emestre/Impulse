@@ -26,6 +26,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,6 +40,9 @@ import com.facebook.Session;
 import java.util.Date;
 
 public class DrawerActivity extends ActionBarActivity {
+
+    private static final String TAG = "DrawerActivity";
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -143,10 +147,14 @@ public class DrawerActivity extends ActionBarActivity {
                 fragment.setArguments(bundle);
                 setFragment(fragment, position);
                 break;
+
             case 1:
                 RestClient client = new RestClient();
                 final Bundle extras = getIntent().getExtras();
                 if (extras != null && extras.containsKey("USER_ID")) {
+
+                    Log.d(TAG, "getting a certain user's posts...");
+
                     client.getPostList(new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
@@ -156,6 +164,9 @@ public class DrawerActivity extends ActionBarActivity {
                     }, extras.getString("USER_ID"));
                     extras.remove("USER_ID");
                 } else {
+
+                    Log.d(TAG, "getting all posts...");
+
                     client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
@@ -166,6 +177,7 @@ public class DrawerActivity extends ActionBarActivity {
                 }
 
                 break;
+
             case 2:
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
@@ -173,6 +185,7 @@ public class DrawerActivity extends ActionBarActivity {
                 startActivity(intent);
                 finish();
                 break;
+
             default:
                 return;
         }

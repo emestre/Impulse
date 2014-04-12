@@ -4,25 +4,14 @@ import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
-
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +36,10 @@ public class PostTask extends AsyncTask<String, String, String> {
     private String audience;
     private String location;
     private String filename;
+    private String fromUser;
+    private String toUser;
+    private String postId;
+    private String message;
 
     /**
      * Creates a new instance of PostTask with the specified URL, callback, and
@@ -68,6 +61,15 @@ public class PostTask extends AsyncTask<String, String, String> {
         this.url = url;
         this.filename = filename;
         this.userKey = userKey;
+        this.callback = callback;
+    }
+
+    public PostTask(String url, String fromUser, String toUser, String postId, String message, RestTaskCallback callback) {
+        this.url = url;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+        this.postId = postId;
+        this.message = message;
         this.callback = callback;
     }
 
@@ -148,6 +150,46 @@ public class PostTask extends AsyncTask<String, String, String> {
             post = new HttpPost(url);
 
             try {
+                resp = client.execute(post);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (resp != null)
+                return Integer.toString(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/createMessage")) {
+            MultipartEntityBuilder entity = MultipartEntityBuilder.create();
+            entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            entity.addTextBody("fromUser", this.fromUser);
+            entity.addTextBody("toUser", this.toUser);
+            entity.addTextBody("postId", this.postId);
+            entity.addTextBody("message", this.message);
+
+            try {
+                post.setEntity(entity.build());
+                resp = client.execute(post);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (resp != null)
+                return Integer.toString(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/editAboutUser")) {
+            MultipartEntityBuilder entity = MultipartEntityBuilder.create();
+            entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            entity.addTextBody("userKey", this.userKey);
+            entity.addTextBody("aboutMe", this.filename);
+
+            try {
+                post.setEntity(entity.build());
                 resp = client.execute(post);
             } catch (IOException e) {
                 e.printStackTrace();
