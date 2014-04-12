@@ -4,25 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphObject;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONObject;
 
 public class PostFragment extends Fragment {
 
@@ -39,9 +27,6 @@ public class PostFragment extends Fragment {
     private int mPageNumber;
     private Post mPost;
     private ImageView mPostImage;
-    private TextView mCaption;
-    private ImageView mCaptionImage;
-    private Button mButtonLike;
     // the facebook ID of the current user, whoever is logged in to this instance
     private String mUserId;
 
@@ -92,9 +77,6 @@ public class PostFragment extends Fragment {
                 Context.MODE_PRIVATE).getString("UserId", "");
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
-        mCaption = (TextView) view.findViewById(R.id.post_caption);
-        mCaptionImage = (ImageView) view.findViewById(R.id.caption_blurb);
-        mButtonLike = (Button) view.findViewById(R.id.button_like);
 
         initLayout();
 
@@ -102,14 +84,6 @@ public class PostFragment extends Fragment {
     }
 
     private void initLayout() {
-
-
-        // populate caption and check in text fields
-        // hide image icons if fields are empty
-        mCaption.setText(mPost.caption);
-        if (mPost.caption.equals(""))
-            mCaptionImage.setVisibility(View.GONE);
-
         // load the post image
         Picasso.with(getActivity().getApplicationContext())
                 .load(RestClient.getFile(mPost.fileName, "full"))
@@ -123,31 +97,6 @@ public class PostFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
-
-
-        if (mPost.liked) {
-            mButtonLike.setEnabled(false);
-            mButtonLike.setText("Liked");
-        }
-        else {
-            mButtonLike.setEnabled(true);
-            mButtonLike.setText("Like");
-
-            mButtonLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RestClient client = new RestClient();
-                    client.likePost(mPost.fileName, mUserId, new GetCallback() {
-                        @Override
-                        void onDataReceived(String response) {
-                            mButtonLike.setEnabled(false);
-                            mButtonLike.setText("Liked");
-                            //mLikes.setText(mPost.numLikes+1 + " likes");
-                        }
-                    });
-                }
-            });
-        }
     }
 
 //    private void getMutualFriendsCount(Session session, String userId) {
