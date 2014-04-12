@@ -7,9 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 
 public class PostFragment extends Fragment {
@@ -69,7 +68,7 @@ public class PostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.post_fragment, container, false);
 
-        if(view == null || mPost == null)
+        if (view == null || mPost == null)
             return view;
 
         // get the user's unique facebook ID from shared preferences

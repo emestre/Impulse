@@ -62,6 +62,10 @@ public class ProfileActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_profile, container, false);
 
+        // tell the host activity that this fragment has an options menu
+        setHasOptionsMenu(true);
+
+        // get the user's facebook session
         final Session session = Session.getActiveSession();
 
         mUserName = (TextView) root.findViewById(R.id.user_name);
@@ -148,8 +152,6 @@ public class ProfileActivity extends Fragment {
                 startActivity(intent);
             }
         });
-
-        setHasOptionsMenu(true);
 
         return root;
     }
