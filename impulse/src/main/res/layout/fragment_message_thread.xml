@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.impulse.android.MessageThreadFragment">
+
+    <ListView
+        android:id="@+id/message_list"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_weight="8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_weight="2"
+            android:id="@+id/reply_from_thread_editText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:layout_weight="7"
+            android:id="@+id/reply_from_thread_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Send" />
+    </LinearLayout>
+</LinearLayout>

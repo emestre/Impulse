@@ -29,7 +29,7 @@ public class FullScreenActivity extends Activity {
             String filePath = extras.getString("FILE_PATH");
             ImageView image = (ImageView) findViewById(R.id.fullscreen_image);
             Picasso.with(getApplicationContext())
-                    .load(RestClient.getFile(filePath))
+                    .load(RestClient.getFile(filePath, "full"))
                     .into(image);
         }
         else

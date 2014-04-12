@@ -136,6 +136,7 @@ public class DrawerActivity extends ActionBarActivity {
     private void selectItem(final int position) {
         // update the main content by replacing fragments
         Fragment fragment;
+        RestClient client = new RestClient();
         switch (position) {
             case 0:
                 String userId = getSharedPreferences("com.impulse",
@@ -149,7 +150,6 @@ public class DrawerActivity extends ActionBarActivity {
                 break;
 
             case 1:
-                RestClient client = new RestClient();
                 final Bundle extras = getIntent().getExtras();
                 if (extras != null && extras.containsKey("USER_ID")) {
 
@@ -177,8 +177,17 @@ public class DrawerActivity extends ActionBarActivity {
                 }
 
                 break;
-
             case 2:
+                client = new RestClient();
+                client.getActiveThreads(userKey, new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        Fragment frag = MessagesFragment.create(response);
+                        setFragment(frag, position);
+                    }
+                });
+                break;
+            case 3:
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
                 Intent intent = new Intent(this, MainActivity.class);
@@ -194,7 +203,7 @@ public class DrawerActivity extends ActionBarActivity {
     public void setFragment(Fragment fragment, int position) {
         Bundle args = new Bundle();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commitAllowingStateLoss();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);

@@ -38,16 +38,10 @@ public class PostFragment extends Fragment {
      */
     private int mPageNumber;
     private Post mPost;
-    private ImageView mUserImage;
     private ImageView mPostImage;
-    private TextView mUserName;
     private TextView mCaption;
     private ImageView mCaptionImage;
-    private TextView mTimeout;
-    private TextView mLocation;
-    private ImageView mLocationPin;
     private Button mButtonLike;
-    private TextView mLikes;
     // the facebook ID of the current user, whoever is logged in to this instance
     private String mUserId;
 
@@ -75,6 +69,10 @@ public class PostFragment extends Fragment {
         return mPageNumber;
     }
 
+    public Post getPost() {
+        return mPost;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,15 +92,9 @@ public class PostFragment extends Fragment {
                 Context.MODE_PRIVATE).getString("UserId", "");
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
-        mUserImage = (ImageView) view.findViewById(R.id.post_userpicture);
-        mUserName = (TextView) view.findViewById(R.id.post_user);
         mCaption = (TextView) view.findViewById(R.id.post_caption);
         mCaptionImage = (ImageView) view.findViewById(R.id.caption_blurb);
-        mTimeout = (TextView) view.findViewById(R.id.post_timeout);
-        mLocation = (TextView) view.findViewById(R.id.post_location);
-        mLocationPin = (ImageView) view.findViewById(R.id.location_pin);
         mButtonLike = (Button) view.findViewById(R.id.button_like);
-        mLikes = (TextView) view.findViewById(R.id.post_likes);
 
         initLayout();
 
@@ -110,28 +102,17 @@ public class PostFragment extends Fragment {
     }
 
     private void initLayout() {
-        Session session = Session.getActiveSession();
-        getUserName(session, mPost.userKey);
-        mUserName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadUserProfile();
-            }
-        });
+
 
         // populate caption and check in text fields
         // hide image icons if fields are empty
         mCaption.setText(mPost.caption);
         if (mPost.caption.equals(""))
             mCaptionImage.setVisibility(View.GONE);
-        mTimeout.setText(mPost.timeOut + " left");
-        mLocation.setText(mPost.location);
-        if (mPost.location.equals(""))
-            mLocationPin.setVisibility(View.GONE);
 
         // load the post image
         Picasso.with(getActivity().getApplicationContext())
-                .load(RestClient.getFile(mPost.fileName))
+                .load(RestClient.getFile(mPost.fileName, "full"))
                 .fit()
                 .into(mPostImage);
         mPostImage.setOnClickListener(new View.OnClickListener() {
@@ -143,20 +124,7 @@ public class PostFragment extends Fragment {
             }
         });
 
-        // load the user profile picture
-        Picasso.with(getActivity().getApplicationContext())
-                .load("https://graph.facebook.com/" + mPost.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
-                .into(mUserImage);
-        // set profile picture link to user's profile
-        mUserImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadUserProfile();
-            }
-        });
 
-        // handle the liking functionality
-        mLikes.setText(mPost.numLikes + " likes");
         if (mPost.liked) {
             mButtonLike.setEnabled(false);
             mButtonLike.setText("Liked");
@@ -174,43 +142,12 @@ public class PostFragment extends Fragment {
                         void onDataReceived(String response) {
                             mButtonLike.setEnabled(false);
                             mButtonLike.setText("Liked");
-                            mLikes.setText(mPost.numLikes+1 + " likes");
+                            //mLikes.setText(mPost.numLikes+1 + " likes");
                         }
                     });
                 }
             });
         }
-    }
-
-    private void getUserName(Session session, String userId) {
-        Bundle requestBundle = new Bundle();
-        requestBundle.putString("fields", "name");
-        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
-                    public void onCompleted(Response response) {
-                        GraphObject obj = response.getGraphObject();
-                        if (obj == null) {
-                            mUserName.setText("Impulse");
-                            return;
-                        }
-                        JSONObject json = response.getGraphObject().getInnerJSONObject();
-                        JsonElement elem = new JsonParser().parse(json.toString());
-                        mUserName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
-                    }
-                }
-        ).executeAsync();
-    }
-
-    // loads the post user's profile
-    private void loadUserProfile() {
-        Bundle bundle = new Bundle();
-        bundle.putString("id", mPost.userKey);
-
-        Fragment fragment = new ProfileActivity();
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.content_frame, fragment).commit();
     }
 
 //    private void getMutualFriendsCount(Session session, String userId) {
