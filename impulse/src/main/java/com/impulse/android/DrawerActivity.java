@@ -163,7 +163,7 @@ public class DrawerActivity extends ActionBarActivity {
                     client.getPostList(new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
-                            Fragment frag = PostActivity.create(response);
+                            Fragment frag = PostActivity.create(response, true);
                             setFragment(frag, position);
                         }
                     }, extras.getString("USER_ID"));
@@ -175,7 +175,7 @@ public class DrawerActivity extends ActionBarActivity {
                     client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
-                            Fragment frag = PostActivity.create(response);
+                            Fragment frag = PostActivity.create(response, false);
                             setFragment(frag, position);
                         }
                     });

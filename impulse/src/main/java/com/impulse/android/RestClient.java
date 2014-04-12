@@ -141,7 +141,7 @@ public class RestClient {
         }).execute();
     }
 
-    public static String getFile(String fileName, String sizeType) {
-        return BASE_URL + GET_FILE + "?fileName=" + fileName + "&sizeType=" + sizeType;
+    public static String getFile(String fileName, String sizeType, boolean crop) {
+        return BASE_URL + GET_FILE + "?fileName=" + fileName + "&sizeType=" + sizeType + "&crop=" + crop;
     }
 }

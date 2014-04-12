@@ -7,9 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 
 public class PostFragment extends Fragment {
@@ -67,9 +67,9 @@ public class PostFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.post_fragment, container, false);
+        final View view = inflater.inflate(R.layout.post_fragment, container, false);
 
-        if(view == null || mPost == null)
+        if (view == null || mPost == null)
             return view;
 
         // get the user's unique facebook ID from shared preferences
@@ -78,16 +78,30 @@ public class PostFragment extends Fragment {
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
 
-        initLayout();
+        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    initLayout();
+                }
+            });
+        }
 
         return view;
     }
 
     private void initLayout() {
         // load the post image
+        int width = mPostImage.getWidth();
+        int height = mPostImage.getHeight();
+
         Picasso.with(getActivity().getApplicationContext())
-                .load(RestClient.getFile(mPost.fileName, "full"))
-                .fit()
+                .load(RestClient.getFile(mPost.fileName, "full", false))
+                .resize(width, height)
+                .centerCrop()
+              //.fit()
                 .into(mPostImage);
         mPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
