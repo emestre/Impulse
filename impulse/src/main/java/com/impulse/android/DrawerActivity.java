@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.Session;
 
@@ -102,6 +103,10 @@ public class DrawerActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drawer, menu);
+        this.getActionBar().setDisplayShowCustomEnabled(true);
+        this.getActionBar().setDisplayShowTitleEnabled(false);
+        ((TextView) findViewById(R.id.action_bar_title)).setText("Impulse");
+        this.getActionBar().setCustomView((TextView) findViewById(R.id.action_bar_title));
         return super.onCreateOptionsMenu(menu);
     }
 
