@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -16,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -31,6 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.HttpStatus;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
@@ -54,6 +56,8 @@ public class ProfileActivity extends Fragment {
     private TextView mFriendsText;
     private ImageView mProfilePic;
 
+    private boolean isEditing = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_profile, container, false);
@@ -75,13 +79,6 @@ public class ProfileActivity extends Fragment {
         mUserId = this.getArguments().getString("id");
         Log.d(TAG, "user ID: " + mUserId);
 
-        // if we're viewing the logged in user's profile, then allow editing of about field
-        if (mUserId.equals(getActivity().getSharedPreferences("com.impulse",
-                Context.MODE_PRIVATE).getString("UserId", ""))) {
-
-            mAboutField.setEnabled(true);
-        }
-
         Request.newGraphPathRequest(session, mUserId, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
@@ -97,11 +94,17 @@ public class ProfileActivity extends Fragment {
 
                 // get the user's birthday to calculate age
                 if (user.getBirthday() != null) {
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
-                    DateTime dob = formatter.parseDateTime(user.getBirthday());
-                    DateTime now = new DateTime();
-                    // set this user's age
-                    mUserName.setText(mUserName.getText() + ", " + Years.yearsBetween(dob, now).getYears());
+                    Log.d(TAG, "birthday: " + user.getBirthday());
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+                        DateTime dob = formatter.parseDateTime(user.getBirthday());
+                        DateTime now = new DateTime();
+                        // set this user's age
+                        mUserName.setText(mUserName.getText() + ", " + Years.yearsBetween(dob, now).getYears());
+                    }
+                    catch (IllegalArgumentException e) {
+                        Log.d(TAG, "user doesn't share age on facebook");
+                    }
                 }
                 else {
                     Log.d(TAG, "user's birthday returned NULL");
@@ -111,6 +114,13 @@ public class ProfileActivity extends Fragment {
                 getFriends(session);
             }
         }).executeAsync();
+
+        new RestClient().aboutUser(mUserId, new GetCallback() {
+            @Override
+            void onDataReceived(String response) {
+                mAboutField.setText(response);
+            }
+        });
 
         mFriendScrollList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,20 +149,66 @@ public class ProfileActivity extends Fragment {
             }
         });
 
-        LinearLayout screen = (LinearLayout) root.findViewById(R.id.profile_container);
-        // set the root layout to receive touch events to hide keyboard
-        screen.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // hide the keyboard if touch is received outside of keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-
-                return true;
-            }
-        });
+        setHasOptionsMenu(true);
 
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        // if we're viewing the logged in user's profile, then allow editing of about field
+        if (mUserId.equals(getActivity().getSharedPreferences("com.impulse",
+                Context.MODE_PRIVATE).getString("UserId", ""))) {
+
+            inflater.inflate(R.menu.profile, menu);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                if (isEditing) {
+                    isEditing = false;
+
+                    // upload the user's text to the server
+                    String text = mAboutField.getText().toString();
+                    if (text.equals(""))
+                        text = mUserId;
+
+                    Log.d(TAG, "uploading about field: " + text);
+                    new RestClient().editAboutUser(mUserId, text, new PostCallback() {
+                        @Override
+                        public void onPostSuccess(String result) {
+                            if (Integer.parseInt(result) == HttpStatus.SC_OK) {
+                                Log.d(TAG, "about user text upload SUCCEEDED");
+                            }
+                        }
+                    });
+
+                    mAboutField.setEnabled(false);
+                    mAboutField.setBackgroundColor(0x00000000);
+                    item.setTitle("Edit");
+                }
+                else {
+                    isEditing = true;
+                    mAboutField.setEnabled(true);
+                    mAboutField.requestFocus();
+                    mAboutField.setBackgroundColor(0xFFFFFFFF);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mAboutField, InputMethodManager.SHOW_IMPLICIT);
+                    item.setTitle("Done");
+                }
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void getFriends(Session session) {

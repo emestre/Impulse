@@ -4,25 +4,14 @@ import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
-
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -197,7 +186,7 @@ public class PostTask extends AsyncTask<String, String, String> {
             MultipartEntityBuilder entity = MultipartEntityBuilder.create();
             entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             entity.addTextBody("userKey", this.userKey);
-            entity.addTextBody("aboutUser", this.filename);
+            entity.addTextBody("aboutMe", this.filename);
 
             try {
                 post.setEntity(entity.build());
