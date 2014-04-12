@@ -41,7 +41,7 @@ public class ReplyView extends LinearLayout {
         super(context);
 
         init(context);
-        Picasso.with(context).load(RestClient.getFile(reply.postId)).into(postThumbnail);
+        Picasso.with(context).load(RestClient.getFile(reply.postId, "50")).into(postThumbnail);
         if (reply.userKey.equals(userKey))
             postUser.setText("Your post");
         else

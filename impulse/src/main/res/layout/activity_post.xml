@@ -3,12 +3,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:id="@+id/post_info"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/post_userpicture"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/post_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:textSize="@dimen/post_text_size"/>
+
+        <TextView
+            android:id="@+id/post_timeout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/post_text_size"/>
+
+        <TextView
+            android:id="@+id/post_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:layout_below="@id/post_user"
+            android:textSize="@dimen/post_text_size"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/post_timeout">
+
+            <ImageView
+                android:id="@+id/location_pin"
+                android:layout_width="10dp"
+                android:layout_height="12dp"
+                android:src="@drawable/image_location_pin"/>
+
+            <TextView
+                android:id="@+id/post_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/location_pin"
+                android:textSize="@dimen/post_text_size"
+                android:textColor="#006E8A"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:gravity="center"
         android:clipToPadding="false"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
+        android:layout_marginTop="40dp"
         android:paddingBottom="10dp"
         android:background="#EEE6E6"
         android:layout_width="match_parent"

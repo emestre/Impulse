@@ -40,8 +40,6 @@ public class MessageThreadFragment extends Fragment {
     private String userKey;
     private Timer timer;
 
-
-    // TODO: Rename and change types and number of parameters
     public static MessageThreadFragment create(String response, String otherUserKey, String postId) {
         MessageThreadFragment fragment = new MessageThreadFragment(response, otherUserKey, postId);
         return fragment;
