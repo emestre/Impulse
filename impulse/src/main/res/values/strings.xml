@@ -43,7 +43,7 @@
     <string name="accept_post_text">Accept</string>
     <string-array name="pages_array">
         <item>Profile</item>
-        <item>Posts</item>
+        <item>Home</item>
         <item>Messages</item>
         <item>Logout</item>
     </string-array>
