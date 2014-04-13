@@ -41,7 +41,7 @@ public class ReplyView extends LinearLayout {
         super(context);
 
         initReply(context);
-        Picasso.with(context).load(RestClient.getFile(reply.postId, "50", false)).into(postThumbnail);
+        Picasso.with(context).load(RestClient.getFile(reply.postId, "200", false)).fit().into(postThumbnail);
         if (reply.userKey.equals(userKey))
             postUser.setText("Your post");
         else
@@ -54,7 +54,8 @@ public class ReplyView extends LinearLayout {
         initThread(context);
 
         Picasso.with(context)
-                .load("https://graph.facebook.com/" + thread.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
+                .load("https://graph.facebook.com/" + thread.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
+                .fit()
                 .into(postThumbnail);
         getUserName(thread.userKey, false);
     }
