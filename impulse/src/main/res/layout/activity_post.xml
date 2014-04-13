@@ -136,39 +136,88 @@
             android:drawableLeft="@drawable/ic_caret_up"
             android:drawableRight="@drawable/ic_caret_up"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/content"
             android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="#f2f2f2">
+            android:background="#d1ebe8">
 
-            <TextView
+            <ImageView
                 android:id="@+id/reply_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send a message"
-                android:gravity="center"
-                android:layout_gravity="center" />
+                android:layout_marginTop="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/image_reply"/>
 
-            <EditText
-                android:id="@+id/reply_editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:lines="2"
-                android:maxLines="2"
-                android:gravity="center"
-                android:layout_gravity="center" />
-
-            <Button
-                android:id="@+id/reply_button"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send" />
+                android:layout_marginTop="25dp"
+                android:layout_below="@+id/reply_content"
+                android:layout_centerHorizontal="true">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/camera_reply"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/image_camera_reply"/>
+
+                <ImageView
+                    android:id="@+id/video_reply"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/image_video_reply"/>
+
+                <ImageView
+                    android:id="@+id/message_reply"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/image_message_reply"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reply_widgets"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true">
+
+                <EditText
+                    android:id="@+id/reply_editText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:layout_weight="80"
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/reply_button"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="20"
+                    android:text="Send"
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+
+
+
+
+        </RelativeLayout>
     </SlidingDrawer>
 
 </FrameLayout>

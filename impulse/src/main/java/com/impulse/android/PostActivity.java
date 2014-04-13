@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,7 +67,10 @@ public class PostActivity extends Fragment {
 
     private SlidingDrawer mReplyDrawer;
     private Button mDrawerButton;
-    private Button mSendButton;
+    private ImageView mCameraReply;
+    private ImageView mVideoReply;
+    private ImageView mMessageReply;
+    private Button mButtonSend;
     private EditText mReplyEditText;
 
     private TextView mCaption;
@@ -118,9 +122,13 @@ public class PostActivity extends Fragment {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
+
         mReplyDrawer = (SlidingDrawer) root.findViewById(R.id.bottom);
         mDrawerButton = (Button) root.findViewById(R.id.handle);
-        mSendButton = (Button) root.findViewById(R.id.reply_button);
+        mCameraReply = (ImageView) root.findViewById(R.id.camera_reply);
+        mVideoReply = (ImageView) root.findViewById(R.id.video_reply);
+        mMessageReply = (ImageView) root.findViewById(R.id.message_reply);
+        mButtonSend = (Button) root.findViewById(R.id.reply_button);
         mReplyEditText = (EditText) root.findViewById(R.id.reply_editText);
 
         mUserImage = (ImageView) root.findViewById(R.id.post_userpicture);
@@ -134,12 +142,12 @@ public class PostActivity extends Fragment {
         mButtonLike = (Button) root.findViewById(R.id.button_like);
 
         myUserKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-       // mPager.setPageMargin(5);
+//        mPager.setPageMargin(5);
         mPager.setClipToPadding(false);
         mPager.setAdapter(mPagerAdapter);
         mPager.getCurrentItem();
 
-        if(NUM_PAGES != 0) {
+        if (NUM_PAGES != 0) {
             if(posts.get(0).userKey.equals(myUserKey)) {
                 mReplyDrawer.setVisibility(View.INVISIBLE);
                 allowDelete = true;
@@ -207,12 +215,44 @@ public class PostActivity extends Fragment {
             @Override
             public void onDrawerClosed() {
                 mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_up, 0, R.drawable.ic_caret_up, 0);
+                mReplyEditText.setVisibility(View.GONE);
+                mButtonSend.setVisibility(View.GONE);
+            }
+        });
+        
+        mCameraReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reply with picture selected");
+            }
+        });
+        
+        mVideoReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reply with video selected");
+            }
+        });
+        
+        mMessageReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reply with message selected");
+                mReplyEditText.setVisibility(View.VISIBLE);
+                mButtonSend.setVisibility(View.VISIBLE);
+
+                mReplyEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mReplyEditText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
-        mSendButton.setOnClickListener(new View.OnClickListener() {
+        mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
                 int curPos = mPager.getCurrentItem();
                 Post currentPost = posts.get(curPos);
 
