@@ -101,12 +101,11 @@ public class DrawerActivity extends ActionBarActivity {
         selectItem(1);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drawer, menu);
+        getActionBar().setDisplayShowHomeEnabled(false);
         SetActionBarTitle("impulse");
         return super.onCreateOptionsMenu(menu);
     }
@@ -248,8 +247,9 @@ public class DrawerActivity extends ActionBarActivity {
         customTitle.setText(title);
         customTitle.setTextColor(Color.WHITE);
         customTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-        customTitle.setWidth(customTitle.getMaxWidth());
+        //customTitle.setWidth(customTitle.getMaxWidth());
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
+        customTitle.setPadding(size.x/3, 0, 0, 0);
     }
 }
