@@ -40,26 +40,27 @@ public class ReplyView extends LinearLayout {
     public ReplyView(Context context, Reply reply) {
         super(context);
 
-        init(context);
-        Picasso.with(context).load(RestClient.getFile(reply.postId, "50", false)).into(postThumbnail);
+        initReply(context);
+        Picasso.with(context).load(RestClient.getFile(reply.postId, "200", false)).fit().into(postThumbnail);
         if (reply.userKey.equals(userKey))
             postUser.setText("Your post");
         else
-            getUserName(reply.userKey);
+            getUserName(reply.userKey, true);
         postTimeout.setText(reply.timeout);
     }
 
     public ReplyView(Context context, Thread thread) {
         super(context);
-        init(context);
+        initThread(context);
 
         Picasso.with(context)
-                .load("https://graph.facebook.com/" + thread.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
+                .load("https://graph.facebook.com/" + thread.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
+                .fit()
                 .into(postThumbnail);
-        getUserName(thread.userKey);
+        getUserName(thread.userKey, false);
     }
 
-    private void init(Context context) {
+    private void initReply(Context context) {
         userKey = context.getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(
@@ -72,8 +73,19 @@ public class ReplyView extends LinearLayout {
 
     }
 
+    private void initThread(Context context) {
+        userKey = context.getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
 
-    private void getUserName(String userId) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.post_thread_item, this, true);
+        postThumbnail = (ImageView) view.findViewById(R.id.thread_user_thumbnail);
+        postUser = (TextView) view.findViewById(R.id.thread_user_name);
+    }
+
+
+    private void getUserName(String userId, final boolean reply) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("fields", "name");
         Session session = Session.getActiveSession();
@@ -86,7 +98,11 @@ public class ReplyView extends LinearLayout {
                 }
                 JSONObject json = response.getGraphObject().getInnerJSONObject();
                 JsonElement elem = new JsonParser().parse(json.toString());
-                postUser.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0] + "'s post");
+                String name = elem.getAsJsonObject().get("name").getAsString().split(" ")[0];
+                if(reply)
+                    postUser.setText(name + "'s post");
+                else
+                    postUser.setText(name);
             }
         }
         ).executeAsync();

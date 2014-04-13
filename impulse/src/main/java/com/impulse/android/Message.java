@@ -7,9 +7,11 @@ public class Message {
 
     public String userKey;
     public String message;
+    public String timestamp;
 
-    public Message(String userKey, String message) {
+    public Message(String userKey, String message, String timestamp) {
         this.userKey = userKey;
         this.message = message;
+        this.timestamp = timestamp;
     }
 }
