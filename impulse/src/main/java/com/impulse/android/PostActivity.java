@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -207,6 +208,11 @@ public class PostActivity extends Fragment {
                             Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                 });
 
@@ -240,8 +246,9 @@ public class PostActivity extends Fragment {
         mUserName.setText("");
         mLikes.setText(post.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
-                .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
+                .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
                 .transform(new RoundedTransformation(45, 2))
+                .fit()
                 .into(mUserImage);
         mTimeout.setText(post.timeOut + " left");
         mLocation.setText(post.location);
