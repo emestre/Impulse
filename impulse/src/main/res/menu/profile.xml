@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/action_edit"
-        android:orderInCategory="100"
+        android:menuCategory="system"
+        android:orderInCategory="50"
         app:showAsAction="always|withText"
         android:title="Edit"/>
 

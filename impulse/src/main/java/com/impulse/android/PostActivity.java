@@ -1,8 +1,9 @@
 package com.impulse.android;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,11 +50,12 @@ import java.util.Date;
 
 public class PostActivity extends Fragment {
 
+    private static final String TAG = "PostActivity";
+
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
     private int NUM_PAGES;
-
     private ArrayList<Post> posts;
 
     /**
@@ -64,7 +68,10 @@ public class PostActivity extends Fragment {
 
     private SlidingDrawer mReplyDrawer;
     private Button mDrawerButton;
-    private Button mSendButton;
+    private ImageView mCameraReply;
+    private ImageView mVideoReply;
+    private ImageView mMessageReply;
+    private Button mButtonSend;
     private EditText mReplyEditText;
 
     private TextView mCaption;
@@ -78,6 +85,10 @@ public class PostActivity extends Fragment {
     private ImageView mLocationPin;
     private TextView mLikes;
     private boolean myPosts;
+
+    private boolean allowDelete = false;
+    private ProgressDialog mDeleteProgress;
+
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
@@ -99,6 +110,11 @@ public class PostActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_post, container, false);
 
+        Log.d(TAG, "creating a new post activity fragment...");
+
+        // tell the host activity that this fragment has an options menu
+        setHasOptionsMenu(true);
+
         posts = new ArrayList<Post>();
         if (postList != null)
             parsePosts(postList);
@@ -107,9 +123,13 @@ public class PostActivity extends Fragment {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
+
         mReplyDrawer = (SlidingDrawer) root.findViewById(R.id.bottom);
         mDrawerButton = (Button) root.findViewById(R.id.handle);
-        mSendButton = (Button) root.findViewById(R.id.reply_button);
+        mCameraReply = (ImageView) root.findViewById(R.id.camera_reply);
+        mVideoReply = (ImageView) root.findViewById(R.id.video_reply);
+        mMessageReply = (ImageView) root.findViewById(R.id.message_reply);
+        mButtonSend = (Button) root.findViewById(R.id.reply_button);
         mReplyEditText = (EditText) root.findViewById(R.id.reply_editText);
 
         mUserImage = (ImageView) root.findViewById(R.id.post_userpicture);
@@ -123,14 +143,16 @@ public class PostActivity extends Fragment {
         mButtonLike = (Button) root.findViewById(R.id.button_like);
 
         myUserKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-       // mPager.setPageMargin(5);
+//        mPager.setPageMargin(5);
         mPager.setClipToPadding(false);
         mPager.setAdapter(mPagerAdapter);
         mPager.getCurrentItem();
 
-        if(NUM_PAGES != 0) {
-            if(posts.get(0).userKey.equals(myUserKey))
+        if (NUM_PAGES != 0) {
+            if(posts.get(0).userKey.equals(myUserKey)) {
                 mReplyDrawer.setVisibility(View.INVISIBLE);
+                allowDelete = true;
+            }
             setPost(posts.get(0));
         }
 
@@ -140,7 +162,6 @@ public class PostActivity extends Fragment {
                 loadUserProfile();
             }
         });
-
         mUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,13 +178,20 @@ public class PostActivity extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 Post currentPost = posts.get(position);
-                if(currentPost.userKey.equals(myUserKey)) {
+
+                if (currentPost.userKey.equals(myUserKey)) {
                     Log.i("REPLYDRAWER", "MY POST");
                     mReplyDrawer.setVisibility(View.INVISIBLE);
+
+                    allowDelete = true;
+                    getActivity().supportInvalidateOptionsMenu();
                 }
                 else {
                     Log.i("REPLYDRAWER", "NOT MY POST");
                     mReplyDrawer.setVisibility(View.VISIBLE);
+
+                    allowDelete = false;
+                    getActivity().supportInvalidateOptionsMenu();
                 }
 
                 setPost(currentPost);
@@ -188,10 +216,39 @@ public class PostActivity extends Fragment {
             @Override
             public void onDrawerClosed() {
                 mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_up, 0, R.drawable.ic_caret_up, 0);
+                mReplyEditText.setVisibility(View.GONE);
+                mButtonSend.setVisibility(View.GONE);
+            }
+        });
+        
+        mCameraReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reply with picture selected");
+            }
+        });
+        
+        mVideoReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reply with video selected");
+            }
+        });
+        
+        mMessageReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reply with message selected");
+                mReplyEditText.setVisibility(View.VISIBLE);
+                mButtonSend.setVisibility(View.VISIBLE);
+
+                mReplyEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mReplyEditText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
-        mSendButton.setOnClickListener(new View.OnClickListener() {
+        mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int curPos = mPager.getCurrentItem();
@@ -218,7 +275,6 @@ public class PostActivity extends Fragment {
 
                 mReplyEditText.setText("");
                 mReplyDrawer.animateClose();
-
             }
         });
 
@@ -236,6 +292,111 @@ public class PostActivity extends Fragment {
         return root;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.post, menu);
+
+        if (allowDelete)
+            menu.findItem(R.id.action_delete).setVisible(true);
+        else
+            menu.findItem(R.id.action_delete).setVisible(false);
+
+        super.onCreateOptionsMenu(menu, inflater);
+        Log.d(TAG, "menu is inflated");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                buildDeleteConfirmDialog().show();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog buildDeleteConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Delete Post");
+        builder.setMessage("Are you sure you want to delete this post?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                // display a loading spinner while the post is being deleted
+                mDeleteProgress = new ProgressDialog(getActivity());
+                mDeleteProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mDeleteProgress.setTitle("Deleting Post...");
+                mDeleteProgress.setMessage("Your post is being deleted.");
+                mDeleteProgress.setIndeterminate(true);
+                mDeleteProgress.setCancelable(false);
+                mDeleteProgress.show();
+
+                final int curIndex = mPager.getCurrentItem();
+                Log.d(TAG, "removing post: " + posts.get(curIndex).fileName);
+                new RestClient().removeFile(posts.get(curIndex).fileName, new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        Log.d(TAG, "removeFile returned");
+
+                        if (myPosts) {
+                            Log.d(TAG, "getting all of my posts");
+
+                            new RestClient().getPostList(new GetCallback() {
+                                @Override
+                                void onDataReceived(String response) {
+                                    updatePosts(response, curIndex);
+                                }
+                            }, myUserKey);
+                        }
+                        else {
+                            Log.d(TAG, "getting all the posts");
+
+                            new RestClient().getPostList(myUserKey, 0.0, 0.0, new Date(), new GetCallback() {
+                                @Override
+                                void onDataReceived(String response) {
+                                    updatePosts(response, curIndex);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        return builder.create();
+    }
+
+    private void updatePosts(String response, int index) {
+        postList = response;
+        posts.clear();
+        parsePosts(postList);
+        NUM_PAGES = posts.size();
+        mPagerAdapter.notifyDataSetChanged();
+        if (NUM_PAGES > 1) {
+            if (index == NUM_PAGES) {
+                mPager.setCurrentItem(index-1);
+                setPost(posts.get(index-1));
+            }
+            else {
+                mPager.setCurrentItem(index);
+                setPost(posts.get(index));
+            }
+        }
+
+        mDeleteProgress.dismiss();
+    }
+
     private void setPost(final Post post) {
         Session session = Session.getActiveSession();
         mCaption.setText(post.caption);
@@ -243,7 +404,9 @@ public class PostActivity extends Fragment {
             mCaptionImage.setVisibility(View.GONE);
         else
             mCaptionImage.setVisibility(View.VISIBLE);
+
         mUserName.setText("");
+        getUserName(session, post.userKey);
         mLikes.setText(post.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
                 .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
@@ -251,12 +414,12 @@ public class PostActivity extends Fragment {
                 .fit()
                 .into(mUserImage);
         mTimeout.setText(post.timeOut + " left");
+
         mLocation.setText(post.location);
         if (post.location.equals(""))
             mLocationPin.setVisibility(View.GONE);
         else
             mLocationPin.setVisibility(View.VISIBLE);
-        getUserName(session, post.userKey);
 
         if (post.liked) {
             mButtonLike.setEnabled(false);
@@ -300,7 +463,6 @@ public class PostActivity extends Fragment {
         }
         ).executeAsync();
     }
-
 
     private void loadUserProfile() {
         Post post = posts.get(mPager.getCurrentItem());
@@ -381,44 +543,6 @@ public class PostActivity extends Fragment {
         return calculatedTimeout;
     }
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getActivity().getMenuInflater().inflate(R.menu.post_menu, menu);
-
-        menu.findItem(R.id.action_previous).setEnabled(mPager.getCurrentItem() > 0);
-        menu.findItem(R.id.action_next).setEnabled(mPager.getCurrentItem() < mPagerAdapter.getCount() - 1);
-        return true;
-    } */
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_reply:
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_reply);
-
-                dialog.show();
-                return true;
-            case R.id.action_previous:
-                // Go to the previous step in the wizard. If there is no previous step,
-                // setCurrentItem will do nothing.
-                mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-                return true;
-
-            case R.id.action_next:
-                // Advance to the next step in the wizard. If there is no next step, setCurrentItem
-                // will do nothing.
-                mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-                return true;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     /**
      * A simple pager adapter that represents 5 {@link PostFragment} objects, in
      * sequence.
@@ -444,6 +568,11 @@ public class PostActivity extends Fragment {
             }
 
             return PostFragment.create(position, posts.get(position));
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
