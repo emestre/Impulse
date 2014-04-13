@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 /**
  * Created by eliot.mestre on 4/11/2014.
  */
@@ -49,15 +53,51 @@ public class MessageView  extends LinearLayout {
             timeStampParams.addRule(RelativeLayout.LEFT_OF, R.id.user_message_picture);
             messageTextView.setGravity(Gravity.RIGHT);
             timeStampTextView.setGravity(Gravity.RIGHT);
+           // messageTextView.setBackground(context.getResources().getDrawable(R.drawable.my_message_bg));
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         }
         else {
             textParams.addRule(RelativeLayout.RIGHT_OF, R.id.user_message_picture);
             timeStampParams.addRule(RelativeLayout.RIGHT_OF, R.id.user_message_picture);
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+           // messageTextView.setBackground(context.getResources().getDrawable(R.drawable.other_message_bg));
         }
 
         messageTextView.setText(message.message);
-        timeStampTextView.setText(message.timestamp);
+        timeStampTextView.setText(parseTimestamp(message.timestamp));
     }
+
+    private String parseTimestamp(String timestamp) {
+        return calculateTimeout(timestamp);
+    }
+
+    public static long getDateTimeDiff(DateTime date1, DateTime date2) {
+        return date2.getMillis() - date1.getMillis();
+    }
+
+    public static String calculateTimeout(String timeOut) {
+        String calculatedTimeout = "";
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss zzz yyyy");
+        DateTime dt = formatter.parseDateTime(timeOut);
+        DateTime currentTime = new DateTime();
+
+        long diffInHours = -1 * getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60);
+        long diffInMinutes = -1 * getDateTimeDiff(currentTime, dt) / (1000 * 60);
+
+        if(diffInHours > 1)
+            calculatedTimeout = diffInHours + " hours ";
+        else if(diffInHours == 1)
+            calculatedTimeout = diffInHours + " hour ";
+        else if (diffInHours == 0)
+            if(diffInMinutes > 1)
+                calculatedTimeout = diffInMinutes + " minutes ";
+            else if(diffInMinutes == 1)
+                calculatedTimeout = diffInMinutes + " minute ";
+            else if(diffInMinutes == 0)
+                calculatedTimeout = "Less than a minute ";
+
+        calculatedTimeout += "ago";
+        return calculatedTimeout;
+    }
+
 }
