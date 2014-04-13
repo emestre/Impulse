@@ -19,6 +19,8 @@ package com.impulse.android;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -27,6 +29,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,6 +38,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.Session;
 
@@ -102,6 +107,7 @@ public class DrawerActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drawer, menu);
+        SetActionBarTitle("impulse");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -234,5 +240,16 @@ public class DrawerActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void SetActionBarTitle(String title) {
+        int titleid = getResources().getIdentifier("action_bar_title", "id", "android");
+        TextView customTitle = (TextView) findViewById(titleid);
+        customTitle.setText(title);
+        customTitle.setTextColor(Color.WHITE);
+        customTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+        customTitle.setWidth(customTitle.getMaxWidth());
+        Point size = new Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
     }
 }
