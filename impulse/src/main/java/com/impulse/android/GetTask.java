@@ -70,8 +70,12 @@ public class GetTask extends AsyncTask<String, String, String> {
                 url += "&longitude=" + lon;
             }
 
-            if(afterTime != null)
-                url += "&afterTime=" + afterTime.toString().replaceAll(" ", "+");
+            if(afterTime != null) {
+                String date = afterTime.toString();
+                if(date.contains(" 00:00 "))
+                    date = date.replace(" 00:00 ", " ");
+                url += "&afterTime=" + date.replaceAll(" ", "+");
+            }
 
             get = new HttpGet(url);
 
