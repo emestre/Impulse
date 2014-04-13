@@ -1,6 +1,7 @@
 package com.impulse.android;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -60,7 +61,6 @@ public class PostActivity extends Fragment {
      * and next wizard steps.
      */
     private ViewPager mPager;
-    private Boolean start = true;
     private String postList;
     private String myUserKey;
 
@@ -79,8 +79,10 @@ public class PostActivity extends Fragment {
     private TextView mLocation;
     private ImageView mLocationPin;
     private TextView mLikes;
+    private boolean myPosts;
 
     private boolean allowDelete = false;
+    private ProgressDialog mDeleteProgress;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -90,13 +92,13 @@ public class PostActivity extends Fragment {
     public PostActivity() {
     }
 
-    public static PostActivity create(String posts) {
-        return new PostActivity(posts);
+    public static PostActivity create(String posts, boolean myPosts) {
+        return new PostActivity(posts, myPosts);
     }
 
-    public PostActivity(String postList) {
-        Log.d(TAG, "posts: " + postList);
+    public PostActivity(String postList, boolean myPosts) {
         this.postList = postList;
+        this.myPosts = myPosts;
     }
 
     @Override
@@ -196,6 +198,7 @@ public class PostActivity extends Fragment {
             @Override
             public void onDrawerOpened() {
                 mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_down, 0, R.drawable.ic_caret_down, 0);
+                mReplyDrawer.bringToFront();
                 Log.i("CURRENT_POST", mPager.getCurrentItem() + "");
             }
         });
@@ -263,18 +266,7 @@ public class PostActivity extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
-                Log.d(TAG, "delete post selected");
-                int curIndex = mPager.getCurrentItem();
-                if (NUM_PAGES > 1) {
-                    if (curIndex == 0)
-                        mPager.setCurrentItem(curIndex+1);
-                    else
-                        mPager.setCurrentItem(curIndex-1);
-                }
-
-                posts.remove(curIndex);
-                NUM_PAGES = posts.size();
-                mPagerAdapter.notifyDataSetChanged();
+                buildDeleteConfirmDialog().show();
 
                 return true;
         }
@@ -283,7 +275,7 @@ public class PostActivity extends Fragment {
     }
 
     private AlertDialog buildDeleteConfirmDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete Post");
         builder.setMessage("Are you sure you want to delete this post?");
         builder.setCancelable(true);
@@ -292,6 +284,44 @@ public class PostActivity extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                // display a loading spinner while the post is being deleted
+                mDeleteProgress = new ProgressDialog(getActivity());
+                mDeleteProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mDeleteProgress.setTitle("Deleting Post...");
+                mDeleteProgress.setMessage("Your post is being deleted.");
+                mDeleteProgress.setIndeterminate(true);
+                mDeleteProgress.setCancelable(false);
+                mDeleteProgress.show();
+
+                final int curIndex = mPager.getCurrentItem();
+                Log.d(TAG, "removing post: " + posts.get(curIndex).fileName);
+                new RestClient().removeFile(posts.get(curIndex).fileName, new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        Log.d(TAG, "removeFile returned");
+
+                        if (myPosts) {
+                            Log.d(TAG, "getting all of my posts");
+
+                            new RestClient().getPostList(new GetCallback() {
+                                @Override
+                                void onDataReceived(String response) {
+                                    updatePosts(response, curIndex);
+                                }
+                            }, myUserKey);
+                        }
+                        else {
+                            Log.d(TAG, "getting all the posts");
+
+                            new RestClient().getPostList(myUserKey, 0.0, 0.0, new Date(), new GetCallback() {
+                                @Override
+                                void onDataReceived(String response) {
+                                    updatePosts(response, curIndex);
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -304,6 +334,26 @@ public class PostActivity extends Fragment {
         return builder.create();
     }
 
+    private void updatePosts(String response, int index) {
+        postList = response;
+        posts.clear();
+        parsePosts(postList);
+        NUM_PAGES = posts.size();
+        mPagerAdapter.notifyDataSetChanged();
+        if (NUM_PAGES > 1) {
+            if (index == NUM_PAGES) {
+                mPager.setCurrentItem(index-1);
+                setPost(posts.get(index-1));
+            }
+            else {
+                mPager.setCurrentItem(index);
+                setPost(posts.get(index));
+            }
+        }
+
+        mDeleteProgress.dismiss();
+    }
+
     private void setPost(final Post post) {
         Session session = Session.getActiveSession();
         mCaption.setText(post.caption);
@@ -311,18 +361,21 @@ public class PostActivity extends Fragment {
             mCaptionImage.setVisibility(View.GONE);
         else
             mCaptionImage.setVisibility(View.VISIBLE);
+
         mUserName.setText("");
+        getUserName(session, post.userKey);
         mLikes.setText(post.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
                 .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=45&height=45")
+                .transform(new RoundedTransformation(45, 2))
                 .into(mUserImage);
         mTimeout.setText(post.timeOut + " left");
+
         mLocation.setText(post.location);
         if (post.location.equals(""))
             mLocationPin.setVisibility(View.GONE);
         else
             mLocationPin.setVisibility(View.VISIBLE);
-        getUserName(session, post.userKey);
 
         if (post.liked) {
             mButtonLike.setEnabled(false);
@@ -341,7 +394,7 @@ public class PostActivity extends Fragment {
                         void onDataReceived(String response) {
                             mButtonLike.setEnabled(false);
                             mButtonLike.setText("Liked");
-                            //mLikes.setText(mPost.numLikes+1 + " likes");
+                            mLikes.setText(post.numLikes+1 + " likes");
                         }
                     });
                 }
@@ -381,8 +434,7 @@ public class PostActivity extends Fragment {
     }
 
     private void parsePosts(String response) {
-//        Log.i("Response", response);
-        Log.d(TAG, "parsing posts...");
+        Log.i("Response", response);
         JsonParser parser = new JsonParser();
         JsonArray results = parser.parse(response).getAsJsonArray();
         for (JsonElement post : results) {
@@ -460,23 +512,7 @@ public class PostActivity extends Fragment {
         public Fragment getItem(int position) {
             String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
             RestClient client = new RestClient();
-            if (position == 0 && !start) {
-                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
-                    @Override
-                    void onDataReceived(String response) {
-                        posts.clear();
-                        start = true;
-                        parsePosts(response);
-                        NUM_PAGES = posts.size();
-                        PostActivity.this.mPagerAdapter.notifyDataSetChanged();
-                    }
-                });
-                return PostFragment.create(position, posts.get(position));
-
-            }
-            if (start)
-                start = false;
-            if (position == PostActivity.this.NUM_PAGES - 1) {
+            if (position == PostActivity.this.NUM_PAGES - 1 && !myPosts) {
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
@@ -488,6 +524,11 @@ public class PostActivity extends Fragment {
             }
 
             return PostFragment.create(position, posts.get(position));
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
