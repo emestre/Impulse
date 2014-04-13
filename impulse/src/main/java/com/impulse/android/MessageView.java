@@ -49,18 +49,22 @@ public class MessageView  extends LinearLayout {
         RelativeLayout.LayoutParams timeStampParams = (RelativeLayout.LayoutParams) timeStampTextView.getLayoutParams();
         RelativeLayout.LayoutParams pictureParams = (RelativeLayout.LayoutParams) messageUserPicture.getLayoutParams();
         if(message.userKey.equals(userKey)) {
+       //     textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             textParams.addRule(RelativeLayout.LEFT_OF, R.id.user_message_picture);
             timeStampParams.addRule(RelativeLayout.LEFT_OF, R.id.user_message_picture);
             messageTextView.setGravity(Gravity.RIGHT);
             timeStampTextView.setGravity(Gravity.RIGHT);
-           // messageTextView.setBackground(context.getResources().getDrawable(R.drawable.my_message_bg));
+            messageTextView.setBackground(context.getResources().getDrawable(R.drawable.my_message_bg));
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
         }
         else {
+         //   textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             textParams.addRule(RelativeLayout.RIGHT_OF, R.id.user_message_picture);
             timeStampParams.addRule(RelativeLayout.RIGHT_OF, R.id.user_message_picture);
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-           // messageTextView.setBackground(context.getResources().getDrawable(R.drawable.other_message_bg));
+
+            messageTextView.setBackground(context.getResources().getDrawable(R.drawable.other_message_bg));
         }
 
         messageTextView.setText(message.message);
