@@ -27,6 +27,8 @@ public class PostFragment extends Fragment {
     private int mPageNumber;
     private Post mPost;
     private ImageView mPostImage;
+    private View view;
+    private boolean init = false;
     // the facebook ID of the current user, whoever is logged in to this instance
     private String mUserId;
 
@@ -78,12 +80,13 @@ public class PostFragment extends Fragment {
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
 
+
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
             viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
                 @Override
                 public void onGlobalLayout() {
-                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     initLayout();
                 }
             });
@@ -101,7 +104,7 @@ public class PostFragment extends Fragment {
                 .load(RestClient.getFile(mPost.fileName, "full", false))
                 .resize(width, height)
                 .centerCrop()
-              //.fit()
+               // .fit()
                 .into(mPostImage);
         mPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
