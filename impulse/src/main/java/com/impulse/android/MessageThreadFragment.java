@@ -11,14 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +38,14 @@ import java.util.TimerTask;
 public class MessageThreadFragment extends Fragment {
 
     private AbsListView mListView;
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
     private List<Message> messages;
     private String response;
 
     private EditText replyEditText;
     private Button replyButton;
+
+    private TextView otherUserName;
 
     private String otherUserKey;
     private String postId;
@@ -74,8 +86,10 @@ public class MessageThreadFragment extends Fragment {
         mListView = (AbsListView) view.findViewById(R.id.message_list);
         replyEditText = (EditText) view.findViewById(R.id.reply_from_thread_editText);
         replyButton = (Button) view.findViewById(R.id.reply_from_thread_button);
+        otherUserName = (TextView) view.findViewById(R.id.thread_other_user_name);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
+        getUserName(otherUserKey);
         // Set OnItemClickListener so we can be notified on item clicks
 
         replyButton.setOnClickListener(new View.OnClickListener() {
@@ -85,24 +99,47 @@ public class MessageThreadFragment extends Fragment {
 
                 final RestClient client = new RestClient();
                 String message = replyEditText.getText().toString();
+                replyEditText.setText("");
                 client.createMessage(userKey, otherUserKey, postId, message, new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
                         client.getThread(userKey, otherUserKey, postId, new GetCallback() {
                             @Override
                             void onDataReceived(String response) {
-                                DrawerActivity activity = (DrawerActivity) getActivity();
-                                activity.setFragment(MessageThreadFragment.create(response,otherUserKey, postId), 2);
+                                try {
+                                    messages.clear();
+                                    parsePosts(response);
+                                    mAdapter.notifyDataSetChanged();
+                                    scrollToEnd();
+                                } catch (Exception e) {
+                                    Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                     }
                 });
             }
         });
+        scrollToEnd();
 
-       // timer = new Timer();
-       // timer.schedule(new RefreshTask(userKey, otherUserKey, postId), 10000, 10000);
+         timer = new Timer();
+         timer.schedule(new RefreshTask(userKey, otherUserKey, postId), 10000, 10000);
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        timer.cancel();
+        super.onDestroy();
+    }
+
+    private void scrollToEnd() {
+        mListView.post(new Runnable() {
+            public void run() {
+                mListView.setSelection(mListView.getCount() - 1);
+            }
+        });
     }
 
     private void parsePosts(String response) {
@@ -114,7 +151,8 @@ public class MessageThreadFragment extends Fragment {
 
             String userKey = toAdd.get("author").getAsString();
             String message = toAdd.get("message").getAsString();
-            messages.add(new Message(userKey, message));
+            String timestamp = toAdd.get("timestamp").getAsString();
+            messages.add(new Message(userKey, message, timestamp));
         }
     }
 
@@ -136,10 +174,36 @@ public class MessageThreadFragment extends Fragment {
             client.getThread(userKey, otherUserKey, postId, new GetCallback() {
                 @Override
                 void onDataReceived(String response) {
-                    DrawerActivity activity = (DrawerActivity) getActivity();
-                    activity.setFragment(MessageThreadFragment.create(response,otherUserKey, postId), 2);
+                    try {
+                        messages.clear();
+                        parsePosts(response);
+                        mAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
+    }
+
+
+    private void getUserName(String userId) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("fields", "name");
+        Session session = Session.getActiveSession();
+        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
+            public void onCompleted(Response response) {
+                GraphObject obj = response.getGraphObject();
+                if (obj == null) {
+                    otherUserName.setText("Impulse");
+                    return;
+                }
+                JSONObject json = response.getGraphObject().getInnerJSONObject();
+                JsonElement elem = new JsonParser().parse(json.toString());
+                String name = elem.getAsJsonObject().get("name").getAsString().split(" ")[0];
+                otherUserName.setText(name);
+            }
+        }
+        ).executeAsync();
     }
 }

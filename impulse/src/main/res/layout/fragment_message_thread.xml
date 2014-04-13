@@ -7,6 +7,8 @@
 
     <TextView
         android:id="@+id/thread_other_user_name"
+        android:gravity="center"
+        android:textSize="14sp"
         android:layout_width="match_parent"
         android:layout_height="30dp"/>
 
@@ -14,14 +16,16 @@
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="45dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:layout_marginTop="30dp"/>
 
     <LinearLayout
         android:layout_below="@id/message_list"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="-40dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="-45dp"
         android:orientation="horizontal">
 
         <EditText
