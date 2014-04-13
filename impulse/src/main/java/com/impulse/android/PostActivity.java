@@ -556,7 +556,7 @@ public class PostActivity extends Fragment {
         public Fragment getItem(int position) {
             String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
             RestClient client = new RestClient();
-            if (position == PostActivity.this.NUM_PAGES - 1 && !myPosts) {
+            if (position == PostActivity.this.NUM_PAGES - 1 && !myPosts && NUM_PAGES >= 25) {
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
