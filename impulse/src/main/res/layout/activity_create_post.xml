@@ -27,87 +27,13 @@
         <EditText
             android:id="@+id/caption_field"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_toRightOf="@+id/image_thumb"
             android:textSize="14sp"
             android:inputType="textMultiLine|textCapSentences"
-            android:maxLines="3"
-            android:maxLength="65"
-            android:hint="@string/caption_hint"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/image_thumb"
-            android:layout_below="@id/caption_field">
-
-            <ImageView
-                android:id="@+id/location_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/ic_action_place"/>
-
-            <EditText
-                android:id="@+id/checkin_field"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/location_icon"
-                android:textSize="14sp"
-                android:inputType="textCapWords"
-                android:maxLength="25"
-                android:singleLine="true"
-                android:hint="Check In (optional)"/>
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="25">
-
-        <ImageView
-            android:id="@+id/audience_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_action_group"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/audience_icon"
-            android:layout_centerVertical="true"
-            android:text="Share with..."
-            android:textSize="17sp"/>
-
-        <RadioGroup
-            android:id="@+id/audience_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp">
-
-            <RadioButton
-                android:id="@+id/friends"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Friends"/>
-
-            <RadioButton
-                android:id="@+id/everyone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Everyone"/>
-
-        </RadioGroup>
+            android:hint="@string/caption_hint"
+            android:background="#FFFFFFFF"
+            android:gravity="top"/>
 
     </RelativeLayout>
 
@@ -115,48 +41,133 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="35">
+        android:layout_weight="60">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/time_icon"
+                android:id="@+id/audience_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_action_time"/>
+                android:src="@drawable/ic_action_group"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/time_icon"
+                android:layout_toRightOf="@+id/audience_icon"
                 android:layout_centerVertical="true"
-                android:text="Share for..."
+                android:text="Share with..."
                 android:textSize="17sp"/>
 
-            <TextView
-                android:id="@+id/expiration_time"
+            <RadioGroup
+                android:id="@+id/audience_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="45dp"
                 android:layout_centerVertical="true"
-                android:textSize="17sp"/>
+                android:layout_marginRight="20dp">
+
+                <RadioButton
+                    android:id="@+id/friends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Friends"/>
+
+                <RadioButton
+                    android:id="@+id/everyone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Everyone"/>
+
+            </RadioGroup>
 
         </RelativeLayout>
 
-        <SeekBar
-            android:id="@+id/time_slider"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:max="100"
-            android:progress="100"/>
+            android:layout_marginTop="25dp">
+
+            <ImageView
+                android:id="@+id/location_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_place"/>
+
+            <EditText
+                android:id="@+id/checkin_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/location_icon"
+                android:layout_centerVertical="true"
+                android:inputType="textCapWords"
+                android:maxLength="28"
+                android:singleLine="true"
+                android:hint="Check In (optional)"
+                android:background="@drawable/custom_edit_text_selector"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/time_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_action_time"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/time_icon"
+                    android:layout_centerVertical="true"
+                    android:text="Share for..."
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:id="@+id/expiration_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="45dp"
+                    android:layout_centerVertical="true"
+                    android:textSize="17sp"/>
+
+            </RelativeLayout>
+
+            <SeekBar
+                android:id="@+id/time_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:max="100"
+                android:progress="100"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:indeterminateDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_control_selector"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -19,17 +19,15 @@
         android:layout_height="match_parent" >
     </FrameLayout>
 
-    <Button
+    <ImageView
         android:id="@+id/switch_camera_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="15dp"
-        android:text="@string/switch_camera_text"
-        android:visibility="gone"
-        android:enabled="false" />
+        android:layout_marginRight="20dp"
+        android:src="@drawable/image_switch_camera"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"

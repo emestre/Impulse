@@ -53,6 +53,9 @@ public class CreatePostActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
+        // hide the action bar
+        this.getActionBar().hide();
+
         displayImage();
         initLayout();
         userKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
