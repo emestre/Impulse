@@ -25,5 +25,5 @@
     android:textAlignment="center"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
-    android:textSize="20sp"
+    android:textSize="18sp"
     android:textColor="#ff696969"/>

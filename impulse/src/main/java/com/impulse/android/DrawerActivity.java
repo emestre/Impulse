@@ -30,7 +30,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -98,7 +97,7 @@ public class DrawerActivity extends ActionBarActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        selectItem(1);
+        selectItem(0);
     }
 
     @Override
@@ -107,6 +106,7 @@ public class DrawerActivity extends ActionBarActivity {
         inflater.inflate(R.menu.drawer, menu);
         getActionBar().setDisplayShowHomeEnabled(false);
         SetActionBarTitle("impulse");
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -123,14 +123,16 @@ public class DrawerActivity extends ActionBarActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+
         if (item.getItemId() == R.id.new_post) {
             Intent intent = new Intent(this, CameraActivity.class);
             startActivity(intent);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    /* The click listner for ListView in the navigation drawer */
+    /* The click listener for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -143,18 +145,9 @@ public class DrawerActivity extends ActionBarActivity {
         Fragment fragment;
         RestClient client = new RestClient();
         switch (position) {
+
+            // home drawer click
             case 0:
-                String userId = getSharedPreferences("com.impulse",
-                        Context.MODE_PRIVATE).getString("UserId", "");
-                Bundle bundle = new Bundle();
-                bundle.putString("id", userId);
-
-                fragment = new ProfileActivity();
-                fragment.setArguments(bundle);
-                setFragment(fragment, position);
-                break;
-
-            case 1:
                 final Bundle extras = getIntent().getExtras();
                 if (extras != null && extras.containsKey("USER_ID")) {
 
@@ -180,8 +173,22 @@ public class DrawerActivity extends ActionBarActivity {
                         }
                     });
                 }
+                break;
+
+            // profile drawer click
+            case 1:
+                String userId = getSharedPreferences("com.impulse",
+                        Context.MODE_PRIVATE).getString("UserId", "");
+                Bundle bundle = new Bundle();
+                bundle.putString("id", userId);
+
+                fragment = new ProfileActivity();
+                fragment.setArguments(bundle);
+                setFragment(fragment, position);
 
                 break;
+
+            // messages drawer click
             case 2:
                 client = new RestClient();
                 client.getActiveThreads(userKey, new GetCallback() {
@@ -192,6 +199,8 @@ public class DrawerActivity extends ActionBarActivity {
                     }
                 });
                 break;
+
+            // logout drawer click
             case 3:
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
@@ -199,16 +208,14 @@ public class DrawerActivity extends ActionBarActivity {
                 startActivity(intent);
                 finish();
                 break;
-
-            default:
-                return;
         }
     }
 
     public void setFragment(Fragment fragment, int position) {
-        Bundle args = new Bundle();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commitAllowingStateLoss();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commitAllowingStateLoss();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);

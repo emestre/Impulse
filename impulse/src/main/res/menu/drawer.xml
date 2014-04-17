@@ -8,5 +8,5 @@
         android:menuCategory="system"
         android:icon="@drawable/ic_new_post"
         android:orderInCategory="100"
-        app:showAsAction="always|withText" />
+        app:showAsAction="always" />
 </menu>
