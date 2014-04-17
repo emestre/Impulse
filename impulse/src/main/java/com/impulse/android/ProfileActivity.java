@@ -243,5 +243,4 @@ public class ProfileActivity extends Fragment {
             }
         }
     }
-
 }

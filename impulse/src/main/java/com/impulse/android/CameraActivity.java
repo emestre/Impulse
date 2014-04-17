@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class CameraActivity extends FragmentActivity {
     private SurfaceView mPreviewSurface;
     private CameraPreview mPreview;
     private ImageButton mCaptureButton;
-    private Button mSwitchCamera;
+    private ImageView mSwitchCamera;
     private Button mToggleButton;
 
     private OrientationEventListener mOrientationListener;
@@ -111,8 +112,7 @@ public class CameraActivity extends FragmentActivity {
 
         // image_check if this device has a front facing camera
         if (mNumCams >= 2) {
-            mSwitchCamera  = (Button) findViewById(R.id.switch_camera_button);
-            mSwitchCamera.setEnabled(true);
+            mSwitchCamera  = (ImageView) findViewById(R.id.switch_camera_button);
             mSwitchCamera.setVisibility(View.VISIBLE);
 
             mSwitchCamera.setOnClickListener(new View.OnClickListener() {
