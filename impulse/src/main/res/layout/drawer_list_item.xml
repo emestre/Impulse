@@ -20,10 +20,9 @@
     android:layout_height="wrap_content"
     android:minHeight="40dp"
     android:gravity="center_horizontal"
-    android:textAllCaps="true"
     android:layout_centerHorizontal="true"
     android:textAlignment="center"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
-    android:textSize="20sp"
+    android:textSize="18sp"
     android:textColor="#ff696969"/>

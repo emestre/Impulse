@@ -6,21 +6,22 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/login_background0" />
+        android:src="@drawable/login_background"
+        android:scaleType="fitXY"/>
 
-    <TextView
-        android:id="@+id/viewMiddleInvisible"
+    <ImageView
+        android:id="@+id/impulse_logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/impulse_logo"/>
 
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/viewMiddleInvisible"/>
+        android:layout_below="@id/impulse_logo"/>
 
 </RelativeLayout>

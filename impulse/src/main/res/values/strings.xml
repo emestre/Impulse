@@ -42,9 +42,9 @@
     <string name="preview_description">Preview image.</string>
     <string name="accept_post_text">Accept</string>
     <string-array name="pages_array">
-        <item>Profile</item>
-        <item>Home</item>
-        <item>Messages</item>
-        <item>Logout</item>
+        <item>home</item>
+        <item>profile</item>
+        <item>messages</item>
+        <item>logout</item>
     </string-array>
 </resources>

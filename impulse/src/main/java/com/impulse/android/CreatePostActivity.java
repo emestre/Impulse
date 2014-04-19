@@ -25,13 +25,10 @@ import android.widget.TextView;
 import org.apache.http.HttpStatus;
 
 import java.io.File;
-import java.util.Date;
 
 public class CreatePostActivity extends ActionBarActivity {
 
     private static final String TAG = "CreatePostActivity";
-    private static final String FRIENDS = "friends";
-    private static final String EVERYONE = "everyone";
 
     private static final float TIME_STEP = 10;
 
@@ -45,7 +42,7 @@ public class CreatePostActivity extends ActionBarActivity {
 
     private String mImagePath;
     private String mAudience;
-    private String userKey;
+    private String mUserId;
     private int mExpirationTime = 48 * 60;
 
     @Override
@@ -53,9 +50,13 @@ public class CreatePostActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
+        // hide the action bar
+        this.getActionBar().hide();
+
         displayImage();
         initLayout();
-        userKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+        mUserId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+
         // save the image data in a background thread
         mImagePath = MediaFileHelper.getInternalCachePath(getApplicationContext());
         new SaveImageTask(mImagePath, new SaveImageCallback() {
@@ -166,10 +167,10 @@ public class CreatePostActivity extends ActionBarActivity {
 
     private void audienceSelectionChanged(int id) {
         if (id == R.id.friends) {
-            mAudience = FRIENDS;
+            mAudience = "friends";
         }
         else if (id == R.id.everyone) {
-            mAudience = EVERYONE;
+            mAudience = "everyone";
         }
     }
 
@@ -235,20 +236,16 @@ public class CreatePostActivity extends ActionBarActivity {
     }
 
     private void shareButtonClick() {
-        // get the user's unique facebook ID from shared preferences
-        String userId = getSharedPreferences("com.impulse",
-                            Context.MODE_PRIVATE).getString("UserId", "");
-
         String caption = mCaptionEditText.getText().toString();
         if (caption.equals(""))
-            caption = userId;
+            caption = mUserId;
 
         String checkIn = mCheckInEditText.getText().toString();
         if (checkIn.equals(""))
-            checkIn = userId;
+            checkIn = mUserId;
 
         Log.d(TAG, "uploading new post with...");
-        Log.d(TAG, "user ID: " + userId);
+        Log.d(TAG, "user ID: " + mUserId);
         Log.d(TAG, "caption text: " + caption);
         Log.d(TAG, "location check in text: " + checkIn);
         Log.d(TAG, "audience: " + mAudience);
@@ -256,7 +253,7 @@ public class CreatePostActivity extends ActionBarActivity {
         Log.d(TAG, "rotate image: " + mRotation);
 
         RestClient client = new RestClient();
-        client.postFile(userId, caption, 0, 0, mImagePath, "jpg", mExpirationTime,
+        client.postFile(mUserId, caption, 0, 0, mImagePath, "jpg", mExpirationTime,
                         mRotation, mAudience, checkIn, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
@@ -298,17 +295,9 @@ public class CreatePostActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-                RestClient client = new RestClient();
-                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
-                    @Override
-                    void onDataReceived(String response) {
-                        Intent intent = new Intent(getApplicationContext(),
-                                            DrawerActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("POST_LIST", response);
-                        startActivity(intent);
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -335,18 +324,10 @@ public class CreatePostActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-
-                RestClient client = new RestClient();
-                client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
-                    @Override
-                    void onDataReceived(String response) {
-                        Intent intent = new Intent(getApplicationContext(),
-                                            DrawerActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("POST_LIST", response);
-                        startActivity(intent);
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(),
+                        DrawerActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
