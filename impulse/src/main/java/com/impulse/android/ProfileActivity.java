@@ -97,21 +97,19 @@ public class ProfileActivity extends Fragment {
                 mUserName.setText(user.getName().split(" ")[0]);
 
                 // get the user's birthday to calculate age
-                if (user.getBirthday() != null) {
-                    Log.d(TAG, "birthday: " + user.getBirthday());
-                    try {
-                        DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
-                        DateTime dob = formatter.parseDateTime(user.getBirthday());
-                        DateTime now = new DateTime();
-                        // set this user's age
-                        mUserName.setText(mUserName.getText() + ", " + Years.yearsBetween(dob, now).getYears());
-                    }
-                    catch (IllegalArgumentException e) {
-                        Log.d(TAG, "user doesn't share age on facebook");
-                    }
+                Log.d(TAG, "birthday: " + user.getBirthday());
+                try {
+                    DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+                    DateTime dob = formatter.parseDateTime(user.getBirthday());
+                    DateTime now = new DateTime();
+                    // set this user's age
+                    mUserName.setText(mUserName.getText() + ", " + Years.yearsBetween(dob, now).getYears());
                 }
-                else {
+                catch (NullPointerException eNull) {
                     Log.d(TAG, "user's birthday returned NULL");
+                }
+                catch (IllegalArgumentException eBad) {
+                    Log.d(TAG, "user doesn't share age on facebook");
                 }
 
                 // get this user's list of friends on impulse
@@ -220,9 +218,15 @@ public class ProfileActivity extends Fragment {
         new Request(session, "/" + mUserId + "/friends", requestBundle, HttpMethod.GET, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
-                parseFriends(response);
-                mFriendsText.setText("Friends on Impulse (" + mFriendList.size() + ")");
-                mFriendAdapter.notifyDataSetChanged();
+                try {
+                    parseFriends(response);
+                    mFriendsText.setText("Friends on Impulse (" + mFriendList.size() + ")");
+                    mFriendAdapter.notifyDataSetChanged();
+                }
+                catch (NullPointerException e) {
+                    mFriendsText.setText(mUserName.getText() + " has no friends on Impulse :(");
+                    mFriendAdapter.notifyDataSetChanged();
+                }
             }
         }).executeAsync();
     }
