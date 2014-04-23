@@ -382,12 +382,10 @@ public class PostActivity extends Fragment {
         mPagerAdapter.notifyDataSetChanged();
         if (NUM_PAGES > 1) {
             if (index == NUM_PAGES) {
-                mPager.setCurrentItem(index-1);
-                setPost(posts.get(index-1));
+                mPager.setCurrentItem(index-1, true);
             }
             else {
-                mPager.setCurrentItem(index);
-                setPost(posts.get(index));
+                mPager.setCurrentItem(index, true);
             }
         }
 
@@ -446,22 +444,6 @@ public class PostActivity extends Fragment {
     }
 
     private void getUserName(Session session, String userId) {
-//        Bundle requestBundle = new Bundle();
-//        requestBundle.putString("fields", "name");
-//        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
-//            public void onCompleted(Response response) {
-//                GraphObject obj = response.getGraphObject();
-//                if (obj == null) {
-//                    mUserName.setText("Impulse");
-//                    return;
-//                }
-//                JSONObject json = response.getGraphObject().getInnerJSONObject();
-//                JsonElement elem = new JsonParser().parse(json.toString());
-//                mUserName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
-//            }
-//        }
-//        ).executeAsync();
-
         Request.newGraphPathRequest(session, userId, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
