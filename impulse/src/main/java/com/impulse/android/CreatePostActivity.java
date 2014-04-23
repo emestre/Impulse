@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,10 +49,12 @@ public class CreatePostActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_post);
 
         // hide the action bar
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         this.getActionBar().hide();
+
+        setContentView(R.layout.activity_create_post);
 
         displayImage();
         initLayout();

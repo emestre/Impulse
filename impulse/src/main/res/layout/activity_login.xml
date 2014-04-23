@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/impulse_logo"/>
+        android:src="@drawable/impulse_logo_login"/>
 
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"

@@ -109,9 +109,6 @@ public class PostActivity extends Fragment {
 
         Log.d(TAG, "creating a new post activity fragment...");
 
-        // tell the host activity that this fragment has an options menu
-        setHasOptionsMenu(true);
-
         posts = new ArrayList<Post>();
         if (postList != null)
             parsePosts(postList);
@@ -152,6 +149,9 @@ public class PostActivity extends Fragment {
             }
             setPost(posts.get(0));
         }
+
+        // tell the host activity that this fragment has an options menu
+        setHasOptionsMenu(true);
 
         mUserImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,9 +383,11 @@ public class PostActivity extends Fragment {
         if (NUM_PAGES > 1) {
             if (index == NUM_PAGES) {
                 mPager.setCurrentItem(index-1, true);
+                setPost(posts.get(index-1));
             }
             else {
                 mPager.setCurrentItem(index, true);
+                setPost(posts.get(index));
             }
         }
 
