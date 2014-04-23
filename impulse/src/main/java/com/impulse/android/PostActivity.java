@@ -25,11 +25,10 @@ import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.model.GraphObject;
+import com.facebook.model.GraphUser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,9 +36,9 @@ import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
+import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -436,7 +435,9 @@ public class PostActivity extends Fragment {
                         void onDataReceived(String response) {
                             mButtonLike.setEnabled(false);
                             mButtonLike.setText("Liked");
-                            mLikes.setText(post.numLikes+1 + " likes");
+                            post.liked = true;
+                            ++post.numLikes;
+                            mLikes.setText(post.numLikes + " likes");
                         }
                     });
                 }
@@ -445,21 +446,47 @@ public class PostActivity extends Fragment {
     }
 
     private void getUserName(Session session, String userId) {
-        Bundle requestBundle = new Bundle();
-        requestBundle.putString("fields", "name");
-        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
+//        Bundle requestBundle = new Bundle();
+//        requestBundle.putString("fields", "name");
+//        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
+//            public void onCompleted(Response response) {
+//                GraphObject obj = response.getGraphObject();
+//                if (obj == null) {
+//                    mUserName.setText("Impulse");
+//                    return;
+//                }
+//                JSONObject json = response.getGraphObject().getInnerJSONObject();
+//                JsonElement elem = new JsonParser().parse(json.toString());
+//                mUserName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
+//            }
+//        }
+//        ).executeAsync();
+
+        Request.newGraphPathRequest(session, userId, new Request.Callback() {
+            @Override
             public void onCompleted(Response response) {
-                GraphObject obj = response.getGraphObject();
-                if (obj == null) {
-                    mUserName.setText("Impulse");
-                    return;
+                GraphUser user = response.getGraphObjectAs(GraphUser.class);
+
+                // set user name
+                mUserName.setText(user.getName().split(" ")[0]);
+
+                // get the user's birthday to calculate age
+                Log.d(TAG, "birthday: " + user.getBirthday());
+                try {
+                    DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+                    DateTime dob = formatter.parseDateTime(user.getBirthday());
+                    DateTime now = new DateTime();
+                    // set this user's age
+                    mUserName.setText(mUserName.getText() + ", " + Years.yearsBetween(dob, now).getYears());
                 }
-                JSONObject json = response.getGraphObject().getInnerJSONObject();
-                JsonElement elem = new JsonParser().parse(json.toString());
-                mUserName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
+                catch (NullPointerException eNull) {
+                    Log.d(TAG, "user's birthday returned NULL");
+                }
+                catch (IllegalArgumentException eBad) {
+                    Log.d(TAG, "user doesn't share birthday year on facebook");
+                }
             }
-        }
-        ).executeAsync();
+        }).executeAsync();
     }
 
     private void loadUserProfile() {

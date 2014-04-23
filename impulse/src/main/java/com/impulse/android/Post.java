@@ -32,7 +32,4 @@ public class Post {
         this.numLikes = likes;
         this.location = checkIn;
     }
-
-    public Post() {
-    }
 }

@@ -37,19 +37,22 @@
             android:name="com.impulse.android.CameraActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name="com.impulse.android.FullScreenActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name="com.impulse.android.CreatePostActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name="com.impulse.android.DrawerActivity"
             android:screenOrientation="portrait" >
-
         </activity>
+
     </application>
 
 </manifest>
