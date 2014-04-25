@@ -121,13 +121,13 @@ public class PostActivity extends Fragment {
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
 
-        mReplyDrawer = (SlidingDrawer) root.findViewById(R.id.bottom);
+    /*    mReplyDrawer = (SlidingDrawer) root.findViewById(R.id.bottom);
         mDrawerButton = (Button) root.findViewById(R.id.handle);
         mCameraReply = (ImageView) root.findViewById(R.id.camera_reply);
         mVideoReply = (ImageView) root.findViewById(R.id.video_reply);
         mMessageReply = (ImageView) root.findViewById(R.id.message_reply);
         mButtonSend = (Button) root.findViewById(R.id.reply_button);
-        mReplyEditText = (EditText) root.findViewById(R.id.reply_editText);
+        mReplyEditText = (EditText) root.findViewById(R.id.reply_editText); */
 
         mUserImage = (ImageView) root.findViewById(R.id.post_userpicture);
         mUserName = (TextView) root.findViewById(R.id.post_user);
@@ -147,7 +147,7 @@ public class PostActivity extends Fragment {
 
         if (NUM_PAGES != 0) {
             if(posts.get(0).userKey.equals(myUserKey)) {
-                mReplyDrawer.setVisibility(View.INVISIBLE);
+//                mReplyDrawer.setVisibility(View.INVISIBLE);
                 allowDelete = true;
             }
             setPost(posts.get(0));
@@ -178,14 +178,14 @@ public class PostActivity extends Fragment {
 
                 if (currentPost.userKey.equals(myUserKey)) {
                     Log.i("REPLYDRAWER", "MY POST");
-                    mReplyDrawer.setVisibility(View.INVISIBLE);
+//                    mReplyDrawer.setVisibility(View.INVISIBLE);
 
                     allowDelete = true;
                     getActivity().supportInvalidateOptionsMenu();
                 }
                 else {
                     Log.i("REPLYDRAWER", "NOT MY POST");
-                    mReplyDrawer.setVisibility(View.VISIBLE);
+//                    mReplyDrawer.setVisibility(View.VISIBLE);
 
                     allowDelete = false;
                     getActivity().supportInvalidateOptionsMenu();
@@ -199,7 +199,7 @@ public class PostActivity extends Fragment {
 
             }
         });
-
+/*
         mReplyDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
@@ -275,7 +275,7 @@ public class PostActivity extends Fragment {
             }
         });
 
-
+*/
    /*     mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {

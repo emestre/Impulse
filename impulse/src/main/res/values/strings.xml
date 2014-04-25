@@ -41,6 +41,8 @@
     <string name="user_posts">Show Live Posts</string>
     <string name="preview_description">Preview image.</string>
     <string name="accept_post_text">Accept</string>
+    <string name="reply_button">Reply</string>
+    <string name="send_button">Send</string>
     <string-array name="pages_array">
         <item>Home</item>
         <item>Profile</item>
