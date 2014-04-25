@@ -46,6 +46,7 @@
                 android:inputType="textMultiLine|textCapSentences"
                 android:textSize="12sp"
                 android:layout_weight="2"
+                style="@style/OverlayText"
                 android:visibility="gone" />
 
             <Button
@@ -53,12 +54,12 @@
                 android:layout_width="match_parent"
                 android:text="@string/send_button"
                 android:layout_margin="5dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:textColor="#FFFFFF"
                 android:background="@drawable/round_button_bg"
                 style="@style/OverlayText"
                 android:textSize="12sp"
-                android:layout_weight="8"
+                android:layout_weight="10"
                 android:visibility="gone" />
 
         </LinearLayout>
