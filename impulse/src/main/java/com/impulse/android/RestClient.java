@@ -16,6 +16,7 @@ public class RestClient {
     private static final String CREATE_MESSAGE = "/createMessage";
     private static final String EDIT_ABOUT_USER = "/editAboutUser";
     private static final String GET_ACTIVE_USER_THREAD = "/getActiveUserThreads";
+    private static final String INIT_SESSION = "/initializeSession";
 
     public void postUser(String userKey, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
@@ -134,6 +135,16 @@ public class RestClient {
     public void getActiveUserThreads(String userKey, String postId, final GetCallback callback) {
         String url = BASE_URL + GET_ACTIVE_USER_THREAD;
         new GetTask(url, userKey, postId, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public void initSession(String version, final GetCallback callback) {
+        String url = BASE_URL + INIT_SESSION;
+        new GetTask(url, version, new RestTaskCallback() {
             @Override
             public void onTaskComplete(String result) {
                 callback.onDataReceived(result);

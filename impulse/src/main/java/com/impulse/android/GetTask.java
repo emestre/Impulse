@@ -17,6 +17,7 @@ public class GetTask extends AsyncTask<String, String, String> {
     private String userId;
     private String otherUserId;
     private String postId;
+    private String version;
     private double lat, lon;
     private Date afterTime;
     private RestTaskCallback callback;
@@ -176,6 +177,23 @@ public class GetTask extends AsyncTask<String, String, String> {
 
             if (result != null)
                 return result;
+
+            return "Error Occurred";
+        }
+
+        else if (type.equals("/initializeSession")) {
+            url += "?version" + userId;
+
+            get = new HttpGet(url);
+
+            try {
+                resp = client.execute(get);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (resp != null)
+                return String.valueOf(resp.getStatusLine().getStatusCode());
 
             return "Error Occurred";
         }
