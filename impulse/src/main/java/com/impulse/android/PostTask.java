@@ -40,6 +40,7 @@ public class PostTask extends AsyncTask<String, String, String> {
     private String toUser;
     private String postId;
     private String message;
+    private String type;
 
     /**
      * Creates a new instance of PostTask with the specified URL, callback, and
@@ -64,8 +65,9 @@ public class PostTask extends AsyncTask<String, String, String> {
         this.callback = callback;
     }
 
-    public PostTask(String url, String fromUser, String toUser, String postId, String message, RestTaskCallback callback) {
+    public PostTask(String url, String fromUser, String toUser, String postId, String message, String type, RestTaskCallback callback) {
         this.url = url;
+        this.type = type;
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.postId = postId;
@@ -167,7 +169,13 @@ public class PostTask extends AsyncTask<String, String, String> {
             entity.addTextBody("fromUserKey", this.fromUser);
             entity.addTextBody("toUserKey", this.toUser);
             entity.addTextBody("postId", this.postId);
+            entity.addTextBody("type", this.type);
             entity.addTextBody("message", this.message);
+
+            if (this.type.equals("image")) {
+                entity.addTextBody("message", "image");
+                entity.addPart("image", new FileBody(new File(message)));
+            }
 
             try {
                 post.setEntity(entity.build());

@@ -112,9 +112,9 @@ public class RestClient {
         }).execute();
     }
 
-    public void createMessage(String fromUser, String toUser, String postId, String message, final PostCallback callback) {
+    public void createMessage(String fromUser, String toUser, String postId, String message, String type, final PostCallback callback) {
         String url = BASE_URL + CREATE_MESSAGE;
-        new PostTask(url, fromUser, toUser, postId, message, new RestTaskCallback() {
+        new PostTask(url, fromUser, toUser, postId, message, type, new RestTaskCallback() {
             @Override
             public void onTaskComplete(String result) {
                 callback.onPostSuccess(result);
