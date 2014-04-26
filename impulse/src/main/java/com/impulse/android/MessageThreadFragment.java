@@ -152,7 +152,8 @@ public class MessageThreadFragment extends Fragment {
             String userKey = toAdd.get("author").getAsString();
             String message = toAdd.get("message").getAsString();
             String timestamp = toAdd.get("timestamp").getAsString();
-            messages.add(new Message(userKey, message, timestamp));
+            String type = toAdd.get("type").getAsString();
+            messages.add(new Message(userKey, message, timestamp, type));
         }
     }
 
