@@ -73,6 +73,7 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mListView.setOnItemClickListener(null);
         String userKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         RestClient client = new RestClient();
         final Thread thread = threads.get(position);

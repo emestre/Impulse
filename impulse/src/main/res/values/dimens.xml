@@ -6,5 +6,6 @@
     <dimen name="post_text_size">10sp</dimen>
     <dimen name="profile_text_size">10sp</dimen>
     <dimen name="profile_username_text_size">15sp</dimen>
+    <dimen name="create_post_text_size">14sp</dimen>
 
 </resources>

@@ -43,10 +43,16 @@
     <string name="accept_post_text">Accept</string>
     <string name="reply_button">Reply</string>
     <string name="send_button">Send</string>
+
     <string-array name="pages_array">
         <item>home</item>
         <item>profile</item>
         <item>messages</item>
         <item>logout</item>
     </string-array>
+
+    <string name="title_activity_loading">LoadingActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>

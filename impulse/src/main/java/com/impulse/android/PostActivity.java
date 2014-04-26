@@ -109,9 +109,6 @@ public class PostActivity extends Fragment {
 
         Log.d(TAG, "creating a new post activity fragment...");
 
-        // tell the host activity that this fragment has an options menu
-        setHasOptionsMenu(true);
-
         posts = new ArrayList<Post>();
         if (postList != null)
             parsePosts(postList);
@@ -152,6 +149,9 @@ public class PostActivity extends Fragment {
             }
             setPost(posts.get(0));
         }
+
+        // tell the host activity that this fragment has an options menu
+        setHasOptionsMenu(true);
 
         mUserImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,11 +382,11 @@ public class PostActivity extends Fragment {
         mPagerAdapter.notifyDataSetChanged();
         if (NUM_PAGES > 1) {
             if (index == NUM_PAGES) {
-                mPager.setCurrentItem(index-1);
+                mPager.setCurrentItem(index-1, true);
                 setPost(posts.get(index-1));
             }
             else {
-                mPager.setCurrentItem(index);
+                mPager.setCurrentItem(index, true);
                 setPost(posts.get(index));
             }
         }
@@ -446,22 +446,6 @@ public class PostActivity extends Fragment {
     }
 
     private void getUserName(Session session, String userId) {
-//        Bundle requestBundle = new Bundle();
-//        requestBundle.putString("fields", "name");
-//        new Request(session, "/" + userId, requestBundle, HttpMethod.GET, new Request.Callback() {
-//            public void onCompleted(Response response) {
-//                GraphObject obj = response.getGraphObject();
-//                if (obj == null) {
-//                    mUserName.setText("Impulse");
-//                    return;
-//                }
-//                JSONObject json = response.getGraphObject().getInnerJSONObject();
-//                JsonElement elem = new JsonParser().parse(json.toString());
-//                mUserName.setText(elem.getAsJsonObject().get("name").getAsString().split(" ")[0]);
-//            }
-//        }
-//        ).executeAsync();
-
         Request.newGraphPathRequest(session, userId, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {

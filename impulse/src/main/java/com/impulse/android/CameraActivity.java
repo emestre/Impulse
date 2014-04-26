@@ -237,17 +237,17 @@ public class CameraActivity extends FragmentActivity {
     }
 
     private void switchCameraButtonClick() {
+        // release whatever camera we have no and remove preview surfaces
+        releaseCamera();
+
+        mPreviewFrame.removeView(mPreviewSurface);
+        mPreviewFrame.removeView(mPreview);
+
         // toggle what camera we want to preview
         if (mCameraId == BACK_CAMERA)
             mCameraId = FRONT_CAMERA;
         else
             mCameraId = BACK_CAMERA;
-
-        // release whatever camera we have no and remove preview surfaces
-        releaseCamera();
-        mPreviewFrame.removeView(mPreviewSurface);
-        mPreviewFrame.removeView(mPreview);
-
         // re-open the camera
         mCamera = getCameraInstance(mCameraId);
         // initialize and start the preview

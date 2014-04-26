@@ -82,6 +82,7 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        mListView.setOnItemClickListener(null);
         String userKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         RestClient client = new RestClient();
         if(!userKey.equals(replies.get(position).userKey)) {

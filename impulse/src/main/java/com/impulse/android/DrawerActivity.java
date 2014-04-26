@@ -58,6 +58,9 @@ public class DrawerActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         setContentView(R.layout.activity_drawer);
 
         mTitle = mDrawerTitle = getTitle();
@@ -72,10 +75,6 @@ public class DrawerActivity extends ActionBarActivity {
                 R.layout.drawer_list_item, mPageTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         userKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -96,7 +95,13 @@ public class DrawerActivity extends ActionBarActivity {
                 supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
+
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         selectItem(0);
     }
 
@@ -104,8 +109,8 @@ public class DrawerActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drawer, menu);
-        getActionBar().setDisplayShowHomeEnabled(false);
-        SetActionBarTitle("impulse");
+//        getActionBar().setDisplayShowHomeEnabled(false);
+//        SetActionBarTitle("impulse");
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -223,11 +228,11 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
-    }
+//    @Override
+//    public void setTitle(CharSequence title) {
+//        mTitle = title;
+//        getSupportActionBar().setTitle(mTitle);
+//    }
 
     /**
      * When using the ActionBarDrawerToggle, you must call it during
@@ -244,7 +249,7 @@ public class DrawerActivity extends ActionBarActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
+        // Pass any configuration change to the drawer toggle
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
