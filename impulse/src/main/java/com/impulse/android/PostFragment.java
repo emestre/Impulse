@@ -1,18 +1,17 @@
 package com.impulse.android;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,13 +30,12 @@ public class PostFragment extends Fragment {
     private int mPageNumber;
     private Post mPost;
     private ImageView mPostImage;
-    private View view;
+    private View mDialogView;
+    private AlertDialog mReply;
     private boolean init = false;
     // the facebook ID of the current user, whoever is logged in to this instance
     private String mUserId;
     private Button mMessageReply;
-    private EditText mReplyEditText;
-    private Button mButtonSend;
     private String myUserKey;
 
     /**
@@ -79,6 +77,7 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final View view = inflater.inflate(R.layout.post_fragment, container, false);
+        mDialogView = inflater.inflate(R.layout.dialog_reply, null);
 
         if (view == null || mPost == null)
             return view;
@@ -89,8 +88,11 @@ public class PostFragment extends Fragment {
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
         mMessageReply = (Button) view.findViewById(R.id.message_reply_button);
-        mReplyEditText = (EditText) view.findViewById(R.id.reply_editText);
-        mButtonSend = (Button) view.findViewById(R.id.reply_button);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setView(mDialogView);
+        mReply = builder.create();
 
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -102,6 +104,7 @@ public class PostFragment extends Fragment {
                 }
             });
         }
+
         if (mPost.userKey.equals(myUserKey))
             mMessageReply.setVisibility(View.GONE);
         else
@@ -131,56 +134,73 @@ public class PostFragment extends Fragment {
             }
         });
 
-
         mMessageReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mReplyEditText.setVisibility(View.VISIBLE);
-                mButtonSend.setVisibility(View.VISIBLE);
-                mMessageReply.setVisibility(View.INVISIBLE);
-                mReplyEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mReplyEditText, InputMethodManager.SHOW_IMPLICIT);
+                mReply.show();
             }
         });
 
-        mButtonSend.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if(visibility == View.VISIBLE)
-                    mMessageReply.setVisibility(View.INVISIBLE);
-                else
-                    mMessageReply.setVisibility(View.VISIBLE);
-            }
-        });
-
-        mButtonSend.setOnClickListener(new View.OnClickListener() {
+        ImageView cameraReply = (ImageView) mDialogView.findViewById(R.id.camera_reply_image);
+        cameraReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RestClient client = new RestClient();
-                String postId = mPost.fileName;
-                String userKey = mPost.userKey;
-                String message = mReplyEditText.getText().toString();
-                client.createMessage(myUserKey, userKey, postId, message, new PostCallback() {
-                    @Override
-                    public void onPostSuccess(String result) {
-                        if (result.equals("200"))
-                            Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
-                    }
-                });
-                mReplyEditText.setVisibility(View.GONE);
-                mButtonSend.setVisibility(View.GONE);
-                mMessageReply.setVisibility(View.VISIBLE);
-                mReplyEditText.setText("");
+                Log.d(TAG, "camera reply click received");
+                mReply.dismiss();
             }
         });
+
+        ImageView textReply = (ImageView) mDialogView.findViewById(R.id.text_reply_image);
+        textReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "text reply click received");
+
+                Intent intent = new Intent(getActivity().getApplicationContext(), TextReplyActivity.class);
+                intent.putExtra("filename", mPost.fileName);
+                intent.putExtra("userid", mPost.userKey);
+                startActivity(intent);
+                mReply.dismiss();
+            }
+        });
+
+//        mButtonSend.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+//            @Override
+//            public void onSystemUiVisibilityChange(int visibility) {
+//                if(visibility == View.VISIBLE)
+//                    mMessageReply.setVisibility(View.INVISIBLE);
+//                else
+//                    mMessageReply.setVisibility(View.VISIBLE);
+//            }
+//        });
+//
+//        mButtonSend.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RestClient client = new RestClient();
+//                String postId = mPost.fileName;
+//                String userKey = mPost.userKey;
+//                String message = mReplyEditText.getText().toString();
+//                client.createMessage(myUserKey, userKey, postId, message, new PostCallback() {
+//                    @Override
+//                    public void onPostSuccess(String result) {
+//                        if (result.equals("200"))
+//                            Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
+//                        else
+//                            Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
+//                        InputMethodManager inputManager = (InputMethodManager)
+//                                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//
+//                        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+//                                InputMethodManager.HIDE_NOT_ALWAYS);
+//                    }
+//                });
+//                mReplyEditText.setVisibility(View.GONE);
+//                mButtonSend.setVisibility(View.GONE);
+//                mMessageReply.setVisibility(View.VISIBLE);
+//                mReplyEditText.setText("");
+//            }
+//        });
     }
 
 //    private void getMutualFriendsCount(Session session, String userId) {

@@ -43,10 +43,14 @@
     <string name="accept_post_text">Accept</string>
     <string name="reply_button">Reply</string>
     <string name="send_button">Send</string>
+
     <string-array name="pages_array">
         <item>Home</item>
         <item>Profile</item>
         <item>Messages</item>
         <item>Logout</item>
     </string-array>
+
+    <string name="title_activity_text_reply">TextReplyActivity</string>
+
 </resources>

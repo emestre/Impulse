@@ -15,8 +15,8 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_impulse_icon"
-        android:logo="@drawable/impulse_logo"
         android:label="@string/app_name"
+        android:logo="@drawable/impulse_logo"
         android:theme="@style/CustomActionBarTheme" >
         <activity
             android:name="com.impulse.android.MainActivity"
@@ -33,27 +33,26 @@
             android:value="@string/app_id" />
 
         <activity android:name="com.facebook.LoginActivity" />
-
         <activity
             android:name="com.impulse.android.CameraActivity"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name="com.impulse.android.FullScreenActivity"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name="com.impulse.android.CreatePostActivity"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name="com.impulse.android.DrawerActivity"
             android:screenOrientation="portrait" >
         </activity>
-
+        <activity
+            android:name="com.impulse.android.TextReplyActivity"
+            android:label="@string/title_activity_text_reply" >
+        </activity>
     </application>
 
 </manifest>
