@@ -50,8 +50,7 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_login, container, false);
         authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
-//        authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
-        authButton.setReadPermissions(Arrays.asList("user_birthday"));
+        authButton.setReadPermissions(Arrays.asList("user_birthday", "read_friendlists"));
         return view;
     }
 

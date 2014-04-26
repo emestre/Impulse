@@ -62,6 +62,9 @@ public class ProfileActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_profile, container, false);
 
+        // get the user ID from the bundled arguments to populate profile information
+        mUserId = this.getArguments().getString("id");
+        Log.d(TAG, "user ID: " + mUserId);
         // tell the host activity that this fragment has an options menu
         setHasOptionsMenu(true);
 
@@ -78,10 +81,6 @@ public class ProfileActivity extends Fragment {
         mFriendAdapter = new FriendViewAdapter(getActivity(), mFriendList);
         mFriendScrollList = (HorizontalListView) root.findViewById(R.id.friends_list);
         mFriendScrollList.setAdapter(mFriendAdapter);
-
-        // get the user ID from the bundled arguments to populate profile information
-        mUserId = this.getArguments().getString("id");
-        Log.d(TAG, "user ID: " + mUserId);
 
         Request.newGraphPathRequest(session, mUserId, new Request.Callback() {
             @Override
@@ -224,7 +223,8 @@ public class ProfileActivity extends Fragment {
                     mFriendAdapter.notifyDataSetChanged();
                 }
                 catch (NullPointerException e) {
-                    mFriendsText.setText(mUserName.getText() + " has no friends on Impulse :(");
+                    Log.d(TAG, "friends list response returned NULL");
+                    mFriendsText.setText("Doesn't share friends list...");
                     mFriendAdapter.notifyDataSetChanged();
                 }
             }

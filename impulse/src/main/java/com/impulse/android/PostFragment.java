@@ -115,13 +115,13 @@ public class PostFragment extends Fragment {
         int width = mPostImage.getWidth();
         int height = mPostImage.getHeight();
 
-
         Picasso.with(getActivity())
                 .load(RestClient.getFile(mPost.fileName, "full", false))
                 .resize(width, height)
                 .centerCrop()
                         // .fit()
                 .into(mPostImage);
+
         mPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
