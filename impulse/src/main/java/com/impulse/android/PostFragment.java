@@ -161,7 +161,7 @@ public class PostFragment extends Fragment {
                 String postId = mPost.fileName;
                 String userKey = mPost.userKey;
                 String message = mReplyEditText.getText().toString();
-                client.createMessage(myUserKey, userKey, postId, message, new PostCallback() {
+                client.createMessage(myUserKey, userKey, postId, message, "text", new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
                         if (result.equals("200"))
