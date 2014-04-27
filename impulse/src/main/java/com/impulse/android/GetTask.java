@@ -10,7 +10,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 public class GetTask extends AsyncTask<String, String, String> {
     private String url;
@@ -72,9 +77,9 @@ public class GetTask extends AsyncTask<String, String, String> {
             }
 
             if(afterTime != null) {
-                String date = afterTime.toString();
-                if(date.contains(" 00:00 "))
-                    date = date.replace(" 00:00 ", " ");
+                DateFormat format = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy", Locale.ENGLISH);
+                format.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                String date = format.format(afterTime);
                 url += "&afterTime=" + date.replaceAll(" ", "+");
             }
 
