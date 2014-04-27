@@ -57,7 +57,7 @@ public class TextReplyActivity extends ActionBarActivity {
 
         String myUserKey = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
 
-        new RestClient().createMessage(myUserKey, mPostUserId, mFilename, message, new PostCallback() {
+        new RestClient().createMessage(myUserKey, mPostUserId, mFilename, message, "text", new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
                 if (Integer.parseInt(result) == HttpStatus.SC_OK) {

@@ -116,7 +116,7 @@ public class MainFragment extends Fragment {
             }
             SharedPreferences prefs = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
             Log.i("USER", prefs.getString("UserId", ""));
-            Intent intent = new Intent(getActivity(), DrawerActivity.class);
+            Intent intent = new Intent(getActivity(), LoadingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);

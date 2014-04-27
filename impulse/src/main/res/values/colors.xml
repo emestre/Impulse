@@ -3,5 +3,6 @@
 
     <color name="action_bar_bg">#eb7065</color>
     <color name="create_post_text">#A4A4A4</color>
+    <color name="black_overlay">#66000000</color>
 
 </resources>

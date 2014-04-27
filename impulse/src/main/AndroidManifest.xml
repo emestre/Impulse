@@ -51,7 +51,13 @@
         </activity>
         <activity
             android:name="com.impulse.android.TextReplyActivity"
-            android:label="@string/title_activity_text_reply" >
+            android:label="Reply" >
+        </activity>
+        <activity
+            android:name="com.impulse.android.LoadingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_loading"
+            android:theme="@style/FullscreenTheme" >
         </activity>
     </application>
 
