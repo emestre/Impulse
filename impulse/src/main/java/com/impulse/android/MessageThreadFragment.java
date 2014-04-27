@@ -1,8 +1,6 @@
 package com.impulse.android;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -100,7 +98,7 @@ public class MessageThreadFragment extends Fragment {
                 final RestClient client = new RestClient();
                 String message = replyEditText.getText().toString();
                 replyEditText.setText("");
-                client.createMessage(userKey, otherUserKey, postId, message, new PostCallback() {
+                client.createMessage(userKey, otherUserKey, postId, message,"text", new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
                         client.getThread(userKey, otherUserKey, postId, new GetCallback() {

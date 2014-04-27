@@ -182,7 +182,7 @@ public class GetTask extends AsyncTask<String, String, String> {
         }
 
         else if (type.equals("/initializeSession")) {
-            url += "?version" + userId;
+            url += "?version=" + userId;
 
             get = new HttpGet(url);
 
