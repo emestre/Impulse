@@ -1,9 +1,16 @@
 package com.impulse.android;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +19,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.HttpStatus;
 
 public class PostFragment extends Fragment {
 
@@ -37,6 +47,8 @@ public class PostFragment extends Fragment {
     private String mUserId;
     private Button mMessageReply;
     private String myUserKey;
+
+    private String filePathToSend;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -146,6 +158,10 @@ public class PostFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "camera reply click received");
+
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/jpg");
+                startActivityForResult(photoPickerIntent, 100);
                 mReply.dismiss();
             }
         });
@@ -224,4 +240,65 @@ public class PostFragment extends Fragment {
 //        JsonArray mutualFriends = data.getAsJsonArray();
 //        return mutualFriends.size();
 //    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                    Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case 100:
+                if(resultCode == Activity.RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getActivity().getContentResolver().query(
+                            selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    filePathToSend = cursor.getString(columnIndex);
+                    cursor.close();
+                    Log.i("DPOKADW", filePathToSend);
+                    showDialogSendPicture();
+                }
+        }
+    }
+
+
+    private void showDialogSendPicture() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Send Picture");
+        builder.setMessage("Do you want to send this picture?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RestClient client = new RestClient();
+                client.createMessage(myUserKey, mPost.userKey, mPost.fileName, filePathToSend, "image", new PostCallback() {
+                    @Override
+                    public void onPostSuccess(String result) {
+                        if (Integer.parseInt(result) == HttpStatus.SC_OK) {
+                            Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
 }

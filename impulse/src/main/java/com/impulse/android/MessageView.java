@@ -118,18 +118,19 @@ public class MessageView  extends LinearLayout {
         long diffInMinutes = -1 * getDateTimeDiff(currentTime, dt) / (1000 * 60);
 
         if(diffInHours > 1)
-            calculatedTimeout = diffInHours + " hours ";
+            calculatedTimeout = diffInHours + " hours ago";
         else if(diffInHours == 1)
-            calculatedTimeout = diffInHours + " hour ";
+            calculatedTimeout = diffInHours + " hour ago";
         else if (diffInHours == 0)
             if(diffInMinutes > 1)
-                calculatedTimeout = diffInMinutes + " minutes ";
+                calculatedTimeout = diffInMinutes + " minutes ago";
             else if(diffInMinutes == 1)
-                calculatedTimeout = diffInMinutes + " minute ";
+                calculatedTimeout = diffInMinutes + " minute ago";
             else if(diffInMinutes == 0)
-                calculatedTimeout = "Less than a minute ";
+                calculatedTimeout = "Less than a minute ago";
+        else
+            calculatedTimeout = "Just now";
 
-        calculatedTimeout += "ago";
         return calculatedTimeout;
     }
 
