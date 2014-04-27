@@ -1,7 +1,14 @@
 package com.impulse.android;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +33,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -42,6 +50,7 @@ public class MessageThreadFragment extends Fragment {
 
     private EditText replyEditText;
     private Button replyButton;
+    private Button replyImageButton;
 
     private TextView otherUserName;
 
@@ -49,6 +58,7 @@ public class MessageThreadFragment extends Fragment {
     private String postId;
     private String userKey;
     private Timer timer;
+    private String filePathToSend;
 
     public static MessageThreadFragment create(String response, String otherUserKey, String postId) {
         MessageThreadFragment fragment = new MessageThreadFragment(response, otherUserKey, postId);
@@ -84,11 +94,22 @@ public class MessageThreadFragment extends Fragment {
         mListView = (AbsListView) view.findViewById(R.id.message_list);
         replyEditText = (EditText) view.findViewById(R.id.reply_from_thread_editText);
         replyButton = (Button) view.findViewById(R.id.reply_from_thread_button);
+        replyImageButton = (Button) view.findViewById(R.id.reply_from_thread_button_image);
         otherUserName = (TextView) view.findViewById(R.id.thread_other_user_name);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         getUserName(otherUserKey);
         // Set OnItemClickListener so we can be notified on item clicks
+
+        replyImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/jpg");
+                startActivityForResult(photoPickerIntent, 100);
+            }
+        });
+
 
         replyButton.setOnClickListener(new View.OnClickListener() {
 
@@ -204,5 +225,74 @@ public class MessageThreadFragment extends Fragment {
             }
         }
         ).executeAsync();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case 100:
+                if(resultCode == Activity.RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getActivity().getContentResolver().query(
+                            selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    filePathToSend = cursor.getString(columnIndex);
+                    cursor.close();
+                    Log.i("DPOKADW", filePathToSend);
+                    showDialogSendPicture();
+                }
+        }
+    }
+
+
+    private void showDialogSendPicture() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Send Picture");
+        builder.setMessage("Do you want to send this picture?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final RestClient client = new RestClient();
+                client.createMessage(userKey, otherUserKey, postId, filePathToSend, "image", new PostCallback() {
+                    @Override
+                    public void onPostSuccess(String result) {
+                        client.getThread(userKey, otherUserKey, postId, new GetCallback() {
+                            @Override
+                            void onDataReceived(String response) {
+                                try {
+                                    messages.clear();
+                                    parsePosts(response);
+                                    mAdapter.notifyDataSetChanged();
+                                    scrollToEnd();
+                                } catch (Exception e) {
+                                    Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
     }
 }
