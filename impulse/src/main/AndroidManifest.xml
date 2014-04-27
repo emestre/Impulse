@@ -50,6 +50,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.impulse.android.TextReplyActivity"
+            android:label="Reply" >
+        </activity>
+        <activity
             android:name="com.impulse.android.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_loading"

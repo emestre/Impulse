@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.apache.http.HttpStatus;
@@ -38,6 +39,7 @@ public class CreatePostActivity extends ActionBarActivity {
     private EditText mCheckInEditText;
     private TextView mExpirationText;
     private ImageButton mShareButton;
+    private Switch mAudienceSwitch;
     private ProgressDialog mUploadingProgress;
     private AlertDialog mUploadStatus;
 
@@ -123,6 +125,8 @@ public class CreatePostActivity extends ActionBarActivity {
             }
         });
         audienceButtons.check(R.id.everyone);
+
+        mAudienceSwitch = (Switch) findViewById(R.id.audience_switch);
 
         // handle the sliding bar changes
         mExpirationText = (TextView) findViewById(R.id.expiration_time);
@@ -247,17 +251,21 @@ public class CreatePostActivity extends ActionBarActivity {
         if (checkIn.equals(""))
             checkIn = mUserId;
 
+        String audience = "everyone";
+        if (mAudienceSwitch.isChecked())
+            audience = "friends";
+
         Log.d(TAG, "uploading new post with...");
         Log.d(TAG, "user ID: " + mUserId);
         Log.d(TAG, "caption text: " + caption);
         Log.d(TAG, "location check in text: " + checkIn);
-        Log.d(TAG, "audience: " + mAudience);
+        Log.d(TAG, "audience: " + audience);
         Log.d(TAG, "timeout in minutes: " + mExpirationTime);
         Log.d(TAG, "rotate image: " + mRotation);
 
         RestClient client = new RestClient();
         client.postFile(mUserId, caption, 0, 0, mImagePath, "jpg", mExpirationTime,
-                        mRotation, mAudience, checkIn, new PostCallback() {
+                        mRotation, audience, checkIn, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
 
@@ -287,7 +295,6 @@ public class CreatePostActivity extends ActionBarActivity {
     }
 
     private AlertDialog buildSuccessDialog() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Upload Succeeded");
         builder.setMessage("Your post was successfully created.");
@@ -308,7 +315,6 @@ public class CreatePostActivity extends ActionBarActivity {
     }
 
     private AlertDialog buildFailureDialog() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Upload Failed");
         builder.setMessage("Sorry, there was a problem uploading your post.");
