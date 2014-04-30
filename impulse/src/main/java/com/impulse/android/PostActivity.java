@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,6 +34,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.HttpStatus;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
@@ -62,6 +62,7 @@ public class PostActivity extends Fragment {
     private ViewPager mPager;
     private String postList;
     private String myUserKey;
+    private Post mCurrentPost;
 
     private SlidingDrawer mReplyDrawer;
     private Button mDrawerButton;
@@ -84,15 +85,13 @@ public class PostActivity extends Fragment {
     private boolean myPosts;
 
     private boolean allowDelete = false;
+    private boolean allowLike = false;
     private ProgressDialog mDeleteProgress;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-
-    public PostActivity() {
-    }
 
     public static PostActivity create(String posts, boolean myPosts) {
         return new PostActivity(posts, myPosts);
@@ -106,8 +105,6 @@ public class PostActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_post, container, false);
-
-        Log.d(TAG, "creating a new post activity fragment...");
 
         posts = new ArrayList<Post>();
         if (postList != null)
@@ -143,15 +140,15 @@ public class PostActivity extends Fragment {
         mPager.getCurrentItem();
 
         if (NUM_PAGES != 0) {
-            if(posts.get(0).userKey.equals(myUserKey)) {
+            if (posts.get(0).userKey.equals(myUserKey)) {
 //                mReplyDrawer.setVisibility(View.INVISIBLE);
                 allowDelete = true;
             }
-            setPost(posts.get(0));
+            mCurrentPost = posts.get(0);
+            setPost();
+            // tell the host activity that this fragment has an options menu
+            setHasOptionsMenu(true);
         }
-
-        // tell the host activity that this fragment has an options menu
-        setHasOptionsMenu(true);
 
         mUserImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,16 +171,15 @@ public class PostActivity extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                Post currentPost = posts.get(position);
+                mCurrentPost = posts.get(position);
 
-                if (currentPost.userKey.equals(myUserKey)) {
+                if (mCurrentPost.userKey.equals(myUserKey)) {
                     Log.i("REPLYDRAWER", "MY POST");
 //                    mReplyDrawer.setVisibility(View.INVISIBLE);
 
                     allowDelete = true;
                     getActivity().supportInvalidateOptionsMenu();
-                }
-                else {
+                } else {
                     Log.i("REPLYDRAWER", "NOT MY POST");
 //                    mReplyDrawer.setVisibility(View.VISIBLE);
 
@@ -191,7 +187,7 @@ public class PostActivity extends Fragment {
                     getActivity().supportInvalidateOptionsMenu();
                 }
 
-                setPost(currentPost);
+                setPost();
             }
 
             @Override
@@ -293,21 +289,41 @@ public class PostActivity extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.post, menu);
 
-        if (allowDelete)
+        if (allowDelete) {
             menu.findItem(R.id.action_delete).setVisible(true);
-        else
+            menu.findItem(R.id.action_reply).setVisible(false);
+        }
+        else {
             menu.findItem(R.id.action_delete).setVisible(false);
+            menu.findItem(R.id.action_reply).setVisible(true);
+        }
+
+        if (allowLike) {
+            menu.findItem(R.id.action_like).setEnabled(true);
+        }
+        else {
+            menu.findItem(R.id.action_like).setEnabled(false);
+        }
 
         super.onCreateOptionsMenu(menu, inflater);
-        Log.d(TAG, "menu is inflated");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_reply:
+                Toast.makeText(getActivity(), "reply pressed", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "CURRENT POST TO REPLY TO:");
+                Log.d(TAG, "user ID:" + mCurrentPost.userKey);
+                Log.d(TAG, "caption:" + mCurrentPost.caption);
+                return true;
+
             case R.id.action_delete:
                 buildDeleteConfirmDialog().show();
+                return true;
 
+            case R.id.action_like:
+                likeButtonClick();
                 return true;
         }
 
@@ -383,66 +399,89 @@ public class PostActivity extends Fragment {
         if (NUM_PAGES > 1) {
             if (index == NUM_PAGES) {
                 mPager.setCurrentItem(index-1, true);
-                setPost(posts.get(index-1));
+                mCurrentPost = posts.get(index-1);
+                setPost();
             }
             else {
                 mPager.setCurrentItem(index, true);
-                setPost(posts.get(index));
+                mCurrentPost = posts.get(index);
+                setPost();
             }
         }
 
         mDeleteProgress.dismiss();
     }
 
-    private void setPost(final Post post) {
+    private void setPost() {
         Session session = Session.getActiveSession();
-        mCaption.setText(post.caption);
-        if (post.caption.equals(""))
+        mCaption.setText(mCurrentPost.caption);
+        if (mCurrentPost.caption.equals(""))
             mCaptionImage.setVisibility(View.GONE);
         else
             mCaptionImage.setVisibility(View.VISIBLE);
 
         mUserName.setText("");
-        getUserName(session, post.userKey);
-        mLikes.setText(post.numLikes + " likes");
+        getUserName(session, mCurrentPost.userKey);
+        mLikes.setText(mCurrentPost.numLikes + " likes");
         Picasso.with(getActivity().getApplicationContext())
-                .load("https://graph.facebook.com/" + post.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
+                .load("https://graph.facebook.com/" + mCurrentPost.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
                 .transform(new RoundedTransformation(45, 2))
                 .fit()
                 .into(mUserImage);
-        mTimeout.setText(post.timeOut + " left");
+        mTimeout.setText(mCurrentPost.timeOut + " left");
 
-        mLocation.setText(post.location);
-        if (post.location.equals(""))
+        mLocation.setText(mCurrentPost.location);
+        if (mCurrentPost.location.equals(""))
             mLocationPin.setVisibility(View.GONE);
         else
             mLocationPin.setVisibility(View.VISIBLE);
 
-        if (post.liked) {
+        if (mCurrentPost.liked) {
+            allowLike = false;
+            getActivity().invalidateOptionsMenu();
+
             mButtonLike.setEnabled(false);
             mButtonLike.setText("Liked");
         }
         else {
+            allowLike = true;
+            getActivity().invalidateOptionsMenu();
+
             mButtonLike.setEnabled(true);
             mButtonLike.setText("Like");
 
             mButtonLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RestClient client = new RestClient();
-                    client.likePost(post.fileName, myUserKey, new GetCallback() {
-                        @Override
-                        void onDataReceived(String response) {
-                            mButtonLike.setEnabled(false);
-                            mButtonLike.setText("Liked");
-                            post.liked = true;
-                            ++post.numLikes;
-                            mLikes.setText(post.numLikes + " likes");
-                        }
-                    });
+                    likeButtonClick();
                 }
             });
         }
+    }
+
+    private void likeButtonClick() {
+        new RestClient().likePost(mCurrentPost.fileName, myUserKey, new GetCallback() {
+            @Override
+            void onDataReceived(String response) {
+                if (Integer.parseInt(response) == HttpStatus.SC_OK) {
+                    Log.i(TAG, "like post SUCCEEDED");
+                    mButtonLike.setEnabled(false);
+                    mButtonLike.setText("Liked");
+
+                    mCurrentPost.liked = true;
+                    ++mCurrentPost.numLikes;
+                    mLikes.setText(mCurrentPost.numLikes + " likes");
+
+                    allowLike = false;
+                    getActivity().invalidateOptionsMenu();
+                }
+                else {
+                    Toast.makeText(getActivity(),
+                            "Server communication failed, try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void getUserName(Session session, String userId) {

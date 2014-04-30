@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<item-->
+        <!--android:id="@+id/action_reply"-->
+        <!--android:menuCategory="system"-->
+        <!--android:orderInCategory="75"-->
+        <!--app:showAsAction="always"-->
+        <!--android:icon="@drawable/ic_action_social_reply"-->
+        <!--android:title="Reply"-->
+        <!--android:visible="false"/>-->
+
+</menu>
