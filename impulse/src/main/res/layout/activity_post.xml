@@ -99,6 +99,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:textSize="@dimen/post_text_size"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/post_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:textSize="@dimen/post_text_size"/>
 
         <ImageView
@@ -107,18 +117,10 @@
             android:layout_height="16dp"
             android:layout_marginLeft="3dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/post_caption"
             android:src="@drawable/image_comment_blurb"/>
 
-        <TextView
-            android:id="@+id/post_caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/caption_blurb"
-            android:layout_toLeftOf="@id/button_like"
-            android:textSize="@dimen/post_text_size"/>
+
 
     </RelativeLayout>
 

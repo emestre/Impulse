@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_edit"
         android:menuCategory="system"
-        android:orderInCategory="50"
+        android:orderInCategory="75"
         app:showAsAction="always|withText"
         android:title="Edit"/>
 
