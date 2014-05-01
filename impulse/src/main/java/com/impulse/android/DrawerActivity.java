@@ -252,16 +252,4 @@ public class DrawerActivity extends ActionBarActivity {
         // Pass any configuration change to the drawer toggle
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-
-    public void SetActionBarTitle(String title) {
-        int titleid = getResources().getIdentifier("action_bar_title", "id", "android");
-        TextView customTitle = (TextView) findViewById(titleid);
-        customTitle.setText(title);
-        customTitle.setTextColor(Color.WHITE);
-        customTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-        //customTitle.setWidth(customTitle.getMaxWidth());
-        Point size = new Point();
-        getWindowManager().getDefaultDisplay().getSize(size);
-        customTitle.setPadding(size.x/3, 0, 0, 0);
-    }
 }
