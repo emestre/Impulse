@@ -312,10 +312,14 @@ public class PostActivity extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_reply:
-                Toast.makeText(getActivity(), "reply pressed", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "CURRENT POST TO REPLY TO:");
-                Log.d(TAG, "user ID:" + mCurrentPost.userKey);
-                Log.d(TAG, "caption:" + mCurrentPost.caption);
+                RestClient client = new RestClient();
+                client.getThread(myUserKey, mCurrentPost.userKey, mCurrentPost.fileName, new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        DrawerActivity activity = (DrawerActivity) getActivity();
+                        activity.setFragment(MessageThreadFragment.create(response, mCurrentPost.userKey, mCurrentPost.fileName), 2);
+                    }
+                });
                 return true;
 
             case R.id.action_delete:
