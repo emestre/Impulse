@@ -34,6 +34,7 @@
             android:layout_marginTop="7dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
+            android:textStyle="italic"
             android:textSize="@dimen/post_text_size"/>
 
         <TextView

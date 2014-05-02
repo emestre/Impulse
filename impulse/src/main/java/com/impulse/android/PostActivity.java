@@ -432,7 +432,7 @@ public class PostActivity extends Fragment {
                 .transform(new RoundedTransformation(45, 2))
                 .fit()
                 .into(mUserImage);
-        mTimeout.setText(mCurrentPost.timeOut + " left");
+        mTimeout.setText(mCurrentPost.timeOut);
 
         mLocation.setText(mCurrentPost.location);
         if (mCurrentPost.location.equals(""))
@@ -576,11 +576,17 @@ public class PostActivity extends Fragment {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss zzz yyyy");
         DateTime dt = formatter.parseDateTime(timeOut);
         DateTime currentTime = new DateTime();
-        long diffInDays = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60 * 24);
+        //long diffInDays = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60 * 24);
         long diffInHours = getDateTimeDiff(currentTime, dt) / (1000 * 60 * 60);
-        long diffInMinutes = getDateTimeDiff(currentTime, dt) / (1000 * 60);
+        //long diffInMinutes = getDateTimeDiff(currentTime, dt) / (1000 * 60);
 
-        if (diffInDays > 0) {
+        if (diffInHours > 0) {
+            calculatedTimeout = "expires in " + diffInHours + " hrs";
+        }
+        else {
+            calculatedTimeout = "expires in less than 1 hr";
+        }
+        /*if (diffInDays > 0) {
             diffInHours -= diffInDays * 24;
             diffInMinutes -= (diffInDays * 24 * 60 + diffInHours * 60);
             calculatedTimeout = diffInDays + " days " + diffInHours + " hrs " + diffInMinutes + " mins";
@@ -590,7 +596,7 @@ public class PostActivity extends Fragment {
         } else if (diffInMinutes > 0) {
             calculatedTimeout = diffInMinutes + " mins";
         } else
-            calculatedTimeout = "";
+            calculatedTimeout = "";*/
 
         return calculatedTimeout;
     }
