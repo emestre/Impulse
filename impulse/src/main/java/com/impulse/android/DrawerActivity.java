@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -171,6 +172,11 @@ public class DrawerActivity extends ActionBarActivity {
                     getIntent().removeExtra("USER_ID");
                 } else {
                     atHomeScreen = true;
+
+                    for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                        getSupportFragmentManager().popBackStack();
+                    }
+
                     Log.d(TAG, "getting all posts...");
 
                     client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
