@@ -246,7 +246,7 @@ public class PostActivity extends Fragment {
                     @Override
                     void onDataReceived(String response) {
                         DrawerActivity activity = (DrawerActivity) getActivity();
-                        activity.setFragment(MessageThreadFragment.create(response, mCurrentPost.userKey, mCurrentPost.fileName), 2);
+                        activity.setFragment(MessageThreadFragment.create(response, mCurrentPost.userKey, mCurrentPost.fileName), 2, false);
                     }
                 });
                 return true;

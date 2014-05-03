@@ -146,11 +146,7 @@ public class ProfileActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getIntent().putExtra("USER_ID", mUserId);
-
                 ((DrawerActivity) getActivity()).selectItem(0);
-                /*Intent intent = new Intent(getActivity(), DrawerActivity.class);
-                intent.putExtra("USER_ID", mUserId);
-                startActivity(intent);*/
             }
         });
 

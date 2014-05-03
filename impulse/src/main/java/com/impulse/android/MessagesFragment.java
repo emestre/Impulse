@@ -90,7 +90,7 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
                 @Override
                 void onDataReceived(String response) {
                     DrawerActivity activity = (DrawerActivity) getActivity();
-                    activity.setFragment(MessageThreadFragment.create(response, replies.get(position).userKey, replies.get(position).postId), 2);
+                    activity.setFragment(MessageThreadFragment.create(response, replies.get(position).userKey, replies.get(position).postId), 2, true);
                 }
             });
         }
@@ -99,7 +99,7 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
                 @Override
                 void onDataReceived(String response) {
                     DrawerActivity activity = (DrawerActivity) getActivity();
-                    activity.setFragment(ThreadsFragment.create(response, replies.get(position).postId), 2);
+                    activity.setFragment(ThreadsFragment.create(response, replies.get(position).postId), 2, true);
                 }
             });
         }

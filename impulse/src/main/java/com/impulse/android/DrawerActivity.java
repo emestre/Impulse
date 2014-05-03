@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -164,7 +165,7 @@ public class DrawerActivity extends ActionBarActivity {
                         @Override
                         void onDataReceived(String response) {
                             Fragment frag = PostActivity.create(response, true);
-                            setFragment(frag, position);
+                            setFragment(frag, position, false);
                         }
                     }, extras.getString("USER_ID"));
                     getIntent().removeExtra("USER_ID");
@@ -176,7 +177,7 @@ public class DrawerActivity extends ActionBarActivity {
                         @Override
                         void onDataReceived(String response) {
                             Fragment frag = PostActivity.create(response, false);
-                            setFragment(frag, position);
+                            setFragment(frag, position, false);
                         }
                     });
                 }
@@ -191,7 +192,7 @@ public class DrawerActivity extends ActionBarActivity {
 
                 fragment = new ProfileActivity();
                 fragment.setArguments(bundle);
-                setFragment(fragment, position);
+                setFragment(fragment, position, false);
 
                 break;
 
@@ -202,7 +203,7 @@ public class DrawerActivity extends ActionBarActivity {
                     @Override
                     void onDataReceived(String response) {
                         Fragment frag = MessagesFragment.create(response);
-                        setFragment(frag, position);
+                        setFragment(frag, position, false);
                     }
                 });
                 break;
@@ -218,12 +219,16 @@ public class DrawerActivity extends ActionBarActivity {
         }
     }
 
-    public void setFragment(Fragment fragment, int position) {
+    public void setFragment(Fragment fragment, int position, boolean addToBackStack) {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commitAllowingStateLoss();
+        FragmentTransaction transaction = manager.beginTransaction()
+                .replace(R.id.content_frame, fragment);
 
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commitAllowingStateLoss();
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         //setTitle(mPageTitles[position]);
@@ -260,8 +265,7 @@ public class DrawerActivity extends ActionBarActivity {
         if (!atHomeScreen && getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getIntent().removeExtra("USER_ID");
             selectItem(0);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

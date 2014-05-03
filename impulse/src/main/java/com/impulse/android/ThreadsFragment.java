@@ -80,7 +80,7 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
             @Override
             void onDataReceived(String response) {
                 DrawerActivity activity = (DrawerActivity) getActivity();
-                activity.setFragment(MessageThreadFragment.create(response, thread.userKey, postId), 2);
+                activity.setFragment(MessageThreadFragment.create(response, thread.userKey, postId), 2, true);
             }
         });
     }
