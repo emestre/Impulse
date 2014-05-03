@@ -26,8 +26,6 @@ public class MainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayShowTitleEnabled(false);
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.impulse.android", PackageManager.GET_SIGNATURES);

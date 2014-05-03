@@ -54,6 +54,7 @@ public class DrawerActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPageTitles;
+    private boolean atHomeScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

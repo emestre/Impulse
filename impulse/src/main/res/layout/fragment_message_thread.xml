@@ -26,27 +26,31 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="-45dp"
+        android:background="@color/create_post_text"
         android:orientation="horizontal">
 
         <EditText
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:id="@+id/reply_from_thread_editText"
+            android:hint="Write a message here"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <Button
-            android:layout_weight="7.4"
+            android:layout_weight="8"
             android:id="@+id/reply_from_thread_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Send" />
+            android:background="@color/create_post_text"
+            android:drawableLeft="@drawable/ic_action_send" />
 
         <Button
-            android:layout_weight="7.8"
+            android:layout_weight="8"
             android:id="@+id/reply_from_thread_button_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/gray_camera_icon" />
+            android:background="@color/create_post_text"
+            android:drawableLeft="@drawable/ic_action_camera" />
 
     </LinearLayout>
 </RelativeLayout>
