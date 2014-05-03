@@ -54,5 +54,6 @@
     <string name="title_activity_loading">LoadingActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="send_message">Write a message here</string>
 
 </resources>

@@ -27,12 +27,14 @@
         android:layout_height="45dp"
         android:layout_marginTop="-45dp"
         android:background="#ffe2e2e2"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:windowSoftInputMode="adjustPan"
+        android:isScrollContainer="false">
 
         <EditText
             android:layout_weight="2"
             android:id="@+id/reply_from_thread_editText"
-            android:hint="Write a message here"
+            android:hint="@string/send_message"
             android:layout_width="match_parent"
             android:inputType="textCapSentences"
             android:layout_height="match_parent" />
