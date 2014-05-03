@@ -195,92 +195,6 @@ public class PostActivity extends Fragment {
 
             }
         });
-/*
-        mReplyDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
-            @Override
-            public void onDrawerOpened() {
-                mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_down, 0, R.drawable.ic_caret_down, 0);
-                mReplyDrawer.bringToFront();
-                Log.i("CURRENT_POST", mPager.getCurrentItem() + "");
-            }
-        });
-
-        mReplyDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
-            @Override
-            public void onDrawerClosed() {
-                mDrawerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caret_up, 0, R.drawable.ic_caret_up, 0);
-                mReplyEditText.setVisibility(View.GONE);
-                mButtonSend.setVisibility(View.GONE);
-            }
-        });
-        
-        mCameraReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "reply with picture selected");
-            }
-        });
-        
-        mVideoReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "reply with video selected");
-            }
-        });
-        
-        mMessageReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "reply with message selected");
-                mReplyEditText.setVisibility(View.VISIBLE);
-                mButtonSend.setVisibility(View.VISIBLE);
-
-                mReplyEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mReplyEditText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-        mButtonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int curPos = mPager.getCurrentItem();
-                Post currentPost = posts.get(curPos);
-
-                RestClient client = new RestClient();
-                String postId = currentPost.fileName;
-                String userKey = currentPost.userKey;
-                String message = mReplyEditText.getText().toString();
-                client.createMessage(myUserKey, userKey, postId, message, new PostCallback() {
-                    @Override
-                    public void onPostSuccess(String result) {
-                        if(result.equals("200"))
-                            Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
-                    }
-                });
-
-                mReplyEditText.setText("");
-                mReplyDrawer.animateClose();
-            }
-        });
-
-*/
-   /*     mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    getActivity().invalidateOptionsMenu();
-                }
-            }
-        });
-        */
 
         return root;
     }
@@ -298,14 +212,29 @@ public class PostActivity extends Fragment {
             menu.findItem(R.id.action_reply).setVisible(true);
         }
 
-        if (allowLike) {
+        if (!mCurrentPost.liked) {
             menu.findItem(R.id.action_like).setEnabled(true);
+            menu.findItem(R.id.action_like).getIcon().setAlpha(255);
         }
         else {
             menu.findItem(R.id.action_like).setEnabled(false);
+            menu.findItem(R.id.action_like).getIcon().setAlpha(130);
         }
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (mCurrentPost.liked) {
+            menu.findItem(R.id.action_like).setEnabled(false);
+            menu.findItem(R.id.action_like).getIcon().setAlpha(130);
+        }
+        else {
+            menu.findItem(R.id.action_like).setEnabled(true);
+            menu.findItem(R.id.action_like).getIcon().setAlpha(255);
+        }
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

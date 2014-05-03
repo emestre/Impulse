@@ -110,8 +110,6 @@ public class PostFragment extends Fragment {
                 Context.MODE_PRIVATE).getString("UserId", "");
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
-        mMessageReply = (Button) view.findViewById(R.id.message_reply_button);
-
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
             viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -122,58 +120,6 @@ public class PostFragment extends Fragment {
                 }
             });
         }
-
-//        mDialogView = inflater.inflate(R.layout.dialog_reply, null);
-//        if (mPost.userKey.equals(myUserKey)) {
-//            mMessageReply.setVisibility(View.GONE);
-//            allowReply = false;
-//        }
-//        else {
-//            mMessageReply.setVisibility(View.VISIBLE);
-//            allowReply = true;
-//        }
-//
-//        // tell the host activity that this fragment has an options menu
-//        setHasOptionsMenu(true);
-//
-//        mMessageReply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mReply.show();
-//            }
-//        });
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setCancelable(true);
-//        builder.setView(mDialogView);
-//        mReply = builder.create();
-//
-//        ImageView cameraReply = (ImageView) mDialogView.findViewById(R.id.camera_reply_image);
-//        cameraReply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "camera reply click received");
-//
-//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//                photoPickerIntent.setType("image/jpg");
-//                startActivityForResult(photoPickerIntent, 100);
-//                mReply.dismiss();
-//            }
-//        });
-//
-//        ImageView textReply = (ImageView) mDialogView.findViewById(R.id.text_reply_image);
-//        textReply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "text reply click received");
-//
-//                Intent intent = new Intent(getActivity().getApplicationContext(), TextReplyActivity.class);
-//                intent.putExtra("filename", mPost.fileName);
-//                intent.putExtra("userid", mPost.userKey);
-//                startActivity(intent);
-//                mReply.dismiss();
-//            }
-//        });
 
         return view;
     }

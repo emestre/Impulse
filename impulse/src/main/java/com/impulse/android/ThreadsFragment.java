@@ -31,7 +31,6 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
     private String response;
     private String postId;
 
-    // TODO: Rename and change types of parameters
     public static ThreadsFragment create(String response, String postId) {
         ThreadsFragment fragment = new ThreadsFragment(response, postId);
         return fragment;

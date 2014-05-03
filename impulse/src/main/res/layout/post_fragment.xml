@@ -19,19 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <Button
-            android:id="@+id/message_reply_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/reply_button"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/round_button_bg"
-            style="@style/OverlayText"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-
     </RelativeLayout>
 
 </LinearLayout>
