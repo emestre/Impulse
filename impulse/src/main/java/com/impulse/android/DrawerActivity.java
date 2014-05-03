@@ -54,7 +54,7 @@ public class DrawerActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPageTitles;
-    private boolean atHomeScreen;
+    private boolean atHomeScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +146,11 @@ public class DrawerActivity extends ActionBarActivity {
         }
     }
 
-    private void selectItem(final int position) {
+    public void selectItem(final int position) {
         // update the main content by replacing fragments
         Fragment fragment;
         RestClient client = new RestClient();
+        atHomeScreen = false;
         switch (position) {
 
             // home drawer click
@@ -166,9 +167,9 @@ public class DrawerActivity extends ActionBarActivity {
                             setFragment(frag, position);
                         }
                     }, extras.getString("USER_ID"));
-                    extras.remove("USER_ID");
+                    getIntent().removeExtra("USER_ID");
                 } else {
-
+                    atHomeScreen = true;
                     Log.d(TAG, "getting all posts...");
 
                     client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
@@ -252,5 +253,16 @@ public class DrawerActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggle
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!atHomeScreen && getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            getIntent().removeExtra("USER_ID");
+            selectItem(0);
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.impulse.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -144,9 +145,12 @@ public class ProfileActivity extends Fragment {
         mViewPostsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DrawerActivity.class);
+                getActivity().getIntent().putExtra("USER_ID", mUserId);
+
+                ((DrawerActivity) getActivity()).selectItem(0);
+                /*Intent intent = new Intent(getActivity(), DrawerActivity.class);
                 intent.putExtra("USER_ID", mUserId);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
 

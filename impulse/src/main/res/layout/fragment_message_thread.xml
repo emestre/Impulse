@@ -34,6 +34,7 @@
             android:id="@+id/reply_from_thread_editText"
             android:hint="Write a message here"
             android:layout_width="match_parent"
+            android:inputType="textCapSentences"
             android:layout_height="match_parent" />
 
         <Button
@@ -41,7 +42,7 @@
             android:id="@+id/reply_from_thread_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/create_post_text"
+            android:background="@android:color/transparent"
             android:drawableLeft="@drawable/ic_action_send" />
 
         <Button
@@ -49,7 +50,7 @@
             android:id="@+id/reply_from_thread_button_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/create_post_text"
+            android:background="@android:color/transparent"
             android:drawableLeft="@drawable/ic_action_camera" />
 
     </LinearLayout>
