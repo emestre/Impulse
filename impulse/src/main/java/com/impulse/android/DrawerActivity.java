@@ -148,6 +148,10 @@ public class DrawerActivity extends ActionBarActivity {
         }
     }
 
+    public void setAtHomeScreen(boolean atHomeScreen) {
+        this.atHomeScreen = atHomeScreen;
+    }
+
     public void selectItem(final int position) {
         // update the main content by replacing fragments
         Fragment fragment;
