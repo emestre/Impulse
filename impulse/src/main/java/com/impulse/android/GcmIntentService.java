@@ -64,10 +64,14 @@ public class GcmIntentService extends IntentService {
 
         final String message = received.getString("message");
         final String senderKey = received.getString("senderKey");
+        String postId = received.getString("postId");
         Session session = Session.getActiveSession();
 
-        final PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, DrawerActivity.class), 2);
+        Intent intent = new Intent(this, DrawerActivity.class);
+        intent.putExtra("thread_user", senderKey);
+        intent.putExtra("thread_post", postId);
+
+        final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         try {
             Response resp = Request.newGraphPathRequest(session, senderKey, new Request.Callback() {
@@ -80,10 +84,11 @@ public class GcmIntentService extends IntentService {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(GcmIntentService.this)
                             .setSmallIcon(R.drawable.ic_impulse_icon)
-                            .setContentTitle("New message from " + userName)
+                            .setContentTitle(userName)
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(message))
-                            .setContentText(message);
+                            .setContentText(message)
+                            .setAutoCancel(true);
 
             mBuilder.setContentIntent(contentIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

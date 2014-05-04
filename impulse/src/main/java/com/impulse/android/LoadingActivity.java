@@ -187,12 +187,12 @@ public class LoadingActivity extends Activity {
             public void onCompleted(GraphUser user, Response response) {
                 if (user != null) {
                     SharedPreferences prefs = getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
-                    if (!prefs.getString("UserId", "").equals(user.getId())) {
+                    //if (!prefs.getString("UserId", "").equals(user.getId())) {
                         prefs.edit().putString("UserId", user.getId()).commit();
                         registerUser(prefs, user.getId(), regid);
                         Log.i("USER", user.getId());
 
-                    }
+                  //  }
                 }
             }
         }).executeAsync();

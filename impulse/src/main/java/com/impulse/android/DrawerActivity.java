@@ -105,7 +105,23 @@ public class DrawerActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        selectItem(0);
+        if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("thread_user")) {
+            Log.i("CHANGE FRAG", "Sanity Check");
+            final String userThread = getIntent().getExtras().getString("thread_user");
+            final String postThread = getIntent().getExtras().getString("thread_post");
+            setAtHomeScreen(false);
+            RestClient client = new RestClient();
+            client.getThread(userKey, userThread, postThread, new GetCallback() {
+                @Override
+                void onDataReceived(String response) {
+                    setFragment(MessageThreadFragment.create(response, userThread, postThread), 2, false);
+                    Log.i("CHANGE FRAG", "WHY U NO WORK!?");
+                }
+            });
+            getIntent().getExtras().remove("thread_user");
+            getIntent().getExtras().remove("thread_post");
+        } else
+            selectItem(0);
     }
 
     @Override
