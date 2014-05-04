@@ -93,29 +93,6 @@ public class MainFragment extends Fragment {
                                       Exception exception) {
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
-            try {
-                Request.newMeRequest(session, new Request.GraphUserCallback() {
-
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        if (user != null) {
-                            SharedPreferences prefs = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
-                            if (!prefs.getString("UserId", "").equals(user.getId())) {
-                                prefs.edit().putString("UserId", user.getId()).commit();
-                                registerUser(prefs, user.getId());
-                                Log.i("USER", user.getId());
-
-                            }
-                        }
-                    }
-                }).executeAsync().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            SharedPreferences prefs = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
-            Log.i("USER", prefs.getString("UserId", ""));
             Intent intent = new Intent(getActivity(), LoadingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -127,12 +104,5 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void registerUser(final SharedPreferences prefs, final String userId) {
-        RestClient db_client = new RestClient();
-        db_client.postUser(userId, new PostCallback() {
-            @Override
-            public void onPostSuccess(String result) {
-            }
-        });
-    }
+
 }

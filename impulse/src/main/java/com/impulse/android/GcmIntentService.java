@@ -10,14 +10,25 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.joda.time.DateTime;
+import org.joda.time.Years;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.lang.*;
+import java.util.concurrent.ExecutionException;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
+    private String userName;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -27,65 +38,59 @@ public class GcmIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        // The getMessageType() intent parameter must be the intent you received
-        // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
-            /*
-             * Filter messages based on message type. Since it is likely that GCM
-             * will be extended in the future with new message types, just ignore
-             * any message types you're not interested in, or that you don't
-             * recognize.
-             */
+
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                sendNotification(extras);
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " +
-                        extras.toString());
-                // If it's a regular GCM message, do some work.
+                sendNotification(extras);
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // This loop represents the service doing some work.
-                for (int i=0; i<5; i++) {
-                    Log.i("BLARGH", "Working... " + (i + 1)
-                            + "/5 @ " + SystemClock.elapsedRealtime());
-                    try {
-                        java.lang.Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                    }
-                }
                 Log.i("BLARGH", "Completed work @ " + SystemClock.elapsedRealtime());
-                // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification(extras);
                 Log.i("BLARGH", "Received: " + extras.toString());
             }
         }
-        // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
-    private void sendNotification(String msg) {
+    private void sendNotification(Bundle received) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, DrawerActivity.class), 0);
+        final String message = received.getString("message");
+        final String senderKey = received.getString("senderKey");
+        Session session = Session.getActiveSession();
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_impulse_icon)
-                        .setContentTitle("GCM Notification")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentText(msg);
+        final PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, DrawerActivity.class), 2);
 
-        mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        try {
+            Response resp = Request.newGraphPathRequest(session, senderKey, new Request.Callback() {
+                @Override
+                public void onCompleted(Response response) {
+                }
+            }).executeAsync().get().get(0);
+            GraphUser user = resp.getGraphObjectAs(GraphUser.class);
+            userName = user.getName().split(" ")[0];
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(GcmIntentService.this)
+                            .setSmallIcon(R.drawable.ic_impulse_icon)
+                            .setContentTitle("New message from " + userName)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(message))
+                            .setContentText(message);
+
+            mBuilder.setContentIntent(contentIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

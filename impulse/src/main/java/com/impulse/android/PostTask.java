@@ -102,7 +102,7 @@ public class PostTask extends AsyncTask<String, String, String> {
         if (type.equals("/createUser")) {
             List<NameValuePair> list = new ArrayList<NameValuePair>();
             list.add(new BasicNameValuePair("userKey", this.userKey));
-
+            list.add(new BasicNameValuePair("regId", this.filename));
             try {
                 post.setEntity(new UrlEncodedFormEntity(list));
                 resp = client.execute(post);

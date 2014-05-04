@@ -74,7 +74,7 @@ public class HomeScreen extends Fragment {
         return root;
     }
 
-    @Override
+  /*  @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -100,7 +100,7 @@ public class HomeScreen extends Fragment {
         startActivity(intent);
     }
 
-    private void registerUser(final SharedPreferences prefs, final String userId) {
+  /*  private void registerUser(final SharedPreferences prefs, final String userId) {
         RestClient db_client = new RestClient();
         db_client.postUser(userId, new PostCallback() {
             @Override
@@ -108,7 +108,7 @@ public class HomeScreen extends Fragment {
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             }
         });
-    }
+    } */
 
 
 

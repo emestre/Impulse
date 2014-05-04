@@ -18,9 +18,9 @@ public class RestClient {
     private static final String GET_ACTIVE_USER_THREAD = "/getActiveUserThreads";
     private static final String INIT_SESSION = "/initializeSession";
 
-    public void postUser(String userKey, final PostCallback callback) {
+    public void postUser(String userKey, String regId, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
-        new PostTask(url, userKey, new RestTaskCallback() {
+        new PostTask(url, regId, userKey, new RestTaskCallback() {
             @Override
             public void onTaskComplete(String result) {
                 if(callback != null)

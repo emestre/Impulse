@@ -1,5 +1,9 @@
 package com.impulse.android;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.impulse.android.util.SystemUiHider;
 
@@ -27,6 +31,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class LoadingActivity extends Activity {
 
@@ -90,7 +95,7 @@ public class LoadingActivity extends Activity {
     private void registerInBackground(final Context context) {
         new AsyncTask<String, Integer, String>() {
             @Override
-            protected String doInBackground(String ... params) {
+            protected String doInBackground(String... params) {
                 String msg = "";
                 try {
                     GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
@@ -173,6 +178,29 @@ public class LoadingActivity extends Activity {
     }
 
     private void sendRegistrationIdToBackend() {
+
+        final String regid = getRegistrationId(getApplicationContext());
+        Session session = Session.getActiveSession();
+        Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    SharedPreferences prefs = getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
+                    if (!prefs.getString("UserId", "").equals(user.getId())) {
+                        prefs.edit().putString("UserId", user.getId()).commit();
+                        registerUser(prefs, user.getId(), regid);
+                        Log.i("USER", user.getId());
+
+                    }
+                }
+            }
+        }).executeAsync();
+
+        SharedPreferences prefs = getSharedPreferences("com.impulse", Context.MODE_PRIVATE);
+        Log.i("USER", prefs.getString("UserId", ""));
+
+        Log.i("REGID", regid);
         String version = null;
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -185,7 +213,7 @@ public class LoadingActivity extends Activity {
             @Override
             void onDataReceived(String response) {
                 if (response.equals(HttpStatus.SC_OK + "")) {
-                    mUploadingProgress.dismiss();
+                    // mUploadingProgress.dismiss();
                     Intent intent = new Intent(LoadingActivity.this, DrawerActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -193,6 +221,15 @@ public class LoadingActivity extends Activity {
                     finish();
                 } else
                     showIncorrectVersionDialog();
+            }
+        });
+    }
+
+    private void registerUser(final SharedPreferences prefs, final String userId, final String regId) {
+        RestClient db_client = new RestClient();
+        db_client.postUser(userId, regId, new PostCallback() {
+            @Override
+            public void onPostSuccess(String result) {
             }
         });
     }
