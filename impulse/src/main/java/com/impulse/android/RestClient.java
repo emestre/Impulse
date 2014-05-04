@@ -17,6 +17,7 @@ public class RestClient {
     private static final String EDIT_ABOUT_USER = "/editAboutUser";
     private static final String GET_ACTIVE_USER_THREAD = "/getActiveUserThreads";
     private static final String INIT_SESSION = "/initializeSession";
+    private static final String LOGOUT = "/logout";
 
     public void postUser(String userKey, String regId, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
@@ -148,6 +149,16 @@ public class RestClient {
             @Override
             public void onTaskComplete(String result) {
                 callback.onDataReceived(result);
+            }
+        }).execute();
+    }
+
+    public void logout(String userKey, String regId, final PostCallback callback) {
+        String url = BASE_URL + LOGOUT;
+        new PostTask(url, regId, userKey, new RestTaskCallback() {
+            @Override
+            public void onTaskComplete(String result) {
+                callback.onPostSuccess(result);
             }
         }).execute();
     }

@@ -75,6 +75,12 @@ public class LoadingActivity extends Activity {
         }
     }
 
+    @Override
+    public void onPause() {
+        mUploadingProgress.dismiss();
+        super.onPause();
+    }
+
 
     private void showIncorrectVersionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
