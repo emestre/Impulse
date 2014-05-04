@@ -16,8 +16,10 @@
 
 package com.impulse.android;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -120,8 +122,17 @@ public class DrawerActivity extends ActionBarActivity {
             });
             getIntent().getExtras().remove("thread_user");
             getIntent().getExtras().remove("thread_post");
-        } else
+
+            Intent local = new Intent();
+            local.setAction("com.impulse.DrawerActivity");
+            sendBroadcast(local);
+        }
+        else
             selectItem(0);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.impulse.DrawerActivity");
+        registerReceiver(receiver, filter);
     }
 
     @Override
@@ -291,8 +302,16 @@ public class DrawerActivity extends ActionBarActivity {
         if (!atHomeScreen && getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getIntent().removeExtra("USER_ID");
             selectItem(0);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
 }

@@ -1,10 +1,12 @@
 package com.impulse.android;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -70,6 +72,7 @@ public class GcmIntentService extends IntentService {
         Intent intent = new Intent(this, DrawerActivity.class);
         intent.putExtra("thread_user", senderKey);
         intent.putExtra("thread_post", postId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -89,7 +92,8 @@ public class GcmIntentService extends IntentService {
                                 .setStyle(new NotificationCompat.BigTextStyle()
                                         .bigText(message))
                                 .setContentText(message)
-                                .setAutoCancel(true);
+                                .setAutoCancel(true)
+                                .setDefaults(Notification.DEFAULT_ALL);
 
                 mBuilder.setContentIntent(contentIntent);
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
