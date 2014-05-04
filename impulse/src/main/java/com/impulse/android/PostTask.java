@@ -209,6 +209,24 @@ public class PostTask extends AsyncTask<String, String, String> {
             return "Error Occurred";
         }
 
+        else if (type.equals("/logout")) {
+            url += "?userKey=" + userKey;
+            url += "&regId=" + filename;
+
+            post = new HttpPost(url);
+
+            try {
+                resp = client.execute(post);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (resp != null)
+                return Integer.toString(resp.getStatusLine().getStatusCode());
+
+            return "Error Occurred";
+        }
+
         return "Invalid URL";
     }
 

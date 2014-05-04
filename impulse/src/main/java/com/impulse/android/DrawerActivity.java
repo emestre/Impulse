@@ -249,9 +249,19 @@ public class DrawerActivity extends ActionBarActivity {
             case 3:
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                String regId = getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("registration_id", "");
+                final Context context = this;
+
+                new RestClient().logout(userKey, regId, new PostCallback() {
+                    @Override
+                    public void onPostSuccess(String result) {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
                 break;
         }
     }
