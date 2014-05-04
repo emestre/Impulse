@@ -451,6 +451,7 @@ public class PostActivity extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("id", post.userKey);
 
+        ((DrawerActivity) getActivity()).setAtHomeScreen(false);
         Fragment fragment = new ProfileActivity();
         fragment.setArguments(bundle);
         FragmentManager manager = getActivity().getSupportFragmentManager();
