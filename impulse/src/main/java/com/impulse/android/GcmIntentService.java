@@ -80,18 +80,20 @@ public class GcmIntentService extends IntentService {
                 }
             }).executeAsync().get().get(0);
             GraphUser user = resp.getGraphObjectAs(GraphUser.class);
-            userName = user.getName().split(" ")[0];
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(GcmIntentService.this)
-                            .setSmallIcon(R.drawable.ic_impulse_icon)
-                            .setContentTitle(userName)
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(message))
-                            .setContentText(message)
-                            .setAutoCancel(true);
+            if(user != null) {
+                userName = user.getName().split(" ")[0];
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(GcmIntentService.this)
+                                .setSmallIcon(R.drawable.ic_impulse_icon)
+                                .setContentTitle(userName)
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                        .bigText(message))
+                                .setContentText(message)
+                                .setAutoCancel(true);
 
-            mBuilder.setContentIntent(contentIntent);
-            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                mBuilder.setContentIntent(contentIntent);
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
