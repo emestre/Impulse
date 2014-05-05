@@ -50,6 +50,7 @@ import java.util.Date;
 public class DrawerActivity extends ActionBarActivity {
 
     private static final String TAG = "DrawerActivity";
+    private static final String SHARE_MESSAGE = "I want you to try this app called impulse: https://www.dropbox.com/s/i8jpcelxvvaaqw7/impulse.apk";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -245,8 +246,18 @@ public class DrawerActivity extends ActionBarActivity {
                 });
                 break;
 
-            // logout drawer click
+            // share button
             case 3:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, this.SHARE_MESSAGE);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Try this new app called impulse");
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, "Share this app using..."));
+                break;
+
+            // logout drawer click
+            case 4:
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
 
@@ -261,7 +272,6 @@ public class DrawerActivity extends ActionBarActivity {
                         finish();
                     }
                 });
-
                 break;
         }
     }
