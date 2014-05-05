@@ -48,6 +48,7 @@
         <item>home</item>
         <item>profile</item>
         <item>messages</item>
+        <item>share</item>
         <item>logout</item>
     </string-array>
 
