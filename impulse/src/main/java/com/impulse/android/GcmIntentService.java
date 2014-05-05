@@ -72,7 +72,6 @@ public class GcmIntentService extends IntentService {
         Intent intent = new Intent(this, DrawerActivity.class);
         intent.putExtra("thread_user", senderKey);
         intent.putExtra("thread_post", postId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
