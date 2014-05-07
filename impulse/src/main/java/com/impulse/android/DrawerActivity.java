@@ -64,7 +64,6 @@ public class DrawerActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         setContentView(R.layout.activity_drawer);
