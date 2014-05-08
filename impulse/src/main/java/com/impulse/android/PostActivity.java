@@ -356,7 +356,7 @@ public class PostActivity extends Fragment {
 
         mUserName.setText("");
         getUserName(session, mCurrentPost.userKey);
-        mLikes.setText(mCurrentPost.numLikes + " likes");
+        mLikes.setText(mCurrentPost.numLikes + "");
         Picasso.with(getActivity().getApplicationContext())
                 .load("https://graph.facebook.com/" + mCurrentPost.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
                 .transform(new RoundedTransformation(45, 2))
@@ -404,7 +404,7 @@ public class PostActivity extends Fragment {
 
                     mCurrentPost.liked = true;
                     ++mCurrentPost.numLikes;
-                    mLikes.setText(mCurrentPost.numLikes + " likes");
+                    mLikes.setText(mCurrentPost.numLikes + "");
 
                     allowLike = false;
                     getActivity().invalidateOptionsMenu();

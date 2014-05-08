@@ -37,13 +37,24 @@
             android:textStyle="italic"
             android:textSize="@dimen/post_text_size"/>
 
+        <ImageView
+            android:id="@+id/like_icon"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/post_userpicture"
+            android:layout_below="@id/post_user"
+            android:src="@drawable/thumbs_up"
+            />
+
         <TextView
             android:id="@+id/post_likes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/post_userpicture"
+            android:layout_toRightOf="@id/like_icon"
             android:layout_below="@id/post_user"
             android:textSize="@dimen/post_text_size"/>
 

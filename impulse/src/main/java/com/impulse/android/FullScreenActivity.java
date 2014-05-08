@@ -1,6 +1,7 @@
 package com.impulse.android;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class FullScreenActivity extends Activity {
         if(extras != null) {
             String filePath = extras.getString("FILE_PATH");
             ImageView image = (ImageView) findViewById(R.id.fullscreen_image);
+            image.setBackgroundColor(Color.BLACK);
             Picasso.with(getApplicationContext())
                     .load(RestClient.getFile(filePath, "full", false))
                     .into(image);
