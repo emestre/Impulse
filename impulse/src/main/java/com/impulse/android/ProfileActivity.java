@@ -1,8 +1,6 @@
 package com.impulse.android;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -198,6 +197,7 @@ public class ProfileActivity extends Fragment {
                     mAboutField.setEnabled(true);
                     mAboutField.requestFocus();
                     mAboutField.setBackgroundColor(0xFFFFFFFF);
+                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(mAboutField, InputMethodManager.SHOW_IMPLICIT);
                     item.setTitle("Done");

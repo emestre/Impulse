@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -44,7 +43,6 @@ public class CreatePostActivity extends ActionBarActivity {
     private AlertDialog mUploadStatus;
 
     private String mImagePath;
-    private String mAudience;
     private String mUserId;
     private int mExpirationTime = 48 * 60;
 
@@ -116,16 +114,6 @@ public class CreatePostActivity extends ActionBarActivity {
         // get the image_check in text field
         mCheckInEditText = (EditText) findViewById(R.id.checkin_field);
 
-        // handle the audience radio button listeners
-        RadioGroup audienceButtons = (RadioGroup) findViewById(R.id.audience_radio);
-        audienceButtons.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                audienceSelectionChanged(checkedId);
-            }
-        });
-        audienceButtons.check(R.id.everyone);
-
         mAudienceSwitch = (Switch) findViewById(R.id.audience_switch);
 
         // handle the sliding bar changes
@@ -170,15 +158,6 @@ public class CreatePostActivity extends ActionBarActivity {
                 return true;
             }
         });
-    }
-
-    private void audienceSelectionChanged(int id) {
-        if (id == R.id.friends) {
-            mAudience = "friends";
-        }
-        else if (id == R.id.everyone) {
-            mAudience = "everyone";
-        }
     }
 
     private void setExpirationTime(float progress) {
