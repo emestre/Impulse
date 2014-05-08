@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.impulse.android.CreatePostActivity"
-    android:background="@color/create_post_text"
+    android:background="@color/create_post_bg"
     android:layout_weight="100">
 
     <RelativeLayout
@@ -67,29 +67,6 @@
                 android:text="Share"
                 android:textSize="@dimen/create_post_text_size"
                 android:textColor="@color/create_post_text"/>
-
-            <RadioGroup
-                android:id="@+id/audience_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:visibility="gone">
-
-                <RadioButton
-                    android:id="@+id/friends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Friends"/>
-
-                <RadioButton
-                    android:id="@+id/everyone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Everyone"/>
-
-            </RadioGroup>
 
             <Switch
                 android:id="@+id/audience_switch"

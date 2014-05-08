@@ -48,4 +48,16 @@
 
     <style name="ButtonBarButton" />
 
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#663d4353</item>
+        <item name="sv_showcaseColor">@color/action_bar_bg</item>
+        <item name="sv_buttonText">OK</item>
+        <item name="sv_tintButtonColor">false</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textColor">@color/action_bar_bg</item>
+    </style>
+
 </resources>
