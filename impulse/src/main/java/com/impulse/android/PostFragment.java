@@ -132,6 +132,7 @@ public class PostFragment extends Fragment {
         Picasso.with(getActivity())
                 .load(RestClient.getFile(mPost.fileName, "full", false))
                 .resize(width, height)
+                .transform(new RoundedTransformation(45, 2))
                 .centerCrop()
                         // .fit()
                 .into(mPostImage);
