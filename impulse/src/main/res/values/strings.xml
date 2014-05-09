@@ -30,13 +30,6 @@
     <string name="toggle_button_text">Video</string>
     <string name="caption_hint">Write a caption…</string>
     <string name="caption">Caption</string>
-    <string name="menu_expire_text">Expiration</string>
-    <string name="submenu_1_text">1 hour</string>
-    <string name="submenu_6_text">6 hours</string>
-    <string name="submenu_12_text">12 hours</string>
-    <string name="submenu_24_text">24 hours</string>
-    <string name="submenu_48_text">48 hours</string>
-    <string name="submenu_72_text">72 hours</string>
     <string name="title_activity_drawer">DrawerActivity</string>
     <string name="user_posts">Show Live Posts</string>
     <string name="preview_description">Preview image.</string>
@@ -56,5 +49,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="send_message">Write a message here</string>
+    <string name="facebook_login_message">We will not post to Facebook\nwithout your permission.</string>
 
 </resources>
