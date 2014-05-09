@@ -94,7 +94,7 @@
         android:paddingRight="30dp"
         android:layout_marginTop="45dp"
         android:paddingBottom="25dp"
-        android:background="#FFFFFF"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

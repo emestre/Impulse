@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.impulse.android">
+    package="com.impulse.impulse">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -25,18 +25,19 @@
         android:icon="@drawable/ic_impulse_icon"
         android:label="@string/app_name"
         android:logo="@drawable/impulse_logo"
-        android:theme="@style/CustomActionBarTheme">
+        android:theme="@style/CustomActionBarTheme"
+        android:debuggable="false" >
         <receiver
-            android:name=".GcmBroadcastReceiver"
+            android:name="com.impulse.impulse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
-        <service android:name=".GcmIntentService" />
+        <service android:name="com.impulse.impulse.GcmIntentService" />
         <activity
-            android:name="com.impulse.android.MainActivity"
+            android:name="com.impulse.impulse.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,22 +52,22 @@
 
         <activity android:name="com.facebook.LoginActivity" />
         <activity
-            android:name="com.impulse.android.CameraActivity"
+            android:name="com.impulse.impulse.CameraActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.impulse.android.FullScreenActivity"
+            android:name="com.impulse.impulse.FullScreenActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.impulse.android.CreatePostActivity"
+            android:name="com.impulse.impulse.CreatePostActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.impulse.android.DrawerActivity"
+            android:name="com.impulse.impulse.DrawerActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.impulse.android.TextReplyActivity"
+            android:name="com.impulse.impulse.TextReplyActivity"
             android:label="Reply"/>
         <activity
-            android:name="com.impulse.android.LoadingActivity"
+            android:name="com.impulse.impulse.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_loading"
             android:theme="@style/FullscreenTheme"/>
