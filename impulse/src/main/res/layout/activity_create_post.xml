@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.impulse.android.CreatePostActivity"
+    tools:context="com.impulse.impulse.CreatePostActivity"
     android:background="@color/create_post_bg"
     android:layout_weight="100">
 

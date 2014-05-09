@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.impulse.android.DrawerActivity" >
+    tools:context="com.impulse.impulse.DrawerActivity" >
     
     <item android:id="@+id/new_post"
         android:title="@string/new_post"
