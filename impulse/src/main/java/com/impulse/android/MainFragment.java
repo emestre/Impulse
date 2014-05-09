@@ -20,15 +20,16 @@ public class MainFragment extends Fragment {
     private static final String TAG = "MainFragment";
     private UiLifecycleHelper uiHelper;
     private LoginButton authButton;
+    private boolean sessionStatusChanged = false;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state,
                          Exception exception) {
+            sessionStatusChanged = true;
             onSessionStateChange(session, state, exception);
         }
     };
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class MainFragment extends Fragment {
 
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
+
+        Log.d(TAG, "in onCreate");
     }
 
     @Override
@@ -63,8 +66,9 @@ public class MainFragment extends Fragment {
         super.onResume();
 
         Session session = Session.getActiveSession();
-        if (session != null &&
+        if (!sessionStatusChanged && session != null &&
                 (session.isOpened() || session.isClosed())) {
+
             onSessionStateChange(session, session.getState(), null);
         }
         uiHelper.onResume();
@@ -97,14 +101,14 @@ public class MainFragment extends Fragment {
     private void onSessionStateChange(Session session, SessionState state,
                                       Exception exception) {
         if (state.isOpened()) {
-            Log.i(TAG, "Logged in...");
-            Intent intent = new Intent(getActivity(), LoadingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getActivity().startActivity(intent);
-            getActivity().finish();
-
-        } else if (state.isClosed()) {
+                Log.i(TAG, "Logged in...");
+                Intent intent = new Intent(getActivity(), LoadingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+        }
+        else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }
     }

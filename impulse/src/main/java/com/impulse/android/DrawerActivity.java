@@ -21,8 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -32,16 +30,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.facebook.Session;
 
@@ -284,7 +279,7 @@ public class DrawerActivity extends ActionBarActivity {
             transaction.addToBackStack(null);
         }
 
-        transaction.commitAllowingStateLoss();
+        transaction.commit();
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         //setTitle(mPageTitles[position]);

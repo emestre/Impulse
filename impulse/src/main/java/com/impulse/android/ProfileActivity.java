@@ -154,7 +154,6 @@ public class ProfileActivity extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
         // if we're viewing the logged in user's profile, then allow editing of about field
         if (mUserId.equals(getActivity().getSharedPreferences("com.impulse",
                 Context.MODE_PRIVATE).getString("UserId", ""))) {
