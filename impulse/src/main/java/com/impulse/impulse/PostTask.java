@@ -142,7 +142,7 @@ public class PostTask extends AsyncTask<String, String, String> {
             if (resp != null)
                 return Integer.toString(resp.getStatusLine().getStatusCode());
 
-            return "Error Occurred";
+            return RestClient.ERROR;
         }
 
         else if (type.equals("/likePost")) {
@@ -160,7 +160,7 @@ public class PostTask extends AsyncTask<String, String, String> {
             if (resp != null)
                 return Integer.toString(resp.getStatusLine().getStatusCode());
 
-            return "Error Occurred";
+            return RestClient.ERROR;
         }
 
         else if (type.equals("/createMessage")) {
@@ -187,7 +187,7 @@ public class PostTask extends AsyncTask<String, String, String> {
             if (resp != null)
                 return Integer.toString(resp.getStatusLine().getStatusCode());
 
-            return "Error Occurred";
+            return RestClient.ERROR;
         }
 
         else if (type.equals("/editAboutUser")) {
@@ -206,7 +206,7 @@ public class PostTask extends AsyncTask<String, String, String> {
             if (resp != null)
                 return Integer.toString(resp.getStatusLine().getStatusCode());
 
-            return "Error Occurred";
+            return RestClient.ERROR;
         }
 
         else if (type.equals("/logout")) {
@@ -224,7 +224,7 @@ public class PostTask extends AsyncTask<String, String, String> {
             if (resp != null)
                 return Integer.toString(resp.getStatusLine().getStatusCode());
 
-            return "Error Occurred";
+            return RestClient.ERROR;
         }
 
         return "Invalid URL";

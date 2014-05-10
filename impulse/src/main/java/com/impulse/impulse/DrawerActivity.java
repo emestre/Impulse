@@ -16,8 +16,10 @@
 
 package com.impulse.impulse;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -54,12 +56,15 @@ public class DrawerActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPageTitles;
+    private Context context;
     private boolean atHomeScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        context = this;
 
         setContentView(R.layout.activity_drawer);
 
@@ -111,8 +116,13 @@ public class DrawerActivity extends ActionBarActivity {
             client.getThread(userKey, userThread, postThread, new GetCallback() {
                 @Override
                 void onDataReceived(String response) {
-                    setFragment(MessageThreadFragment.create(response, userThread, postThread), 2, false);
-                    Log.i("CHANGE FRAG", "WHY U NO WORK!?");
+                    if (response.equals(RestClient.ERROR)) {
+                        Dialog.noInternetDialog(context);
+                    }
+                    else {
+                        setFragment(MessageThreadFragment.create(response, userThread, postThread), 2, false);
+                        Log.i("CHANGE FRAG", "WHY U NO WORK!?");
+                    }
                 }
             });
             getIntent().getExtras().remove("thread_user");
@@ -187,9 +197,14 @@ public class DrawerActivity extends ActionBarActivity {
                 if (extras != null && extras.containsKey("USER_ID")) {
 
                     Log.d(TAG, "getting a certain user's posts...");
-
-                    Fragment frag = PostActivity.create(extras.getString("USER_ID"), true);
-                    setFragment(frag, position, true);
+                            String response = extras.getString("USER_ID");
+                            if (response == null || response.equals(RestClient.ERROR)) {
+                                Dialog.noInternetDialog(context);
+                            }
+                            else {
+                                Fragment frag = PostActivity.create(response, true);
+                                setFragment(frag, position, true);
+                            }
 
                     getIntent().removeExtra("USER_ID");
                 } else {
@@ -202,8 +217,13 @@ public class DrawerActivity extends ActionBarActivity {
                     client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
                         @Override
                         void onDataReceived(String response) {
-                            Fragment frag = PostActivity.create(response, false);
-                            setFragment(frag, position, false);
+                            if (response.equals(RestClient.ERROR)) {
+                                Dialog.noInternetDialog(context);
+                            }
+                            else {
+                                Fragment frag = PostActivity.create(response, false);
+                                setFragment(frag, position, false);
+                            }
                         }
                     });
                 }
@@ -234,8 +254,13 @@ public class DrawerActivity extends ActionBarActivity {
                 client.getActiveThreads(userKey, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        Fragment frag = MessagesFragment.create(response);
-                        setFragment(frag, position, false);
+                        if (response.equals(RestClient.ERROR)) {
+                            Dialog.noInternetDialog(context);
+                        }
+                        else {
+                            Fragment frag = MessagesFragment.create(response);
+                            setFragment(frag, position, false);
+                        }
                     }
                 });
                 break;
@@ -261,9 +286,14 @@ public class DrawerActivity extends ActionBarActivity {
                 new RestClient().logout(userKey, regId, new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
-                        Intent intent = new Intent(context, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if (result.equals(RestClient.ERROR)) {
+                            Dialog.noInternetDialog(context);
+                        }
+                        else {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                 });
                 break;
@@ -285,12 +315,6 @@ public class DrawerActivity extends ActionBarActivity {
         //setTitle(mPageTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
-
-//    @Override
-//    public void setTitle(CharSequence title) {
-//        mTitle = title;
-//        getSupportActionBar().setTitle(mTitle);
-//    }
 
     /**
      * When using the ActionBarDrawerToggle, you must call it during

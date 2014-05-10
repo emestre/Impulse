@@ -245,9 +245,14 @@ public class PostActivity extends Fragment {
                 client.getThread(myUserKey, mCurrentPost.userKey, mCurrentPost.fileName, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        DrawerActivity activity = (DrawerActivity) getActivity();
-                        activity.setAtHomeScreen(false);
-                        activity.setFragment(MessageThreadFragment.create(response, mCurrentPost.userKey, mCurrentPost.fileName), 2, false);
+                        if (response.equals(RestClient.ERROR)) {
+                            Dialog.noInternetDialog(getActivity());
+                        }
+                        else {
+                            DrawerActivity activity = (DrawerActivity) getActivity();
+                            activity.setAtHomeScreen(false);
+                            activity.setFragment(MessageThreadFragment.create(response, mCurrentPost.userKey, mCurrentPost.fileName), 2, false);
+                        }
                     }
                 });
                 return true;
@@ -288,27 +293,41 @@ public class PostActivity extends Fragment {
                 new RestClient().removeFile(posts.get(curIndex).fileName, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        Log.d(TAG, "removeFile returned");
-
-                        if (myPosts) {
-                            Log.d(TAG, "getting all of my posts");
-
-                            new RestClient().getPostList(new GetCallback() {
-                                @Override
-                                void onDataReceived(String response) {
-                                    updatePosts(response, curIndex);
-                                }
-                            }, myUserKey);
+                        if (response.equals(RestClient.ERROR)) {
+                            Dialog.noInternetDialog(getActivity());
                         }
                         else {
-                            Log.d(TAG, "getting all the posts");
+                            Log.d(TAG, "removeFile returned");
 
-                            new RestClient().getPostList(myUserKey, 0.0, 0.0, new Date(), new GetCallback() {
-                                @Override
-                                void onDataReceived(String response) {
-                                    updatePosts(response, curIndex);
-                                }
-                            });
+                            if (myPosts) {
+                                Log.d(TAG, "getting all of my posts");
+
+                                new RestClient().getPostList(new GetCallback() {
+                                    @Override
+                                    void onDataReceived(String response) {
+                                        if (response.equals(RestClient.ERROR)) {
+                                            Dialog.noInternetDialog(getActivity());
+                                        }
+                                        else {
+                                            updatePosts(response, curIndex);
+                                        }
+                                    }
+                                }, myUserKey);
+                            } else {
+                                Log.d(TAG, "getting all the posts");
+
+                                new RestClient().getPostList(myUserKey, 0.0, 0.0, new Date(), new GetCallback() {
+                                    @Override
+                                    void onDataReceived(String response) {
+                                        if (response.equals(RestClient.ERROR)) {
+                                            Dialog.noInternetDialog(getActivity());
+                                        }
+                                        else {
+                                            updatePosts(response, curIndex);
+                                        }
+                                    }
+                                });
+                            }
                         }
                     }
                 });
@@ -397,7 +416,10 @@ public class PostActivity extends Fragment {
         new RestClient().likePost(mCurrentPost.fileName, myUserKey, new GetCallback() {
             @Override
             void onDataReceived(String response) {
-                if (Integer.parseInt(response) == HttpStatus.SC_OK) {
+                if (response.equals(RestClient.ERROR)) {
+                    Dialog.noInternetDialog(getActivity());
+                }
+                else if (Integer.parseInt(response) == HttpStatus.SC_OK) {
                     Log.i(TAG, "like post SUCCEEDED");
                     mButtonLike.setEnabled(false);
                     mButtonLike.setText("Liked");
@@ -408,11 +430,6 @@ public class PostActivity extends Fragment {
 
                     allowLike = false;
                     getActivity().invalidateOptionsMenu();
-                }
-                else {
-                    Toast.makeText(getActivity(),
-                            "Server communication failed, try again.",
-                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -549,9 +566,14 @@ public class PostActivity extends Fragment {
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {
                     @Override
                     void onDataReceived(String response) {
-                        parsePosts(response);
-                        NUM_PAGES = posts.size();
-                        PostActivity.this.mPagerAdapter.notifyDataSetChanged();
+                        if (response.equals(RestClient.ERROR)) {
+                            Dialog.noInternetDialog(getActivity());
+                        }
+                        else {
+                            parsePosts(response);
+                            NUM_PAGES = posts.size();
+                            PostActivity.this.mPagerAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
             }

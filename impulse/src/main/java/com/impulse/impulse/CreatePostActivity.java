@@ -41,6 +41,7 @@ public class CreatePostActivity extends ActionBarActivity {
     private Switch mAudienceSwitch;
     private ProgressDialog mUploadingProgress;
     private AlertDialog mUploadStatus;
+    private Context context;
 
     private String mImagePath;
     private String mUserId;
@@ -50,6 +51,7 @@ public class CreatePostActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = this;
         // hide the action bar
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         this.getActionBar().hide();
@@ -247,19 +249,22 @@ public class CreatePostActivity extends ActionBarActivity {
                         mRotation, audience, checkIn, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
-
-                mUploadingProgress.dismiss();
-
-                if (Integer.parseInt(result) == HttpStatus.SC_OK) {
-                    Log.d(TAG, "Uploading...SUCCESS");
-                    mUploadStatus = buildSuccessDialog();
+                if (result.equals(RestClient.ERROR)) {
+                    Dialog.noInternetDialog(context);
                 }
                 else {
-                    Log.d(TAG, "Uploading...FAILED");
-                    mUploadStatus = buildFailureDialog();
-                }
+                    mUploadingProgress.dismiss();
 
-                mUploadStatus.show();
+                    if (Integer.parseInt(result) == HttpStatus.SC_OK) {
+                        Log.d(TAG, "Uploading...SUCCESS");
+                        mUploadStatus = buildSuccessDialog();
+                    } else {
+                        Log.d(TAG, "Uploading...FAILED");
+                        mUploadStatus = buildFailureDialog();
+                    }
+
+                    mUploadStatus.show();
+                }
             }
         });
 
