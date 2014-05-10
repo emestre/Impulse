@@ -102,7 +102,7 @@ public class DrawerActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("thread_user")) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("thread_user")) {
             Log.i("CHANGE FRAG", "Sanity Check");
             final String userThread = getIntent().getExtras().getString("thread_user");
             final String postThread = getIntent().getExtras().getString("thread_post");
@@ -121,8 +121,7 @@ public class DrawerActivity extends ActionBarActivity {
             Intent local = new Intent();
             local.setAction("com.impulse.DrawerActivity");
             sendBroadcast(local);
-        }
-        else
+        } else
             selectItem(0);
 
         IntentFilter filter = new IntentFilter();
@@ -179,6 +178,7 @@ public class DrawerActivity extends ActionBarActivity {
         Fragment fragment;
         RestClient client = new RestClient();
         atHomeScreen = false;
+
         switch (position) {
 
             // home drawer click
@@ -188,21 +188,15 @@ public class DrawerActivity extends ActionBarActivity {
 
                     Log.d(TAG, "getting a certain user's posts...");
 
-                    client.getPostList(new GetCallback() {
-                        @Override
-                        void onDataReceived(String response) {
-                            Fragment frag = PostActivity.create(response, true);
-                            setFragment(frag, position, false);
-                        }
-                    }, extras.getString("USER_ID"));
+                    Fragment frag = PostActivity.create(extras.getString("USER_ID"), true);
+                    setFragment(frag, position, true);
+
                     getIntent().removeExtra("USER_ID");
                 } else {
                     atHomeScreen = true;
-
                     for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
                         getSupportFragmentManager().popBackStack();
                     }
-
                     Log.d(TAG, "getting all posts...");
 
                     client.getPostList(userKey, 0.0, 0.0, new Date(), new GetCallback() {
@@ -217,6 +211,9 @@ public class DrawerActivity extends ActionBarActivity {
 
             // profile drawer click
             case 1:
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                    getSupportFragmentManager().popBackStack();
+                }
                 String userId = getSharedPreferences("com.impulse",
                         Context.MODE_PRIVATE).getString("UserId", "");
                 Bundle bundle = new Bundle();
@@ -230,6 +227,9 @@ public class DrawerActivity extends ActionBarActivity {
 
             // messages drawer click
             case 2:
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                    getSupportFragmentManager().popBackStack();
+                }
                 client = new RestClient();
                 client.getActiveThreads(userKey, new GetCallback() {
                     @Override
@@ -316,8 +316,7 @@ public class DrawerActivity extends ActionBarActivity {
         if (!atHomeScreen && getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getIntent().removeExtra("USER_ID");
             selectItem(0);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

@@ -1,6 +1,9 @@
 package com.impulse.impulse;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -88,9 +91,9 @@ public class ProfileActivity extends Fragment {
                 GraphUser user = response.getGraphObjectAs(GraphUser.class);
 
                 // load profile picture
-                    Picasso.with(getActivity())
-                            .load("https://graph.facebook.com/" + mUserId + "/picture?type=large&redirect=true&width=400&height=400")
-                            .into(mProfilePic);
+                Picasso.with(getActivity())
+                        .load("https://graph.facebook.com/" + mUserId + "/picture?type=large&redirect=true&width=400&height=400")
+                        .into(mProfilePic);
 
                 // set user name
                 mUserName.setText(user.getName().split(" ")[0]);
@@ -103,11 +106,9 @@ public class ProfileActivity extends Fragment {
                     DateTime now = new DateTime();
                     // set this user's age
                     mUserName.setText(mUserName.getText() + ", " + Years.yearsBetween(dob, now).getYears());
-                }
-                catch (NullPointerException eNull) {
+                } catch (NullPointerException eNull) {
                     Log.d(TAG, "user's birthday returned NULL");
-                }
-                catch (IllegalArgumentException eBad) {
+                } catch (IllegalArgumentException eBad) {
                     Log.d(TAG, "user doesn't share age on facebook");
                 }
 
@@ -144,8 +145,18 @@ public class ProfileActivity extends Fragment {
         mViewPostsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getIntent().putExtra("USER_ID", mUserId);
-                ((DrawerActivity) getActivity()).selectItem(0);
+                RestClient client = new RestClient();
+                client.getPostList(new GetCallback() {
+                    @Override
+                    void onDataReceived(String response) {
+                        if (response.trim().equals("[]"))
+                            showNoPostsDialog();
+                        else {
+                            getActivity().getIntent().putExtra("USER_ID", response);
+                            ((DrawerActivity) getActivity()).selectItem(0);
+                        }
+                    }
+                }, mUserId);
             }
         });
 
@@ -190,8 +201,7 @@ public class ProfileActivity extends Fragment {
                     mAboutField.setEnabled(false);
                     mAboutField.setBackgroundColor(0x00000000);
                     item.setTitle("Edit");
-                }
-                else {
+                } else {
                     isEditing = true;
                     mAboutField.setEnabled(true);
                     mAboutField.requestFocus();
@@ -220,8 +230,7 @@ public class ProfileActivity extends Fragment {
                     parseFriends(response);
                     mFriendsText.setText("Friends on Impulse (" + mFriendList.size() + ")");
                     mFriendAdapter.notifyDataSetChanged();
-                }
-                catch (NullPointerException e) {
+                } catch (NullPointerException e) {
                     Log.d(TAG, "friends list response returned NULL");
                     mFriendsText.setText("Doesn't share friends list...");
                     mFriendAdapter.notifyDataSetChanged();
@@ -246,4 +255,20 @@ public class ProfileActivity extends Fragment {
             }
         }
     }
+
+    private void showNoPostsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("No Live Posts");
+        builder.setMessage("This person does not currently have any live posts.");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
+
 }
