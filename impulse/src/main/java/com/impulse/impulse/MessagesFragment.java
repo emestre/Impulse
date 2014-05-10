@@ -28,6 +28,8 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
     private List<Reply> replies;
 
     private String response;
+    private boolean messagesAvailable = true;
+
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
@@ -56,6 +58,10 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
         super.onCreate(savedInstanceState);
         replies = new ArrayList<Reply>();
         parsePosts(response);
+        if(replies.size() == 0) {
+            replies.add(new Reply("", "", "No messages"));
+            messagesAvailable = false;
+        }
         mAdapter = new ReplyPostAdapter(getActivity(), R.layout.post_reply_item, replies);
     }
 
@@ -77,6 +83,8 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        if(!messagesAvailable)
+            return;
         mListView.setOnItemClickListener(null);
         String userKey = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         RestClient client = new RestClient();

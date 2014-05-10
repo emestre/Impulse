@@ -34,12 +34,17 @@ public class ReplyView extends LinearLayout {
         super(context);
 
         initReply(context);
-        Picasso.with(context).load(RestClient.getFile(reply.postId, "200", false)).fit().into(postThumbnail);
-        if (reply.userKey.equals(userKey))
-            postUser.setText("Your post");
-        else
-            getUserName(reply.userKey, true);
-        postTimeout.setText(reply.timeout);
+        if(reply.postId.isEmpty() && reply.userKey.isEmpty()) {
+            postTimeout.setText(reply.timeout);
+        }
+        else {
+            Picasso.with(context).load(RestClient.getFile(reply.postId, "200", false)).fit().into(postThumbnail);
+            if (reply.userKey.equals(userKey))
+                postUser.setText("Your post");
+            else
+                getUserName(reply.userKey, true);
+            postTimeout.setText(reply.timeout);
+        }
     }
 
     public ReplyView(Context context, Thread thread) {
