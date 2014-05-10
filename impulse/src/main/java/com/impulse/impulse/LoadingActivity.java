@@ -34,11 +34,13 @@ public class LoadingActivity extends Activity {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private String SENDER_ID = "354120366381";
     private ProgressDialog mUploadingProgress;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = this;
         setContentView(R.layout.activity_loading);
 
         setContentView(R.layout.activity_loading);
@@ -211,7 +213,10 @@ public class LoadingActivity extends Activity {
         client.initSession(version, new GetCallback() {
             @Override
             void onDataReceived(String response) {
-                if (response.equals(HttpStatus.SC_OK + "")) {
+                if (response.equals(RestClient.ERROR)) {
+                    Dialog.noInternetDialog(context);
+                }
+                else if (response.equals(HttpStatus.SC_OK + "")) {
                     // mUploadingProgress.dismiss();
                     Intent intent = new Intent(LoadingActivity.this, DrawerActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -229,6 +234,8 @@ public class LoadingActivity extends Activity {
         db_client.postUser(userId, regId, new PostCallback() {
             @Override
             public void onPostSuccess(String result) {
+                if (result.equals(RestClient.ERROR))
+                    Dialog.noInternetDialog(context);
             }
         });
     }

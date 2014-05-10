@@ -77,8 +77,13 @@ public class ThreadsFragment extends Fragment implements AbsListView.OnItemClick
         client.getThread(userKey, thread.userKey, postId, new GetCallback() {
             @Override
             void onDataReceived(String response) {
-                DrawerActivity activity = (DrawerActivity) getActivity();
-                activity.setFragment(MessageThreadFragment.create(response, thread.userKey, postId), 2, true);
+                if (response.equals(RestClient.ERROR)) {
+                    Dialog.noInternetDialog(getActivity());
+                }
+                else {
+                    DrawerActivity activity = (DrawerActivity) getActivity();
+                    activity.setFragment(MessageThreadFragment.create(response, thread.userKey, postId), 2, true);
+                }
             }
         });
     }
