@@ -119,7 +119,12 @@ public class ProfileActivity extends Fragment {
         new RestClient().aboutUser(mUserId, new GetCallback() {
             @Override
             void onDataReceived(String response) {
-                mAboutField.setText(response);
+                if (response.equals(RestClient.ERROR)) {
+                    Dialog.noInternetDialog(getActivity());
+                }
+                else {
+                    mAboutField.setText(response);
+                }
             }
         });
 
@@ -181,7 +186,10 @@ public class ProfileActivity extends Fragment {
                     new RestClient().editAboutUser(mUserId, text, new PostCallback() {
                         @Override
                         public void onPostSuccess(String result) {
-                            if (Integer.parseInt(result) == HttpStatus.SC_OK) {
+                            if (result.equals(RestClient.ERROR)) {
+                                Dialog.noInternetDialog(getActivity());
+                            }
+                            else if (Integer.parseInt(result) == HttpStatus.SC_OK) {
                                 Log.d(TAG, "about user text upload SUCCEEDED");
                             }
                         }

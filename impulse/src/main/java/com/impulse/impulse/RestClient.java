@@ -19,6 +19,8 @@ public class RestClient {
     private static final String INIT_SESSION = "/initializeSession";
     private static final String LOGOUT = "/logout";
 
+    public static final String ERROR = "Error Occurred";
+
     public void postUser(String userKey, String regId, final PostCallback callback) {
         String url = BASE_URL + CREATE_USER;
         new PostTask(url, regId, userKey, new RestTaskCallback() {

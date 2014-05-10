@@ -124,13 +124,18 @@ public class MessageThreadFragment extends Fragment {
                         client.getThread(userKey, otherUserKey, postId, new GetCallback() {
                             @Override
                             void onDataReceived(String response) {
-                                try {
-                                    messages.clear();
-                                    parsePosts(response);
-                                    mAdapter.notifyDataSetChanged();
-                                    scrollToEnd();
-                                } catch (Exception e) {
-                                    Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                                if (response.equals(RestClient.ERROR)) {
+                                    Dialog.noInternetDialog(getActivity());
+                                }
+                                else {
+                                    try {
+                                        messages.clear();
+                                        parsePosts(response);
+                                        mAdapter.notifyDataSetChanged();
+                                        scrollToEnd();
+                                    } catch (Exception e) {
+                                        Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         });
@@ -193,12 +198,17 @@ public class MessageThreadFragment extends Fragment {
             client.getThread(userKey, otherUserKey, postId, new GetCallback() {
                 @Override
                 void onDataReceived(String response) {
-                    try {
-                        messages.clear();
-                        parsePosts(response);
-                        mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                    if (response.equals(RestClient.ERROR)) {
+                        Dialog.noInternetDialog(getActivity());
+                    }
+                    else {
+                        try {
+                            messages.clear();
+                            parsePosts(response);
+                            mAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -265,19 +275,29 @@ public class MessageThreadFragment extends Fragment {
                 client.createMessage(userKey, otherUserKey, postId, filePathToSend, "image", new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
-                        client.getThread(userKey, otherUserKey, postId, new GetCallback() {
-                            @Override
-                            void onDataReceived(String response) {
-                                try {
-                                    messages.clear();
-                                    parsePosts(response);
-                                    mAdapter.notifyDataSetChanged();
-                                    scrollToEnd();
-                                } catch (Exception e) {
-                                    Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                        if (result.equals(RestClient.ERROR)) {
+                            Dialog.noInternetDialog(getActivity());
+                        }
+                        else {
+                            client.getThread(userKey, otherUserKey, postId, new GetCallback() {
+                                @Override
+                                void onDataReceived(String response) {
+                                    if (response.equals(RestClient.ERROR)) {
+                                        Dialog.noInternetDialog(getActivity());
+                                    }
+                                    else {
+                                        try {
+                                            messages.clear();
+                                            parsePosts(response);
+                                            mAdapter.notifyDataSetChanged();
+                                            scrollToEnd();
+                                        } catch (Exception e) {
+                                            Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
                 dialog.dismiss();

@@ -84,8 +84,13 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
             client.getThread(userKey, replies.get(position).userKey, replies.get(position).postId, new GetCallback() {
                 @Override
                 void onDataReceived(String response) {
-                    DrawerActivity activity = (DrawerActivity) getActivity();
-                    activity.setFragment(MessageThreadFragment.create(response, replies.get(position).userKey, replies.get(position).postId), 2, true);
+                    if (response.equals(RestClient.ERROR)) {
+                        Dialog.noInternetDialog(getActivity());
+                    }
+                    else {
+                        DrawerActivity activity = (DrawerActivity) getActivity();
+                        activity.setFragment(MessageThreadFragment.create(response, replies.get(position).userKey, replies.get(position).postId), 2, true);
+                    }
                 }
             });
         }
@@ -93,8 +98,13 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
             client.getActiveUserThreads(userKey, replies.get(position).postId, new GetCallback() {
                 @Override
                 void onDataReceived(String response) {
-                    DrawerActivity activity = (DrawerActivity) getActivity();
-                    activity.setFragment(ThreadsFragment.create(response, replies.get(position).postId), 2, true);
+                    if (response.equals(RestClient.ERROR)) {
+                        Dialog.noInternetDialog(getActivity());
+                    }
+                    else {
+                        DrawerActivity activity = (DrawerActivity) getActivity();
+                        activity.setFragment(ThreadsFragment.create(response, replies.get(position).postId), 2, true);
+                    }
                 }
             });
         }
