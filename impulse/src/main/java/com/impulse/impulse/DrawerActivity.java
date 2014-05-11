@@ -16,10 +16,8 @@
 
 package com.impulse.impulse;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -47,7 +45,8 @@ import java.util.Date;
 public class DrawerActivity extends ActionBarActivity {
 
     private static final String TAG = "DrawerActivity";
-    private static final String SHARE_MESSAGE = "I want you to try this app called impulse: https://www.dropbox.com/s/i8jpcelxvvaaqw7/impulse.apk";
+    private static final String SHARE_MESSAGE =
+            "I want you to try this app called impulse: https://www.dropbox.com/s/i8jpcelxvvaaqw7/impulse.apk";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -57,7 +56,10 @@ public class DrawerActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private String[] mPageTitles;
     private Context context;
+
+    public static boolean isDrawerOpen = false;
     private boolean atHomeScreen = true;
+    private boolean allowDelete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,15 +145,37 @@ public class DrawerActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drawer, menu);
-//        getActionBar().setDisplayShowHomeEnabled(false);
-//        SetActionBarTitle("impulse");
-
         return super.onCreateOptionsMenu(menu);
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        // hide all the action bar items when drawer is open
+        isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        for(int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+
+            if (isDrawerOpen) {
+                if (item.getItemId() == R.id.action_delete) {
+                    allowDelete = item.isVisible();
+                }
+                item.setVisible(false);
+            }
+            else {
+                if (allowDelete) {
+                    if (item.getItemId() != R.id.action_reply) {
+                        item.setVisible(true);
+                    }
+                }
+                else {
+                    if (item.getItemId() != R.id.action_delete) {
+                        item.setVisible(true);
+                    }
+                }
+            }
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
