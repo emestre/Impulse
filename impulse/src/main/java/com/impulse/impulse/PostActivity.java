@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -84,8 +83,6 @@ public class PostActivity extends Fragment {
     private TextView mLikes;
     private boolean myPosts;
 
-    private boolean allowDelete = false;
-    private boolean allowLike = false;
     private ProgressDialog mDeleteProgress;
 
     /**
@@ -96,6 +93,8 @@ public class PostActivity extends Fragment {
     public static PostActivity create(String posts, boolean myPosts) {
         return new PostActivity(posts, myPosts);
     }
+
+    public PostActivity() {}
 
     public PostActivity(String postList, boolean myPosts) {
         this.postList = postList;
@@ -140,10 +139,6 @@ public class PostActivity extends Fragment {
         mPager.getCurrentItem();
 
         if (NUM_PAGES != 0) {
-            if (posts.get(0).userKey.equals(myUserKey)) {
-//                mReplyDrawer.setVisibility(View.INVISIBLE);
-                allowDelete = true;
-            }
             mCurrentPost = posts.get(0);
             setPost();
             // tell the host activity that this fragment has an options menu
@@ -175,15 +170,10 @@ public class PostActivity extends Fragment {
 
                 if (mCurrentPost.userKey.equals(myUserKey)) {
                     Log.i("REPLYDRAWER", "MY POST");
-//                    mReplyDrawer.setVisibility(View.INVISIBLE);
-
-                    allowDelete = true;
                     getActivity().supportInvalidateOptionsMenu();
-                } else {
+                }
+                else {
                     Log.i("REPLYDRAWER", "NOT MY POST");
-//                    mReplyDrawer.setVisibility(View.VISIBLE);
-
-                    allowDelete = false;
                     getActivity().supportInvalidateOptionsMenu();
                 }
 
@@ -202,38 +192,32 @@ public class PostActivity extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.post, menu);
-
-        if (allowDelete) {
-            menu.findItem(R.id.action_delete).setVisible(true);
-            menu.findItem(R.id.action_reply).setVisible(false);
-        }
-        else {
-            menu.findItem(R.id.action_delete).setVisible(false);
-            menu.findItem(R.id.action_reply).setVisible(true);
-        }
-
-        if (!mCurrentPost.liked) {
-            menu.findItem(R.id.action_like).setEnabled(true);
-            menu.findItem(R.id.action_like).getIcon().setAlpha(255);
-        }
-        else {
-            menu.findItem(R.id.action_like).setEnabled(false);
-            menu.findItem(R.id.action_like).getIcon().setAlpha(130);
-        }
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (mCurrentPost.liked) {
-            menu.findItem(R.id.action_like).setEnabled(false);
-            menu.findItem(R.id.action_like).getIcon().setAlpha(130);
+        Log.d(TAG, "onPrepareOptionsMenu called");
+
+        if (!DrawerActivity.isDrawerOpen) {
+            if (mCurrentPost.userKey.equals(myUserKey)) {
+                menu.findItem(R.id.action_delete).setVisible(true);
+                menu.findItem(R.id.action_reply).setVisible(false);
+            }
+            else {
+                menu.findItem(R.id.action_delete).setVisible(false);
+                menu.findItem(R.id.action_reply).setVisible(true);
+            }
+            if (mCurrentPost.liked) {
+                menu.findItem(R.id.action_like).setEnabled(false);
+                menu.findItem(R.id.action_like).getIcon().setAlpha(130);
+            }
+            else {
+                menu.findItem(R.id.action_like).setEnabled(true);
+                menu.findItem(R.id.action_like).getIcon().setAlpha(255);
+            }
         }
-        else {
-            menu.findItem(R.id.action_like).setEnabled(true);
-            menu.findItem(R.id.action_like).getIcon().setAlpha(255);
-        }
+
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -251,7 +235,8 @@ public class PostActivity extends Fragment {
                         else {
                             DrawerActivity activity = (DrawerActivity) getActivity();
                             activity.setAtHomeScreen(false);
-                            activity.setFragment(MessageThreadFragment.create(response, mCurrentPost.userKey, mCurrentPost.fileName), 2, false);
+                            activity.setFragment(MessageThreadFragment.create(response,
+                                    mCurrentPost.userKey, mCurrentPost.fileName), 2, false);
                         }
                     }
                 });
@@ -361,7 +346,7 @@ public class PostActivity extends Fragment {
                 setPost();
             }
         }
-
+        getActivity().supportInvalidateOptionsMenu();
         mDeleteProgress.dismiss();
     }
 
@@ -377,7 +362,8 @@ public class PostActivity extends Fragment {
         getUserName(session, mCurrentPost.userKey);
         mLikes.setText(mCurrentPost.numLikes + "");
         Picasso.with(getActivity().getApplicationContext())
-                .load("https://graph.facebook.com/" + mCurrentPost.userKey + "/picture?type=normal&redirect=true&width=500&height=500")
+                .load("https://graph.facebook.com/" + mCurrentPost.userKey +
+                        "/picture?type=normal&redirect=true&width=500&height=500")
                 .transform(new RoundedTransformation(45, 2))
                 .fit()
                 .into(mUserImage);
@@ -390,15 +376,13 @@ public class PostActivity extends Fragment {
             mLocationPin.setVisibility(View.VISIBLE);
 
         if (mCurrentPost.liked) {
-            allowLike = false;
             getActivity().invalidateOptionsMenu();
 
             mButtonLike.setEnabled(false);
             mButtonLike.setText("Liked");
         }
         else {
-            allowLike = true;
-            getActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
 
             mButtonLike.setEnabled(true);
             mButtonLike.setText("Like");
@@ -428,8 +412,7 @@ public class PostActivity extends Fragment {
                     ++mCurrentPost.numLikes;
                     mLikes.setText(mCurrentPost.numLikes + "");
 
-                    allowLike = false;
-                    getActivity().invalidateOptionsMenu();
+                    getActivity().supportInvalidateOptionsMenu();
                 }
             }
         });
@@ -560,7 +543,9 @@ public class PostActivity extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            String userKey = PostActivity.this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+            String userKey = PostActivity.this.getActivity().getSharedPreferences(
+                    "com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
+
             RestClient client = new RestClient();
             if (position == PostActivity.this.NUM_PAGES - 1 && !myPosts && NUM_PAGES >= 25) {
                 client.getPostList(userKey, 0.0, 0.0, posts.get(position).date, new GetCallback() {

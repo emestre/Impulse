@@ -31,13 +31,13 @@ public class CameraActivity extends FragmentActivity {
 
     private static final String TAG = "CameraActivity";
     public static final String IMAGE_ROTATION_KEY = "rotation";
-    public static final int BACK_CAMERA = 0;
-    public static final int FRONT_CAMERA = 1;
     private static final int MAX_RECORDING_LENGTH = 8000;
 
+    public static int BACK_CAMERA;
+    public static int FRONT_CAMERA;
     private Camera mCamera;
     private int mNumCams = Camera.getNumberOfCameras();
-    private int mCameraId = BACK_CAMERA;
+    private int mCameraId;
     private boolean isFocusing = false;
     private int mRotation = 90;
     public static byte imageData[];
@@ -75,6 +75,20 @@ public class CameraActivity extends FragmentActivity {
 
         // link this activity to the camera layout file
         this.setContentView(R.layout.activity_camera);
+
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        for (int camIdx = 0; camIdx < mNumCams; camIdx++) {
+            Camera.getCameraInfo(camIdx, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                BACK_CAMERA = camIdx;
+                Log.d(TAG, "back camera ID: " + BACK_CAMERA);
+            }
+            else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                FRONT_CAMERA = camIdx;
+                Log.d(TAG, "front camera ID: " + FRONT_CAMERA);
+            }
+        }
+        mCameraId = BACK_CAMERA;
 
         // create the preview surface and initialize button listeners
         initPreview();
