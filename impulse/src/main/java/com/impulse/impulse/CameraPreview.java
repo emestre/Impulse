@@ -72,13 +72,17 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
                 Log.d(TAG, "display orientation set to: 90");
             }
 
+            Log.d(TAG, "supported preview sizes:");
+            for (Camera.Size size: mSupportedPreviewSizes)
+                Log.d(TAG, size.width + " x " + size.height);
+
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
             mCamParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
             Log.d(TAG, "preview size set to: " + mPreviewSize.width + " x " + mPreviewSize.height);
 
-//            Log.d(TAG, "supported picture sizes:");
-//            for (Camera.Size size: mSupportedPictureSizes)
-//                Log.d(TAG, size.width + " x " + size.height);
+            Log.d(TAG, "supported picture sizes:");
+            for (Camera.Size size: mSupportedPictureSizes)
+                Log.d(TAG, size.width + " x " + size.height);
 
             mCamParams.setPictureSize(mPictureSize.width, mPictureSize.height);
             Log.d(TAG, "picture size set to: " + mPictureSize.width + " x " + mPictureSize.height);
