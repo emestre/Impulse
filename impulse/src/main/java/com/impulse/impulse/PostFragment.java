@@ -64,31 +64,6 @@ public class PostFragment extends Fragment {
         return mPost;
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        getActivity().getMenuInflater().inflate(R.menu.post_fragment, menu);
-//
-//        if (allowReply) {
-//            menu.findItem(R.id.action_reply).setVisible(true);
-//        }
-//        else {
-//            menu.findItem(R.id.action_reply).setVisible(false);
-//        }
-//
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_reply:
-//                mReply.show();
-//                return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,31 +85,10 @@ public class PostFragment extends Fragment {
                 Context.MODE_PRIVATE).getString("UserId", "");
 
         mPostImage = (ImageView) view.findViewById(R.id.post_image);
-        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-        if (viewTreeObserver.isAlive()) {
-            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                @Override
-                public void onGlobalLayout() {
-                    initLayout();
-                }
-            });
-        }
-
-        return view;
-    }
-
-    private void initLayout() {
-        // load the post image
-        int width = mPostImage.getWidth();
-        int height = mPostImage.getHeight();
 
         Picasso.with(getActivity())
                 .load(RestClient.getFile(mPost.fileName, "full", false))
-                .resize(width, height)
                 .transform(new RoundedTransformation(45, 2))
-                .centerCrop()
-                        // .fit()
                 .into(mPostImage);
 
         mPostImage.setOnClickListener(new View.OnClickListener() {
@@ -145,87 +99,7 @@ public class PostFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+
+        return view;
     }
-
-//    private void getMutualFriendsCount(Session session, String userId) {
-//        String myId = getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
-//        if (!myId.equals(userId)) {
-//            new Request(session, "/" + userId + "/mutualFriends/" + myId, null, HttpMethod.GET, new Request.Callback() {
-//                        public void onCompleted(Response response) {
-//                            Log.i("Response", response.toString());
-//                            mutualFriends.setText(parseFriends(response) + " mutual friends");
-//                        }
-//                    }
-//            ).executeAsync();
-//        }
-//    }
-
-//    private int parseFriends(Response response) {
-//        GraphObject results = response.getGraphObject();
-//        JSONObject json = results.getInnerJSONObject();
-//        JsonElement elem = new JsonParser().parse(json.toString());
-//        JsonElement data = elem.getAsJsonObject().get("data");
-//        JsonArray mutualFriends = data.getAsJsonArray();
-//        return mutualFriends.size();
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode,
-//                                    Intent imageReturnedIntent) {
-//        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-//
-//        switch(requestCode) {
-//            case 100:
-//                if(resultCode == Activity.RESULT_OK){
-//                    Uri selectedImage = imageReturnedIntent.getData();
-//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-//                    Cursor cursor = getActivity().getContentResolver().query(
-//                            selectedImage, filePathColumn, null, null, null);
-//                    cursor.moveToFirst();
-//
-//                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                    filePathToSend = cursor.getString(columnIndex);
-//                    cursor.close();
-//                    Log.i("DPOKADW", filePathToSend);
-//                    showDialogSendPicture();
-//                }
-//        }
-//    }
-
-//    private void showDialogSendPicture() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle("Send Picture");
-//        builder.setMessage("Do you want to send this picture?");
-//        builder.setCancelable(false);
-//        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                RestClient client = new RestClient();
-//                client.createMessage(myUserKey, mPost.userKey, mPost.fileName, filePathToSend, "image", new PostCallback() {
-//                    @Override
-//                    public void onPostSuccess(String result) {
-//                        if (Integer.parseInt(result) == HttpStatus.SC_OK) {
-//                            Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else {
-//                            Toast.makeText(getActivity(), "Message Did Not Send", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        builder.create().show();
-//    }
 }
