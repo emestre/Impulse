@@ -73,7 +73,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             }
 
             Log.d(TAG, "supported preview sizes:");
-            for (Camera.Size size: mSupportedPreviewSizes)
+            for (Camera.Size size : mSupportedPreviewSizes)
                 Log.d(TAG, size.width + " x " + size.height);
 
             // set the preview size to the aspect ratio calculated by getOptimalPreviewSize()
@@ -81,7 +81,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             Log.d(TAG, "preview size set to: " + mPreviewSize.width + " x " + mPreviewSize.height);
 
             Log.d(TAG, "supported picture sizes:");
-            for (Camera.Size size: mSupportedPictureSizes)
+            for (Camera.Size size : mSupportedPictureSizes)
                 Log.d(TAG, size.width + " x " + size.height);
 
             mCamParams.setPictureSize(mPictureSize.width, mPictureSize.height);
@@ -89,7 +89,26 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
 
             // decrease JPG quality to reduce file size
             mCamParams.setJpegQuality(25);
-            mCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+
+            boolean autoFocus = false;
+            boolean continuousPicture = false;
+            Log.d(TAG, "supported focus modes:");
+            for (String s : mCamParams.getSupportedFocusModes()) {
+                Log.d(TAG, s);
+                if (s.equals(Camera.Parameters.FOCUS_MODE_AUTO))
+                    autoFocus = true;
+                else if (s.equals(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE))
+                    continuousPicture = true;
+            }
+
+            if (continuousPicture) {
+                mCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                Log.d(TAG, "continuous picture focus set");
+            }
+            else if (autoFocus) {
+                mCamParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                Log.d(TAG, "auto focus set");
+            }
 
             // update the camera object parameters
             mCamera.setParameters(mCamParams);
