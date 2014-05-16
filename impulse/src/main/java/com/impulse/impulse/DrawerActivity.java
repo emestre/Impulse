@@ -39,6 +39,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.facebook.Session;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.PointTarget;
+import com.github.amlcurran.showcaseview.targets.Target;
 
 import java.util.Date;
 
