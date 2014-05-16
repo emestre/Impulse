@@ -1,9 +1,10 @@
 package com.impulse.impulse;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -49,6 +52,7 @@ public class ProfileActivity extends Fragment {
     private static final String TAG = "ProfileActivity";
 
     private String mUserId;
+    private String myUserKey;
 
     private TextView mUserName;
     private EditText mAboutField;
@@ -67,6 +71,7 @@ public class ProfileActivity extends Fragment {
 
         // get the user ID from the bundled arguments to populate profile information
         mUserId = this.getArguments().getString("id");
+        myUserKey = this.getActivity().getSharedPreferences("com.impulse", Context.MODE_PRIVATE).getString("UserId", "");
         Log.d(TAG, "user ID: " + mUserId);
         // tell the host activity that this fragment has an options menu
         setHasOptionsMenu(true);
@@ -169,11 +174,45 @@ public class ProfileActivity extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mUserId.equals(myUserKey)) {
+            final SharedPreferences preferences = this.getActivity().getPreferences(Activity.MODE_PRIVATE);
+
+            if (!preferences.contains("first run profile")) {
+                new ShowcaseView.Builder(this.getActivity(), true)
+                        .setContentTitle("Pulse Profile")
+                        .setContentText("Let people know what you’re all about.\n" +
+                                "Your profile is the easiest way for other\n" +
+                                "users to get a sense of who you are.")
+                        .setStyle(R.style.ImpulseShowcaseView)
+                        .hideOnTouchOutside()
+                        .setShowcaseEventListener(new OnShowcaseEventListener() {
+                            @Override
+                            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putBoolean("first run profile", false);
+                                editor.commit();
+                            }
+
+                            @Override
+                            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                            @Override
+                            public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                                showcaseView.setShouldCentreText(true);
+                            }
+                        })
+                        .build();
+            }
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // if we're viewing the logged in user's profile, then allow editing of about field
-        if (mUserId.equals(getActivity().getSharedPreferences("com.impulse",
-                Context.MODE_PRIVATE).getString("UserId", ""))) {
-
+        if (mUserId.equals(myUserKey)) {
             inflater.inflate(R.menu.profile, menu);
         }
 

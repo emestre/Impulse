@@ -1,10 +1,12 @@
 package com.impulse.impulse;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -22,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 
 import org.apache.http.HttpStatus;
 
@@ -77,6 +82,8 @@ public class CreatePostActivity extends ActionBarActivity {
                 }
             }
         }).execute();
+
+        showOnBoardingPopUp();
     }
 
     @Override
@@ -325,5 +332,36 @@ public class CreatePostActivity extends ActionBarActivity {
         });
 
         return builder.create();
+    }
+
+    private void showOnBoardingPopUp() {
+
+        final SharedPreferences preferences = this.getPreferences(Activity.MODE_PRIVATE);
+
+        if (!preferences.contains("first run create post")) {
+            new ShowcaseView.Builder(this, true)
+                    .setContentTitle("Finishing Touches")
+                    .setContentText("This is where you add the who, what,\nwhen, where and why.")
+                    .setStyle(R.style.ImpulseShowcaseView)
+                    .hideOnTouchOutside()
+                    .setShowcaseEventListener(new OnShowcaseEventListener() {
+                        @Override
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean("first run create post", false);
+                            editor.commit();
+                        }
+
+                        @Override
+                        public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                        @Override
+                        public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                            showcaseView.setShouldCentreText(true);
+                        }
+                    })
+                    .build();
+
+        }
     }
 }

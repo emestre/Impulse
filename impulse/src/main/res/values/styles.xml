@@ -48,16 +48,36 @@
 
     <style name="ButtonBarButton" />
 
-    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#663d4353</item>
-        <item name="sv_showcaseColor">@color/action_bar_bg</item>
+    <style name="ImpulseShowcaseView">
+        <item name="sv_titleTextAppearance">@style/TextAppearance.Impulse.Title</item>
+        <item name="sv_detailTextAppearance">@style/TextAppearance.Impulse.Detail</item>
+        <item name="sv_backgroundColor">#99000000</item>
         <item name="sv_buttonText">OK</item>
-        <item name="sv_tintButtonColor">false</item>
-        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
     </style>
 
-    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
-        <item name="android:textColor">@color/action_bar_bg</item>
+    <style name="ImpulseShowcaseViewCentered">
+        <item name="sv_titleTextAppearance">@style/TextAppearance.Impulse.Title.Center</item>
+        <item name="sv_detailTextAppearance">@style/TextAppearance.Impulse.Detail.Center</item>
+        <item name="sv_backgroundColor">#99000000</item>
+        <item name="sv_buttonText">OK</item>
+    </style>
+
+    <style name="TextAppearance.Impulse.Title" parent="android:style/TextAppearance.Large">
+        <item name="android:textColor">#33B5E5</item>
+    </style>
+
+    <style name="TextAppearance.Impulse.Detail" parent="android:style/TextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="TextAppearance.Impulse.Title.Center" parent="android:style/TextAppearance.Large">
+        <item name="android:textColor">#33B5E5</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="TextAppearance.Impulse.Detail.Center" parent="android:style/TextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_centerHorizontal">true</item>
     </style>
 
 </resources>

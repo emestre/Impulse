@@ -49,15 +49,6 @@ public class MainFragment extends Fragment {
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("user_birthday", "read_friendlists"));
 
-//        ViewTarget target = new ViewTarget(view.findViewById(R.id.authButton));
-//        new ShowcaseView.Builder(this.getActivity(), true)
-//                .setTarget(target)
-//                .setContentTitle("Testing Showcase")
-//                .setContentText("This is highlighting the Facebook login button.")
-//                .setStyle(R.style.CustomShowcaseTheme)
-//                .hideOnTouchOutside()
-//                .build();
-
         return view;
     }
 
