@@ -2,14 +2,14 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
     <RelativeLayout
         android:id="@+id/post_info"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:layout_width="match_parent"
-        android:background="@drawable/container_dropshadow"
         android:layout_height="45dp">
 
         <ImageView
@@ -131,8 +131,6 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/post_caption"
             android:src="@drawable/image_comment_blurb"/>
-
-
 
     </RelativeLayout>
 
