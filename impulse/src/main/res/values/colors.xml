@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="action_bar_bg">#eb7065</color>
+    <color name="action_bar_bg">#EB7065</color>
     <color name="create_post_text">#858688</color>
     <color name="create_post_bg">#D9D9D7</color>
     <color name="black_overlay">#66000000</color>

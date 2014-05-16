@@ -1,9 +1,11 @@
 package com.impulse.impulse;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +29,9 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionItemTarget;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -160,30 +165,21 @@ public class PostActivity extends Fragment {
 
         mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
                 mCurrentPost = posts.get(position);
-
-                if (mCurrentPost.userKey.equals(myUserKey)) {
-                    Log.i("REPLYDRAWER", "MY POST");
-                    getActivity().supportInvalidateOptionsMenu();
-                }
-                else {
-                    Log.i("REPLYDRAWER", "NOT MY POST");
-                    getActivity().supportInvalidateOptionsMenu();
-                }
-
+                getActivity().supportInvalidateOptionsMenu();
                 setPost();
+
+                if (position == 1) {
+                    showOnBoardingPopUp();
+                }
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
         return root;
@@ -532,6 +528,80 @@ public class PostActivity extends Fragment {
         return calculatedTimeout;
     }
 
+    private void showOnBoardingPopUp() {
+
+        final SharedPreferences preferences = this.getActivity().getPreferences(Activity.MODE_PRIVATE);
+
+        if (!preferences.contains("first run action bar")) {
+            new ShowcaseView.Builder(PostActivity.this.getActivity(), true)
+                    .setTarget(new ActionItemTarget(PostActivity.this.getActivity(), R.id.action_like))
+                    .setContentTitle("The Like Button")
+                    .setContentText("If you find a post interesting, show it some love!")
+                    .setStyle(R.style.ImpulseShowcaseView)
+                    .hideOnTouchOutside()
+                    .setShowcaseEventListener(new OnShowcaseEventListener() {
+                        @Override
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                            showReplyShowcase(preferences);
+                        }
+
+                        @Override
+                        public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                        @Override
+                        public void onShowcaseViewShow(ShowcaseView showcaseView) {}
+                    })
+                    .build();
+        }
+    }
+
+    private void showReplyShowcase(final SharedPreferences preferences) {
+        new ShowcaseView.Builder(PostActivity.this.getActivity(), true)
+                .setTarget(new ActionItemTarget(PostActivity.this.getActivity(), R.id.action_reply))
+                .setContentTitle("The Reply Button")
+                .setContentText("Directly connect with the poster in a private in-app conversation. " +
+                        "Remember, all posts are time sensitive, so what are you waiting for?!")
+                .setStyle(R.style.ImpulseShowcaseView)
+                .hideOnTouchOutside()
+                .setShowcaseEventListener(new OnShowcaseEventListener() {
+                    @Override
+                    public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                        showNewPostShowcase(preferences);
+                    }
+
+                    @Override
+                    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                    @Override
+                    public void onShowcaseViewShow(ShowcaseView showcaseView) {}
+                })
+                .build();
+    }
+
+    private void showNewPostShowcase(final SharedPreferences preferences) {
+        new ShowcaseView.Builder(PostActivity.this.getActivity(), true)
+                .setTarget(new ActionItemTarget(PostActivity.this.getActivity(), R.id.new_post))
+                .setContentTitle("The Pulse Button")
+                .setContentText("Inspire people to join your quest for fun by creating your own post.")
+                .setStyle(R.style.ImpulseShowcaseView)
+                .hideOnTouchOutside()
+                .setShowcaseEventListener(new OnShowcaseEventListener() {
+                    @Override
+                    public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("first run action bar", false);
+                        editor.commit();
+                    }
+
+                    @Override
+                    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                    @Override
+                    public void onShowcaseViewShow(ShowcaseView showcaseView) {}
+                })
+                .build();
+    }
+
     /**
      * A simple pager adapter that represents 5 {@link PostFragment} objects, in
      * sequence.
@@ -576,5 +646,4 @@ public class PostActivity extends Fragment {
             return NUM_PAGES;
         }
     }
-
 }

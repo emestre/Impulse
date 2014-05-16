@@ -1,6 +1,8 @@
 package com.impulse.impulse;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +13,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -80,6 +84,38 @@ public class MessagesFragment extends Fragment implements AbsListView.OnItemClic
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        final SharedPreferences preferences = this.getActivity().getPreferences(Activity.MODE_PRIVATE);
+
+        if (!preferences.contains("first run messages")) {
+            new ShowcaseView.Builder(this.getActivity(), true)
+                    .setContentTitle("Private Messaging")
+                    .setContentText("All conversations are “post-centric”\nand will " +
+                            "delete once the original\npost has expired.")
+                    .setStyle(R.style.ImpulseShowcaseView)
+                    .hideOnTouchOutside()
+                    .setShowcaseEventListener(new OnShowcaseEventListener() {
+                        @Override
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean("first run messages", false);
+                            editor.commit();
+                        }
+
+                        @Override
+                        public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                        @Override
+                        public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                            showcaseView.setShouldCentreText(true);
+                        }
+                    })
+                    .build();
+        }
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {

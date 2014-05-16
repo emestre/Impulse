@@ -1,5 +1,7 @@
 package com.impulse.impulse;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.SensorManager;
@@ -23,6 +25,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -93,6 +98,8 @@ public class CameraActivity extends FragmentActivity {
         // create the preview surface and initialize button listeners
         initPreview();
         initLayout();
+
+        showOnBoardingPopUp();
 
         // open the camera in onResume() so it can be properly released and re-opened
     }
@@ -441,6 +448,37 @@ public class CameraActivity extends FragmentActivity {
         }
         else {  // back-facing camera
             mRotation = (info.orientation + orientation) % 360;
+        }
+    }
+
+    private void showOnBoardingPopUp() {
+
+        final SharedPreferences preferences = this.getPreferences(Activity.MODE_PRIVATE);
+
+        if (!preferences.contains("first run camera")) {
+            new ShowcaseView.Builder(this, true)
+                    .setContentTitle("Capture the Moment")
+                    .setContentText("Show us what you’re doing…\nor what you wish you were doing!")
+                    .setStyle(R.style.ImpulseShowcaseView)
+                    .hideOnTouchOutside()
+                    .setShowcaseEventListener(new OnShowcaseEventListener() {
+                        @Override
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean("first run camera", false);
+                            editor.commit();
+                        }
+
+                        @Override
+                        public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                        @Override
+                        public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                            showcaseView.hideButton();
+                            showcaseView.setShouldCentreText(true);
+                        }
+                    })
+                    .build();
         }
     }
 }

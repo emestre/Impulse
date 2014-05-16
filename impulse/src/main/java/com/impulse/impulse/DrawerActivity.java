@@ -16,10 +16,12 @@
 
 package com.impulse.impulse;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -39,10 +41,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.facebook.Session;
+<<<<<<< HEAD
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.PointTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
+=======
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+>>>>>>> upstream/master
 
 import java.util.Date;
 
@@ -137,12 +144,16 @@ public class DrawerActivity extends ActionBarActivity {
             Intent local = new Intent();
             local.setAction("com.impulse.DrawerActivity");
             sendBroadcast(local);
-        } else
+        }
+        else {
             selectItem(0);
+        }
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.impulse.DrawerActivity");
         registerReceiver(receiver, filter);
+
+        showOnBoardingPopUp();
     }
 
     @Override
@@ -342,6 +353,38 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerList.setItemChecked(position, true);
         //setTitle(mPageTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    private void showOnBoardingPopUp() {
+
+        final SharedPreferences preferences = this.getPreferences(Activity.MODE_PRIVATE);
+
+        if (!preferences.contains("first run")) {
+            new ShowcaseView.Builder(this, true)
+                    .setContentTitle("Live Posts")
+                    .setContentText("See what people around you are doing!\n" +
+                            "Our live feed shows posts from users\nin your area. " +
+                            "Posts are time sensitive,\nso you better act now!")
+                    .setStyle(R.style.ImpulseShowcaseView)
+                    .hideOnTouchOutside()
+                    .setShowcaseEventListener(new OnShowcaseEventListener() {
+                        @Override
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean("first run", false);
+                            editor.commit();
+                        }
+
+                        @Override
+                        public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+                        @Override
+                        public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                            showcaseView.setShouldCentreText(true);
+                        }
+                    })
+                    .build();
+        }
     }
 
     /**
