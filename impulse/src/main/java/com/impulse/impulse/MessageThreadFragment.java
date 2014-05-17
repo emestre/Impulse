@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,6 +81,9 @@ public class MessageThreadFragment extends Fragment {
         messages = new ArrayList<Message>();
         parsePosts(response);
         mAdapter = new MessageThreadAdapter(getActivity(), R.layout.post_reply_item, messages);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.impulse.DrawerActivity");
     }
 
     @Override

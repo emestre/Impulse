@@ -7,26 +7,17 @@
 
     <TextView
         android:id="@+id/thread_other_user_name"
+        android:layout_alignParentTop="true"
         android:gravity="center"
-        android:textSize="16sp"
+        android:textSize="@dimen/message_text_size"
         android:layout_width="match_parent"
         android:layout_height="30dp"/>
 
-    <ListView
-        android:id="@+id/message_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="45dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:layout_marginTop="30dp"
-        android:stackFromBottom="true"/>
-
     <LinearLayout
-        android:layout_below="@id/message_list"
+        android:id="@+id/message_reply_layout"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="-45dp"
+        android:layout_height="wrap_content"
         android:background="#ffe2e2e2"
         android:orientation="horizontal"
         android:windowSoftInputMode="adjustPan"
@@ -37,8 +28,11 @@
             android:id="@+id/reply_from_thread_editText"
             android:hint="@string/send_message"
             android:layout_width="match_parent"
-            android:inputType="textCapSentences"
-            android:layout_height="match_parent" />
+            android:textSize="@dimen/message_text_size"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minHeight="45dp"
+            android:maxLength="500"
+            android:layout_height="wrap_content" />
 
         <Button
             android:layout_weight="8"
@@ -55,6 +49,16 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/ic_action_camera" />
-
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/message_list"
+        android:layout_below="@id/thread_other_user_name"
+        android:layout_above="@id/message_reply_layout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:stackFromBottom="true"/>
+
 </RelativeLayout>

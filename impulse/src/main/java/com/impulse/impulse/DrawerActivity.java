@@ -17,6 +17,7 @@
 package com.impulse.impulse;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -36,13 +38,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.facebook.Session;
-import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+
 import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 
 import java.util.Date;
 
@@ -50,7 +54,7 @@ public class DrawerActivity extends ActionBarActivity {
 
     private static final String TAG = "DrawerActivity";
     private static final String SHARE_MESSAGE =
-            "I want you to try this app called impulse: https://www.dropbox.com/s/i8jpcelxvvaaqw7/impulse.apk";
+            "I want you to try this app called impulse: https://play.google.com/store/apps/details?id=com.impulse.impulse";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -68,6 +72,8 @@ public class DrawerActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         context = this;

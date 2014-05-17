@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
+    public static final String GROUP_KEY = "group_notifications";
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
     private String userName;
