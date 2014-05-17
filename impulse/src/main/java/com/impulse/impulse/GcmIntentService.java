@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -79,6 +81,14 @@ public class GcmIntentService extends IntentService {
             GraphUser user = resp.getGraphObjectAs(GraphUser.class);
             if(user != null) {
                 userName = user.getName().split(" ")[0];
+
+                Intent refreshScreen = new Intent();
+                refreshScreen.setAction("com.impulse.MessageThreadFragment");
+                refreshScreen.putExtra("otherUserKey", senderKey);
+                refreshScreen.putExtra("postId", postId);
+
+                sendBroadcast(refreshScreen);
+
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(GcmIntentService.this)
                                 .setSmallIcon(R.drawable.ic_impulse_icon)

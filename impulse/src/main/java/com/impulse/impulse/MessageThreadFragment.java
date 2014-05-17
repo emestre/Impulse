@@ -2,6 +2,7 @@ package com.impulse.impulse;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,7 +58,7 @@ public class MessageThreadFragment extends Fragment {
     private String otherUserKey;
     private String postId;
     private String userKey;
-    private Timer timer;
+    //private Timer timer;
     private String filePathToSend;
 
     public static MessageThreadFragment create(String response, String otherUserKey, String postId) {
@@ -83,7 +84,24 @@ public class MessageThreadFragment extends Fragment {
         mAdapter = new MessageThreadAdapter(getActivity(), R.layout.post_reply_item, messages);
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction("com.impulse.DrawerActivity");
+        filter.addAction("com.impulse.MessageThreadFragment");
+        getActivity().registerReceiver(refreshPage, filter);
+    }
+
+    BroadcastReceiver refreshPage = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extras = intent.getExtras();
+            if (otherUserKey.equals(extras.getString("otherUserKey")) && postId.equals(extras.getString("postId"))) {
+                refreshThread();
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(refreshPage);
+        super.onDestroy();
     }
 
     @Override
@@ -118,47 +136,22 @@ public class MessageThreadFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
-                final RestClient client = new RestClient();
                 String message = replyEditText.getText().toString();
+
+                if (message.isEmpty())
+                    return;
+
                 replyEditText.setText("");
-                client.createMessage(userKey, otherUserKey, postId, message,"text", new PostCallback() {
+                new RestClient().createMessage(userKey, otherUserKey, postId, message,"text", new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
-                        client.getThread(userKey, otherUserKey, postId, new GetCallback() {
-                            @Override
-                            void onDataReceived(String response) {
-                                if (response.equals(RestClient.ERROR)) {
-                                    Dialog.noInternetDialog(getActivity());
-                                }
-                                else {
-                                    try {
-                                        messages.clear();
-                                        parsePosts(response);
-                                        mAdapter.notifyDataSetChanged();
-                                        scrollToEnd();
-                                    } catch (Exception e) {
-                                        Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        });
+                        refreshThread();
                     }
                 });
             }
         });
-        scrollToEnd();
-
-         timer = new Timer();
-         timer.schedule(new RefreshTask(userKey, otherUserKey, postId), 10000, 10000);
 
         return view;
-    }
-
-    @Override
-    public void onDestroy() {
-        timer.cancel();
-        super.onDestroy();
     }
 
     private void scrollToEnd() {
@@ -184,39 +177,25 @@ public class MessageThreadFragment extends Fragment {
         }
     }
 
-    private class RefreshTask extends TimerTask {
-
-        private String userKey;
-        private String otherUserKey;
-        private String postId;
-
-        public RefreshTask(String userKey, String otherUserKey, String postId) {
-            this.userKey = userKey;
-            this.otherUserKey = otherUserKey;
-            this.postId = postId;
-        }
-
-        @Override
-        public void run() {
-            final RestClient client = new RestClient();
-            client.getThread(userKey, otherUserKey, postId, new GetCallback() {
-                @Override
-                void onDataReceived(String response) {
-                    if (response.equals(RestClient.ERROR)) {
-                        Dialog.noInternetDialog(getActivity());
-                    }
-                    else {
-                        try {
-                            messages.clear();
-                            parsePosts(response);
-                            mAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
-                        }
+    private void refreshThread() {
+        new RestClient().getThread(userKey, otherUserKey, postId, new GetCallback() {
+            @Override
+            void onDataReceived(String response) {
+                if (response.equals(RestClient.ERROR)) {
+                    Dialog.noInternetDialog(getActivity());
+                }
+                else {
+                    try {
+                        messages.clear();
+                        parsePosts(response);
+                        mAdapter.notifyDataSetChanged();
+                        scrollToEnd();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
 
@@ -265,7 +244,6 @@ public class MessageThreadFragment extends Fragment {
         }
     }
 
-
     private void showDialogSendPicture() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Send Picture");
@@ -275,32 +253,14 @@ public class MessageThreadFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final RestClient client = new RestClient();
-                client.createMessage(userKey, otherUserKey, postId, filePathToSend, "image", new PostCallback() {
+                new RestClient().createMessage(userKey, otherUserKey, postId, filePathToSend, "image", new PostCallback() {
                     @Override
                     public void onPostSuccess(String result) {
                         if (result.equals(RestClient.ERROR)) {
                             Dialog.noInternetDialog(getActivity());
                         }
                         else {
-                            client.getThread(userKey, otherUserKey, postId, new GetCallback() {
-                                @Override
-                                void onDataReceived(String response) {
-                                    if (response.equals(RestClient.ERROR)) {
-                                        Dialog.noInternetDialog(getActivity());
-                                    }
-                                    else {
-                                        try {
-                                            messages.clear();
-                                            parsePosts(response);
-                                            mAdapter.notifyDataSetChanged();
-                                            scrollToEnd();
-                                        } catch (Exception e) {
-                                            Toast.makeText(getActivity(), "An error has ocurred.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            });
+                            refreshThread();
                         }
                     }
                 });
