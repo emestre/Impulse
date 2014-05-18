@@ -44,7 +44,7 @@ public class CameraActivity extends FragmentActivity {
     private int mNumCams = Camera.getNumberOfCameras();
     private int mCameraId;
     private boolean isFocusing = false;
-    private int mRotation = 90;
+    private int mRotation = 270;
     public static byte imageData[];
 
     private MediaRecorder mMediaRecorder;
@@ -291,6 +291,12 @@ public class CameraActivity extends FragmentActivity {
             imageData = Arrays.copyOf(data, data.length);
             Bundle bundle = new Bundle();
             bundle.putInt(IMAGE_ROTATION_KEY, mRotation);
+            if (mCameraId == FRONT_CAMERA) {
+                bundle.putBoolean("front facing", true);
+            }
+            else {
+                bundle.putBoolean("front facing", false);
+            }
 
             findViewById(R.id.image_fragment_container).setVisibility(View.VISIBLE);
             // hide the camera preview to show image fragment
@@ -437,8 +443,10 @@ public class CameraActivity extends FragmentActivity {
     }
 
     private void calculateRotation(int orientation) {
-        if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN)
+        if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
+            mRotation = 270;
             return;
+        }
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCameraId, info);
         orientation = (orientation + 45) / 90 * 90;

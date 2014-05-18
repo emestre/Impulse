@@ -173,7 +173,7 @@ public class PostActivity extends Fragment {
                 getActivity().supportInvalidateOptionsMenu();
                 setPost();
 
-                if (position == 1) {
+                if (position > 0 && !mCurrentPost.userKey.equals(myUserKey)) {
                     showOnBoardingPopUp();
                 }
             }
