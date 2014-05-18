@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -25,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     public static ArrayList<Notifs> notifs = new ArrayList<Notifs>();
+    private static int uniqueNotifs = 0;
     private NotificationManager mNotificationManager;
     public static String viewingUserKey = null;
     public static String viewingPostId = null;
@@ -67,12 +70,6 @@ public class GcmIntentService extends IntentService {
         String senderName;
         Session session = Session.getActiveSession();
 
-        Intent intent = new Intent(this, DrawerActivity.class);
-        intent.putExtra("thread_user", senderKey);
-        intent.putExtra("thread_post", postId);
-
-        final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         try {
             Response resp = Request.newGraphPathRequest(session, senderKey, new Request.Callback() {
                 @Override
@@ -97,13 +94,32 @@ public class GcmIntentService extends IntentService {
                 return;
             }
 
-            notifs.add(new Notifs(senderKey, senderName, postId, message));
+            if (notifs.size() == 0)
+                uniqueNotifs = 0;
+
+            Notifs notif = new Notifs(senderKey, senderName, postId, message);
+
+            if (!notifs.contains(notif))
+                uniqueNotifs++;
+
+            notifs.add(notif);
+
+            Intent intent = new Intent(this, DrawerActivity.class);
+
+            if (uniqueNotifs > 1) {
+                intent.putExtra("messages", "messages");
+            }
+            else {
+                intent.putExtra("thread_user", senderKey);
+                intent.putExtra("thread_post", postId);
+            }
+
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(GcmIntentService.this)
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_impulse_icon))
                             .setSmallIcon(R.drawable.ic_impulse_icon)
-                            .setContentTitle(senderName)
-                            .setContentText(message)
                             .setAutoCancel(true)
                             .setDefaults(Notification.DEFAULT_ALL)
                             .setNumber(notifs.size());
@@ -119,7 +135,10 @@ public class GcmIntentService extends IntentService {
                 for(Notifs cur: notifs)
                     inboxStyle.addLine(cur.getSenderName() + ": " + cur.getMessage());
 
-                mBuilder.setStyle(inboxStyle);
+                mBuilder.setStyle(inboxStyle)
+                        .setContentTitle(notifs.size() + " new messages")
+                        .setContentText("expand for details")
+                        .setContentInfo(notifs.size() + "");
             }
             mBuilder.setContentIntent(contentIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

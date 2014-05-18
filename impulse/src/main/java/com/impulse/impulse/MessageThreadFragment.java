@@ -101,11 +101,26 @@ public class MessageThreadFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
         GcmIntentService.viewingUserKey = null;
         GcmIntentService.viewingPostId = null;
         getActivity().unregisterReceiver(refreshPage);
-        super.onDestroyView();
+        super.onPause();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.impulse.MessageThreadFragment");
+        getActivity().registerReceiver(refreshPage, filter);
+
+        GcmIntentService.viewingUserKey = otherUserKey;
+        GcmIntentService.viewingPostId = postId;
+
+        removeNotifications();
+        refreshThread();
     }
 
     @Override
@@ -154,16 +169,6 @@ public class MessageThreadFragment extends Fragment {
                 });
             }
         });
-
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.impulse.MessageThreadFragment");
-        getActivity().registerReceiver(refreshPage, filter);
-
-        GcmIntentService.viewingUserKey = otherUserKey;
-        GcmIntentService.viewingPostId = postId;
-
-        removeNotifications();
 
         return view;
     }

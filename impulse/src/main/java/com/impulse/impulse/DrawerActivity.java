@@ -18,6 +18,7 @@ package com.impulse.impulse;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -124,8 +125,7 @@ public class DrawerActivity extends ActionBarActivity {
             final String userThread = getIntent().getExtras().getString("thread_user");
             final String postThread = getIntent().getExtras().getString("thread_post");
             setAtHomeScreen(false);
-            RestClient client = new RestClient();
-            client.getThread(userKey, userThread, postThread, new GetCallback() {
+            new RestClient().getThread(userKey, userThread, postThread, new GetCallback() {
                 @Override
                 void onDataReceived(String response) {
                     if (response.equals(RestClient.ERROR)) {
@@ -143,6 +143,10 @@ public class DrawerActivity extends ActionBarActivity {
             Intent local = new Intent();
             local.setAction("com.impulse.DrawerActivity");
             sendBroadcast(local);
+        }
+        else if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("messages")) {
+            getIntent().getExtras().remove("messages");
+            selectItem(2);
         }
         else {
             selectItem(0);
