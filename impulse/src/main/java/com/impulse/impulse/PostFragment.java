@@ -52,7 +52,9 @@ public class PostFragment extends Fragment {
         return fragment;
     }
 
-    public PostFragment() {}
+    public PostFragment() {
+        // required empty constructor
+    }
 
     public PostFragment(Post post) {
         this.mPost = post;
