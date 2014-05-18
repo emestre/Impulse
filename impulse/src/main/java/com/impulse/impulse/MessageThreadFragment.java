@@ -38,6 +38,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,7 +59,6 @@ public class MessageThreadFragment extends Fragment {
     private String otherUserKey;
     private String postId;
     private String userKey;
-    //private Timer timer;
     private String filePathToSend;
 
     public static MessageThreadFragment create(String response, String otherUserKey, String postId) {
@@ -82,10 +82,6 @@ public class MessageThreadFragment extends Fragment {
         messages = new ArrayList<Message>();
         parsePosts(response);
         mAdapter = new MessageThreadAdapter(getActivity(), R.layout.post_reply_item, messages);
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.impulse.MessageThreadFragment");
-        getActivity().registerReceiver(refreshPage, filter);
     }
 
     BroadcastReceiver refreshPage = new BroadcastReceiver() {
@@ -98,10 +94,18 @@ public class MessageThreadFragment extends Fragment {
         }
     };
 
+    private void removeNotifications() {
+        LinkedList<Notifs> temp = new LinkedList<Notifs>();
+        temp.add(new Notifs(otherUserKey, null, postId, null));
+        GcmIntentService.notifs.removeAll(temp);
+    }
+
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
+        GcmIntentService.viewingUserKey = null;
+        GcmIntentService.viewingPostId = null;
         getActivity().unregisterReceiver(refreshPage);
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     @Override
@@ -150,6 +154,16 @@ public class MessageThreadFragment extends Fragment {
                 });
             }
         });
+
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.impulse.MessageThreadFragment");
+        getActivity().registerReceiver(refreshPage, filter);
+
+        GcmIntentService.viewingUserKey = otherUserKey;
+        GcmIntentService.viewingPostId = postId;
+
+        removeNotifications();
 
         return view;
     }
