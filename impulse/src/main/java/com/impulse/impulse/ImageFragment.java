@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+
 public class ImageFragment extends Fragment {
 
     private static final String TAG = "ImageFragment";
@@ -40,14 +42,27 @@ public class ImageFragment extends Fragment {
         Log.d(TAG, "bitmap dimensions: " + bitmap.getWidth() + " x " + bitmap.getHeight());
         mRotation = getArguments().getInt(CameraActivity.IMAGE_ROTATION_KEY);
         Log.d(TAG, "image rotation: " + mRotation);
+        boolean isFrontFacing = getArguments().getBoolean("front facing");
 
-        // rotate the image
+
+        // create the rotation matrix
+        Matrix matrix = new Matrix();
+        if (isFrontFacing) {
+            matrix.postScale(-1, 1);
+        }
         if (mRotation != 0) {
-            // create the rotation matrix
-            Matrix matrix = new Matrix();
-            matrix.postRotate(mRotation);
+            matrix.preRotate(mRotation);
+        }
+        if (isFrontFacing || mRotation != 0) {
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), matrix, false);
+        }
+
+        if (isFrontFacing) {
+            mRotation = 0;
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            CameraActivity.imageData = stream.toByteArray();
         }
 
         image.setImageBitmap(bitmap);

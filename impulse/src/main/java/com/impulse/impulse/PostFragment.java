@@ -52,6 +52,8 @@ public class PostFragment extends Fragment {
         return fragment;
     }
 
+    public PostFragment() {}
+
     public PostFragment(Post post) {
         this.mPost = post;
     }
@@ -88,7 +90,7 @@ public class PostFragment extends Fragment {
 
         Picasso.with(getActivity())
                 .load(RestClient.getFile(mPost.fileName, "full", false))
-                .transform(new RoundedTransformation(45, 2))
+//                .transform(new RoundedTransformation(45, 2))
                 .into(mPostImage);
 
         mPostImage.setOnClickListener(new View.OnClickListener() {
